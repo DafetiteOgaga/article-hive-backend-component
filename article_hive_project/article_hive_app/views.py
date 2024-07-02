@@ -1,73 +1,66 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.utils.html import escape
-
-items = [
-    {
-        'title': 'The Future of Technology',
-        'author': 'Famous',
-        'date': 'May 22, 2024',
-        'content': 
-            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod'
-    },
-    {
-        'title': 'What you need to know about IOT',
-        'author': 'Paul',
-        'date': 'May 22, 2024',
-        'content': 
-            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod'
-    },
-    {
-        'title': 'How to become a better Entrepreneur',
-        'author': 'Deborah',
-        'date': 'May 22, 2024',
-        'content': 
-            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod'
-    },
-    {
-        'title': 'Why Tech Experts are diverting into Farming',
-        'author': 'Mayowa',
-        'date': 'May 22, 2024',
-        'content': 
-            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod'
-    },
-]
-
-rated = [
-    {
-        'title': 'The 7 Benefits of BSc Degree',
-        'content': 
-            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod',
-        'author': 'Becky',
-        'date': 'May 22, 2024',
-    },
-    {
-        'title': 'The Truth about AI',
-        'content': 
-            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod',
-        'author': 'Dickson',
-        'date': 'May 22, 2024',
-    },
-    {
-        'title': 'How to be Excellent in Prompt Engineer',
-        'content': 
-            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod',
-        'author': 'Rotimi',
-        'date': 'May 22, 2024',
-    },
-]
+from .mock_data import *
 
 # Create your views here.
 def home(request):
-    return render(request, 'index.html', {'items': items, 'rated': rated, 'pgname': 'Home'})
+    context = {
+        'items': items,
+        'rated': rated,
+        'pgname': 'Home'
+    }
+    return render(request, 'index.html', context)
+
+def hive(request):
+    context = {
+        'items': hives,
+        'rated': rated,
+        'pgname': 'Hive'
+    }
+    return render(request, 'hive.html', context)
+
+def article(request):
+    context = {
+        'article': articles,
+        'pgname': 'Article'
+    }
+    return render(request, 'article.html', context)
+
+def about_page(request):
+    context = {
+        'about': about,
+        'pgname': 'About'
+    }
+    return render(request, 'about.html', context)
+
+def contact_page(request):
+    context = {
+        'contact': contact,
+        'pgname': 'Contact'
+    }
+    return render(request, 'contact.html', context)
+
+def profile_page(request):
+    context = {
+        'profile': profile,
+        'pgname': 'Profile'
+    }
+    return render(request, 'profile.html', context)
+
+def login_page(request):
+    context = {
+        'login': login,
+        'pgname': 'Login'
+    }
+    return render(request, 'login.html', context)
+
+def register_page(request):
+    context = {
+        'register': register,
+        'pgname': 'Register'
+    }
+    return render(request, 'register.html', context)
 
 def checkRequest(request):
     request_details1 = {
