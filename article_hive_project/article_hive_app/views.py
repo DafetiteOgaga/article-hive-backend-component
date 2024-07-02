@@ -2,70 +2,71 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.utils.html import escape
 
+items = [
+    {
+        'title': 'The Future of Technology',
+        'author': 'Famous',
+        'date': 'May 22, 2024',
+        'content': 
+            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod'
+    },
+    {
+        'title': 'What you need to know about IOT',
+        'author': 'Paul',
+        'date': 'May 22, 2024',
+        'content': 
+            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod'
+    },
+    {
+        'title': 'How to become a better Entrepreneur',
+        'author': 'Deborah',
+        'date': 'May 22, 2024',
+        'content': 
+            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod'
+    },
+    {
+        'title': 'Why Tech Experts are diverting into Farming',
+        'author': 'Mayowa',
+        'date': 'May 22, 2024',
+        'content': 
+            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod'
+    },
+]
+
+rated = [
+    {
+        'title': 'The 7 Benefits of BSc Degree',
+        'content': 
+            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod',
+        'author': 'Becky',
+        'date': 'May 22, 2024',
+    },
+    {
+        'title': 'The Truth about AI',
+        'content': 
+            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod',
+        'author': 'Dickson',
+        'date': 'May 22, 2024',
+    },
+    {
+        'title': 'How to be Excellent in Prompt Engineer',
+        'content': 
+            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod',
+        'author': 'Rotimi',
+        'date': 'May 22, 2024',
+    },
+]
+
 # Create your views here.
 def home(request):
-    items = [
-        {
-            'title': 'The Future of Technology',
-            'author': 'Famous',
-            'date': 'May 22, 2024',
-            'content': 
-                'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod'
-        },
-        {
-            'title': 'What you need to know about IOT',
-            'author': 'Paul',
-            'date': 'May 22, 2024',
-            'content': 
-                'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod'
-        },
-        {
-            'title': 'How to become a better Entrepreneur',
-            'author': 'Deborah',
-            'date': 'May 22, 2024',
-            'content': 
-                'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod'
-        },
-        {
-            'title': 'Why Tech Experts are diverting into Farming',
-            'author': 'Mayowa',
-            'date': 'May 22, 2024',
-            'content': 
-                'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod'
-        },
-    ]
-    
-    rated = [
-        {
-            'title': 'The 7 Benefits of BSc Degree',
-            'content': 
-                'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod',
-            'author': 'Becky',
-            'date': 'May 22, 2024',
-        },
-        {
-            'title': 'The Truth about AI',
-            'content': 
-                'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod',
-            'author': 'Dickson',
-            'date': 'May 22, 2024',
-        },
-        {
-            'title': 'How to be Excellent in Prompt Engineer',
-            'content': 
-                'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod',
-            'author': 'Rotimi',
-            'date': 'May 22, 2024',
-        },
-    ]
     return render(request, 'index.html', {'items': items, 'rated': rated})
 
 def checkRequest(request):

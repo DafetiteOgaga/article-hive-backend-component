@@ -3,6 +3,8 @@ from . import views
 
 urlpatterns = [
 	# Create your urlpatterns here.
-	path('ports/', views.checkRequest, name='checkRequest'),
 	path('', views.home, name='home'),
+
+
+	path('ports/', views.checkRequest, name='checkRequest'),
 ]
