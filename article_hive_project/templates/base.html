@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="Dafetite Ogaga">
+	<meta name="description" content="An online article club that promotes knowledge">
+	<link rel="shortcut icon" type="image/png" href="{% static 'logo - shade of brown/the-article-hive-favicon-color.png' %}" />
+	<title>{{ pgname }}</title>
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+	{% include 'partials/_header.html' %}
+	<main>
+		{% if pgname == 'Home' %}
+			{% include 'partials/_hero.html' %}
+		{% endif %}
+
+		{% block section %}{% endblock section %}
+	</main>
+	{% include 'partials/_footer.html' %}
+</body>
+</html>
