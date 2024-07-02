@@ -902,3 +902,6 @@ form p a:active {
 	font-size: 0.8rem;
 }
 
+.article-pic {
+	border-radius: 0.6rem;
+}
