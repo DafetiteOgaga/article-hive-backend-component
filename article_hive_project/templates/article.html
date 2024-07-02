@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block section %}
+<section class="article">
+	<h1 class="right-anime" style="margin-bottom: 0;">{{ article.title }}</h1>
+	<div class="flex-block top-drop">
+		<!-- <a href="./profile.html">Profile</a> -->
+		<h2>By <a href="{% url 'profile' %}" style="text-decoration: underline; color: rgb(134,77,37);">{{ article.author }}</a></h2><span class="separator">•</span><h2>{{ article.date }}</h2>
+	</div>
+	<img class="down-drop" src="{% static 'logo - shade of brown/the-article-hive-favicon-white.png' %}" alt="article photo" />
+	<p class="left-anime">
+		{{ article.content }}
+	</p>
+</section>
+{% endblock section %}
