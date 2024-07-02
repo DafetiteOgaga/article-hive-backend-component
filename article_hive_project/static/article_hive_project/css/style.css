@@ -206,6 +206,10 @@ nav {
 	} */
 }
 
+nav li {
+	text-wrap: nowrap;
+}
+
 header img {
 	width: 13rem;
 
