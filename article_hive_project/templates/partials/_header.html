@@ -1,0 +1,23 @@
+{% load static %}
+<header>
+	<a href="{% url 'home' %}">
+		<img class="right-anime" src="{% static 'logo - shade of brown/the-article-hive-high-resolution-logo-transparent.png' %}" alt="header logo" />
+	</a>
+	<div style="display: flex;">
+		<nav class="left-anime">
+			<ul>
+				<!-- <li class="right-anime"><a href="./index-static.html">Home</a></li> -->
+				<li class="right-anime"><a href="{% url 'home' %}">Home</a></li>
+				<li class="right-anime"><a href="{% url 'hive' %}">Hive</a></li>
+				<li class="right-anime"><a href="{% url 'contact' %}">Contact Us</a></li>
+				<li class="right-anime"><a href="{% url 'about' %}">About Us</a></li>
+				<!-- <li class="right-anime"><a href="./profile.html">Profile</a></li> -->
+				<li class="right-anime"><a href="{% url 'login' %}">Register/Login</a></li>
+			</ul>
+		</nav>
+		<!-- <div class="search-container">
+			<img src="./images/search-logo2.png" alt="search logo" />
+			<input name="search" type="search" placeholder="Search"/>
+		</div> -->
+	</div>
+</header>

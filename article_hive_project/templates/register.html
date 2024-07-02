@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block section %}
+<section class="register">
+	<div class="content top-drop">
+		<h1 class="right-anime">{{ register.title }}</h1>
+		<!-- <form class="form-register" action="/submit-your-form-handler" method="POST"> -->
+		<form id="form" class="form-register" action="" method="POST">
+			<div class="down-drop">
+				<span class="required">*</span>
+				<input id="firstname" name="firstname" type="text" placeholder="First name" required>
+			</div>
+			<div class="down-drop">
+				<span class="not-required">*</span>
+				<input id="lastname" name="lastname" type="text" placeholder="Last name (Optional)">
+			</div>
+			<div class="down-drop">
+				<span class="required">*</span>
+				<input id="email" name="email" type="email" placeholder="Email" required>
+			</div>
+			<div class="down-drop">
+				<div><span class="not-required">*</span>
+				<input id="number" name="number" type="tel" placeholder="Phone Number (Optional)">
+			</div>
+			<div class="down-drop">
+				<span class="required">*</span>
+				<input id="password1" name="password1" type="password" placeholder="Password" required>
+			</div>
+			<div class="down-drop">
+				<span class="required">*</span>
+				<input id="password2" name="password2" type="password" placeholder="Enter Password again" required>
+			</div>
+			<div class="down-drop">
+				<div><span class="not-required">*</span>
+				<input id="Website" name="Website" type="text" placeholder="Website (Optional)">
+			</div>
+			<div>
+				<span class="not-required">*</span>
+				<div class="click-anime">
+					<button type="submit">Register</button>
+				</div>
+			<p>Already a member? Login<a href="{% url 'login' %}">here</a></p>
+		</form>
+	</div>
+</section>
+{% endblock section %}
