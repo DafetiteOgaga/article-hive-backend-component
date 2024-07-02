@@ -67,7 +67,7 @@ rated = [
 
 # Create your views here.
 def home(request):
-    return render(request, 'index.html', {'items': items, 'rated': rated})
+    return render(request, 'index.html', {'items': items, 'rated': rated, 'pgname': 'Home'})
 
 def checkRequest(request):
     request_details1 = {
