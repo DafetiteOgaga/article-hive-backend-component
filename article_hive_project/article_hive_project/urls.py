@@ -19,5 +19,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('article_hive_app.urls')),     # For article_hive_app configuration
+    path('', include('article_hive_app.urls')),     # For article_hive_app configuration.
 ]
