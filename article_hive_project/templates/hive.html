@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block section %}
+<section class="new-and-rated">
+	<div class="">
+		<h1 class="section-headings left-anime">The Hive</h1>
+		<div class="hive-responsive">
+			{% for item in items %}
+			<a class="box-link" href="{% url 'article' %}">
+				<article class="article-box index-page top-drop article-new">
+					<h1 class="hor-align">{{ item.title }}</h1>
+					<p>
+						{{ item.content|truncatechars:250 }}
+					</p>
+					<div class="author-profilePic-date position-h1-new">
+						<img src="{% static 'images/placeholder.png' %}" alt="author image" /><span class="separator">•</span>
+						<h1>{{ item.author }}</h1><span class="separator">•</span>
+						<h1>{{ item.date }}</h1>
+					</div>
+				</article>
+			</a>
+			{% endfor %}
+		</div>
+	</div>
+	<div>
+		<h1 class="section-headings right-anime" >Top rated</h1>
+		<div>
+			{% for rating in rated %}
+				<a class="box-link" href="{% url 'article' %}">
+					<article class="article-box top-rated index-page left-anime article-rated">
+						<h1 class="hor-align">{{ rating.title }}</h1>
+						<p>
+							{{ rating.content|truncatechars:100 }}
+						</p>
+						<div class="author-profilePic-date position-h1-new">
+							<h1>{{ rating.author }}</h1><span class="separator separator-rated">•</span>
+							<h1>{{ rating.date }}</h1>
+						</div>
+					</article>
+				</a>
+			{% endfor %}
+		</div>
+	</div>
+	<div style="display: flex; justify-content: center;">
+		<a href="#" class="link-tag">Next 3 4 5 ... </a>
+		<a href="#" class="link-tag">Last</a>
+	</div>
+</section>
+{% endblock section %}
