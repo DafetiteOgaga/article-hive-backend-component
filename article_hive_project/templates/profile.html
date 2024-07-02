@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block section %}
+<section class="profile">
+	<div>
+		<div class="profile-img-container right-anime">
+			<img src="{% static 'images/placeholder.png' %}" alt="search logo" />
+			<h1>{{ profile.author }}</h1>
+		</div>
+		<p class="down-drop">
+			{{ profile.about_author }}
+		</p>
+	</div>
+	<div class="top-drop">
+		<p>Number of Articles: {{ profile.number_of_articles }}</p>
+		<p>Rating: {{ profile.rating }}</p>
+		<p>Followers: {{ profile.followers }}</p>
+		<p>Phone {{ profile.phone_number }}</p>
+		<p>Email: {{ profile.email }}</p>
+		<p>Website: {{ profile.website }}</p>
+	</div>
+</section>
+{% endblock section %}
