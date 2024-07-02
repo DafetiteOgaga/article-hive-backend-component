@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block section %}
+<section class="contact">
+	<div class="content top-drop">
+		<h1 class="right-anime">{{ contact.title }}</h1>
+		<!-- <form id="form" class="form-contact" action="/submit-your-form-handler" method="POST"> -->
+		<form id="form" class="form-contact" action="" method="POST">
+			<div class="down-drop">
+				<span class="required">*</span>
+				<input id="firstname" name="firstname" type="text" placeholder="Enter your first name" required>
+			</div>
+			<div class="down-drop">
+				<span class="required">*</span>
+				<textarea id="comment" name="comment" placeholder="Write your comment here" rows="4" required></textarea>
+			</div>
+			<span class="not-required">*</span>
+			<div class="click-anime">
+				<button type="submit">Submit</button>
+			</div>
+		</form>
+	</div>
+</section>
+{% endblock section %}
