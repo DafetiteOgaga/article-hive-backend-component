@@ -124,8 +124,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Added static variable to the here
+# Added static variable here
 STATICFILES_DIRS = [
     BASE_DIR / 'static',		# <- added static to BASE_DIR
-    BASE_DIR / 'static/article_hive_project',		# <- added static to project dir
+    BASE_DIR / 'static/article_hive_project',		# <- added static to project dir.
 ]
