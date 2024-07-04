@@ -4,11 +4,11 @@
 <section class="login">
 	<div class="content top-drop">
 		<h1 class="right-anime">{{ login.title }}</h1>
-		<!-- <form class="form-login" action="/submit-your-form-handler" method="POST"> -->
 		<form id="form" class="form-login" action="" method="POST">
+			{% csrf_token %}
 			<div class="down-drop">
 				<span class="required">*</span>
-				<input id="email" name="email" type="email" placeholder="Email" required>
+				<input id="username" name="username" type="email" placeholder="Email" required>
 			</div>
 			<div class="down-drop">
 				<span class="required">*</span>
