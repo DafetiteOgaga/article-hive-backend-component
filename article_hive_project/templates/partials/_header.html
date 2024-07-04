@@ -12,7 +12,12 @@
 				<li class="right-anime"><a href="{% url 'contact' %}">Contact Us</a></li>
 				<li class="right-anime"><a href="{% url 'about' %}">About Us</a></li>
 				<!-- <li class="right-anime"><a href="./profile.html">Profile</a></li> -->
+				{% if user.is_authenticated %}
+				<li class="right-anime"><a href="{% url 'profile' %}">Profile</a></li>
+				<li class="right-anime"><a href="{% url 'logout' %}">Logout</a></li>
+				{% else %}
 				<li class="right-anime"><a href="{% url 'login' %}">Register/Login</a></li>
+				{% endif %}
 			</ul>
 		</nav>
 		<!-- <div class="search-container">

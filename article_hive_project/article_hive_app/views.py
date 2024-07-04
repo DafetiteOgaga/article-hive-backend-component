@@ -1,10 +1,23 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.http import HttpResponse
 from django.utils.html import escape
 from .mock_data import *
 from .forms import ContactForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
 # from .models import Article, Comment, Contact
+
+# to-do (add login required decorator):
+# 1. templates for members to create and post articles,
+# 2. separete register to basic requirements and create
+# another template to update profile info
+# 3. LoginView                      ✅
+# 4. LogoutView                     ✅
+# 5. PasswordChangeView
+# 6. PasswordResetView
+# 7. PasswordResetConfirmView
+# 8. PasswordResetCompleteView
 
 # Create your views here.
 def home(request):
@@ -55,11 +68,32 @@ def profile_page(request):
     return render(request, 'profile.html', context)
 
 def login_page(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request=request, data=request.POST)
+        print(f'post: {request.POST}')
+        if form.is_valid():
+            print(f'form.is_valid: {form.is_valid()}')
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                print(f'user is not None: {user is not None}')
+                login(request, user)
+                # return redirect('home')
+                return redirect('test_authentication')
+                # return JsonResponse({'message': 'success'})
+        print(f'user is None')
+        return JsonResponse({'message': 'error',})
     context = {
-        'login': login,
+        'login': loginText,
         'pgname': 'Login'
     }
+    print('Got here?')
     return render(request, 'login.html', context)
+
+def logout_page(request):
+    logout(request)
+    return redirect('test_authentication')
 
 def register_page(request):
     context = {
@@ -67,6 +101,12 @@ def register_page(request):
         'pgname': 'Register'
     }
     return render(request, 'register.html', context)
+
+def test_authentication(request):
+    context = {
+        'pgname': 'test_authentication'
+    }
+    return render(request, 'authentication.html', context)
 
 def checkRequest(request):
     request_details1 = {
