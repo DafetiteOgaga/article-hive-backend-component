@@ -129,3 +129,5 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',		# <- added static to BASE_DIR
     BASE_DIR / 'static/article_hive_project',		# <- added static to project dir.
 ]
+
+AUTH_USER_MODEL = 'article_hive_app.User'
