@@ -10,8 +10,11 @@ urlpatterns = [
 	path('contact/', views.contact_page, name='contact'),
 	path('profile/', views.profile_page, name='profile'),
 	path('login/', views.login_page, name='login'),
+	path('logout/', views.logout_page, name='logout'),
 	path('register/', views.register_page, name='register'),
 
 
+
+	path('test_authentication/', views.test_authentication, name='test_authentication'),
 	path('ports/', views.checkRequest, name='checkRequest'),
 ]
