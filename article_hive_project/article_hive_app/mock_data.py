@@ -255,7 +255,7 @@ profile = {
 }
 
 # login page
-login = {
+loginText = {
     'title': 'Login',
 }
 
