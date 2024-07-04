@@ -1,7 +1,10 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 from django.http import HttpResponse
 from django.utils.html import escape
 from .mock_data import *
+from .forms import ContactForm
+# from .models import Article, Comment, Contact
 
 # Create your views here.
 def home(request):
@@ -35,10 +38,13 @@ def about_page(request):
     return render(request, 'about.html', context)
 
 def contact_page(request):
-    context = {
-        'contact': contact,
-        'pgname': 'Contact'
-    }
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'message': 'success'})
+        return JsonResponse({'message': 'error'})
+    context = {'contact': contact, 'pgname': 'Contact'}
     return render(request, 'contact.html', context)
 
 def profile_page(request):
