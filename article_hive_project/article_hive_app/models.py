@@ -8,7 +8,7 @@ class User(AbstractUser):
 	email = models.EmailField(max_length=200, unique=True)
 	phone = models.SmallIntegerField(null=True, blank=True)
 	website = models.URLField(max_length=200, null=True, blank=True)
-	joined_since = models.DateTimeField(auto_add=True)
+	joined_since = models.DateTimeField(auto_now_add=True)
 	# number_of_articles = models.('Article', on_delete=models.CASCADE)
 	# profile_picture = models.ImageField()
 
