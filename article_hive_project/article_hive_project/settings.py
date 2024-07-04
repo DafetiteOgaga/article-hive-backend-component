@@ -130,4 +130,8 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static/article_hive_project',		# <- added static to project dir.
 ]
 
+# custom user model
 AUTH_USER_MODEL = 'article_hive_app.User'
+
+# login redirect for anonymous users
+# LOGIN_URL = '/<login url from routes>/'
