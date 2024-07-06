@@ -1,28 +1,38 @@
 {% load static %}
+{% with "" as empty %}
 <header>
 	<a href="{% url 'home' %}">
 		<img class="right-anime" src="{% static 'logo - shade of brown/the-article-hive-high-resolution-logo-transparent.png' %}" alt="header logo" />
 	</a>
-	<div style="display: flex;">
-		<nav class="left-anime">
-			<ul>
-				<!-- <li class="right-anime"><a href="./index-static.html">Home</a></li> -->
-				<li class="right-anime"><a href="{% url 'home' %}">Home</a></li>
-				<li class="right-anime"><a href="{% url 'hive' %}">Hive</a></li>
-				<li class="right-anime"><a href="{% url 'contact' %}">Contact Us</a></li>
-				<li class="right-anime"><a href="{% url 'about' %}">About Us</a></li>
-				<!-- <li class="right-anime"><a href="./profile.html">Profile</a></li> -->
-				{% if user.is_authenticated %}
-				<li class="right-anime"><a href="{% url 'profile' %}">Profile</a></li>
-				<li class="right-anime"><a href="{% url 'logout' %}">Logout</a></li>
-				{% else %}
-				<li class="right-anime"><a href="{% url 'login' %}">Register/Login</a></li>
-				{% endif %}
-			</ul>
-		</nav>
-		<!-- <div class="search-container">
-			<img src="./images/search-logo2.png" alt="search logo" />
-			<input name="search" type="search" placeholder="Search"/>
-		</div> -->
-	</div>
+	<!-- <div class="nav-and-user"> -->
+		<div style="display: flex;">
+			<nav class="left-anime nav">
+				<ul>
+					<!-- <li class="right-anime"><a href="./index-static.html">Home</a></li> -->
+					<li class="right-anime"><a href="{% url 'home' %}">Home</a></li>
+					<li class="right-anime"><a href="{% url 'hive' %}">Hive</a></li>
+					<li class="right-anime"><a href="{% url 'contact' %}">Contact Us</a></li>
+					<!-- <li class="right-anime"><a href="{% url 'about' %}">About Us</a></li> -->
+					<!-- <li class="right-anime"><a href="./profile.html">Profile</a></li> -->
+					{% if user.is_authenticated %}
+					<!-- <li class="right-anime" style="color: brown;"><a>{{user.email}}</a></li> -->
+					<li class="right-anime"><a href="{% url 'profile' user.id %}">Profile</a></li>
+					<li class="right-anime"><a href="{% url 'logout' %}">Logout</a></li>
+					{% else %}
+					<li class="right-anime"><a href="{% url 'login' %}">Register/Login</a></li>
+					{% endif %}
+				</ul>
+			</nav>
+			<!-- <div class="search-container">
+				<img src="./images/search-logo2.png" alt="search logo" />
+				<input name="search" type="search" placeholder="Search"/>
+			</div> -->
+		</div>
+	<!-- </div> -->
 </header>
+{% if user.is_authenticated %}
+	<div class="greeting nav">
+		<a style="text-decoration: none;" href="{% url 'profile' user.id %}"><h1 class="click-anime">Welcome {{ user.first_name|default:empty|capfirst }}</h1></a>
+	</div>
+{% endif %}
+{% endwith %}
