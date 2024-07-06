@@ -6,21 +6,30 @@
 		<h1 class="right-anime">{{ register.title }}</h1>
 		<!-- <form class="form-register" action="/submit-your-form-handler" method="POST"> -->
 		<form id="form" class="form-register" action="" method="POST">
+			{% csrf_token %}
 			<div class="down-drop">
 				<span class="required">*</span>
-				<input id="firstname" name="firstname" type="text" placeholder="First name" required>
+				<input id="first_name" name="first_name" type="text" placeholder="First name" required>
 			</div>
 			<div class="down-drop">
 				<span class="not-required">*</span>
-				<input id="lastname" name="lastname" type="text" placeholder="Last name (Optional)">
+				<input id="last_name" name="last_name" type="text" placeholder="Last name (Optional)">
 			</div>
+			<div class="down-drop">
+				<span class="not-required">*</span>
+				<input id="middle_name" name="middle_name" type="text" placeholder="Middle name (Optional)">
+			</div>
+			<!-- <div class="down-drop">
+				<span class="required">*</span>
+				<input id="username" name="username" type="text" placeholder="Username" required>
+			</div> -->
 			<div class="down-drop">
 				<span class="required">*</span>
 				<input id="email" name="email" type="email" placeholder="Email" required>
 			</div>
 			<div class="down-drop">
-				<div><span class="not-required">*</span>
-				<input id="number" name="number" type="tel" placeholder="Phone Number (Optional)">
+				<span class="not-required">*</span>
+				<input id="phone" name="phone" type="tel" placeholder="Phone Number (Optional)">
 			</div>
 			<div class="down-drop">
 				<span class="required">*</span>
@@ -30,9 +39,12 @@
 				<span class="required">*</span>
 				<input id="password2" name="password2" type="password" placeholder="Enter Password again" required>
 			</div>
+			<div class="down-drop message-box">
+				<p id="password-match-message"></p>
+			</div>
 			<div class="down-drop">
-				<div><span class="not-required">*</span>
-				<input id="Website" name="Website" type="text" placeholder="Website (Optional)">
+				<span class="not-required">*</span>
+				<input id="website" name="website" type="text" placeholder="Website (Optional)">
 			</div>
 			<div>
 				<span class="not-required">*</span>
