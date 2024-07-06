@@ -1,15 +1,30 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block section %}
+{% with "" as empty %}
 <section class="article">
+	{% if user.is_authenticated and is_owner %}
+	<div class="click-anime">
+		<div class="small-container">
+			<a href="{% url 'update_article_form' article.id %}">
+				<button>Edit Article</button>
+			</a>
+		</div>
+	</div>
+	{% endif %}
 	<h1 class="right-anime" style="margin-bottom: 0;">{{ article.title }}</h1>
 	<div class="flex-block top-drop">
 		<!-- <a href="./profile.html">Profile</a> -->
-		<h2>By <a href="{% url 'profile' %}" style="text-decoration: underline; color: rgb(134,77,37);">{{ article.author }}</a></h2><span class="separator">•</span><h2>{{ article.date }}</h2>
+		<h2>By <a href="{% url 'profile' pk=article.author.pk %}" style="text-decoration: underline; color: rgb(134,77,37);">{{ article.author.first_name|default:empty|capfirst }}</a></h2><span class="separator">•</span><h2>{{ article.date|default:empty }}</h2>
 	</div>
 	<img class="down-drop article-pic" src="{% static 'logo - shade of brown/the-article-hive-favicon-white.png' %}" alt="article photo" />
 	<p class="left-anime">
-		{{ article.content }}
+		{{ article.content|default:empty }}
 	</p>
-</section>
+	<div class="flex-block top-drop">
+		<p>Written by <a href="{% url 'profile' pk=article.author.pk %}" style="text-decoration: underline; color: rgb(134,77,37);">{{ article.author.first_name|default:empty|capfirst }} {{ article.author.last_name|default:empty|capfirst }}</a></h2> on {{ article.date_published|default:empty }}</p>
+		<p>Views: {{ article.views|default:empty }} | Rating: {{ article.rating|default:empty }}</p>
+	</div>
+	</section>
+{% endwith %}
 {% endblock section %}
