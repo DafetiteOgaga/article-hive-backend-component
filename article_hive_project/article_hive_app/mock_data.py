@@ -263,3 +263,8 @@ loginText = {
 register = {
     'title': 'Become a Member for Free!',
 }
+
+# updateprofile page
+updateprofile = {
+    'title': 'Update your profile',
+}

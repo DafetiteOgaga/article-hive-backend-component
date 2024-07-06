@@ -134,4 +134,4 @@ STATICFILES_DIRS = [
 AUTH_USER_MODEL = 'article_hive_app.User'
 
 # login redirect for anonymous users
-# LOGIN_URL = '/<login url from routes>/'
+LOGIN_URL = '/login/'

@@ -170,8 +170,8 @@ body {
 }
 
 header {
-	padding: .5rem 1rem; /* under consideration */
-	padding-top: 2rem;
+	padding: 0 1rem; /* under consideration */
+	padding-top: 2.5rem;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -192,7 +192,7 @@ header {
 	}
 }
 
-nav {
+.nav {
 	padding-right: 2rem;
 	/* @media (min-width: 480px) {
 		padding-top: 1rem;
@@ -401,7 +401,7 @@ article p {
     }
 }
 
-.responsive {
+/* .responsive {
 	display: flex;
 	flex-direction: column;
 
@@ -411,9 +411,9 @@ article p {
 	@media (min-width: 1200px) {
         flex-direction: row;
     }
-}
+} */
 
-.hive-responsive {
+.responsive {
 	display: grid;
     grid-template-columns: repeat(auto-fill, minmax(1fr));
     /* margin: 0.5rem; */
@@ -908,4 +908,97 @@ form p a:active {
 
 .article-pic {
 	border-radius: 0.6rem;
+}
+
+#start-320 {
+	font-size: 3rem;
+}
+
+.message-box {
+	display: flex;
+	justify-content: start;
+}
+.message-box p {
+	height: 0;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	font-style: italic;
+	color: red;
+	text-align: start;
+	font-size: 0.5rem;
+
+	@media (min-width: 720px) {
+        font-size: 0.5rem;
+    }
+	@media (min-width: 1024px) {
+        font-size: 0.9rem;
+    }
+}
+
+.profile-update {
+	width: 100%;
+	font-size: 0.49rem;
+
+	@media (min-width: 720px) {
+        font-size: 0.55rem;
+    }
+	@media (min-width: 1024px) {
+        font-size: 0.9rem;
+    }
+}
+
+.greeting {
+	display: grid;
+	justify-content: end;
+}
+.greeting h1 {
+	font-size: small;
+	margin: 0;
+	color: rgb(134,77,37);
+
+	@media (min-width: 480px) {
+        font-size: medium;
+		padding-right: 1rem;
+    }
+	@media (min-width: 1024px) {
+        font-size: x-large;
+    }
+	@media (min-width: 1024px) {
+        padding-right: 2.5rem;
+    }
+}
+
+.profile-buttons button{
+	margin: 0 0.5rem;
+}
+
+.small-container button {
+	background-color: rgb(134,77,37);
+	color: white;
+	border: none;
+	border-radius: .6rem;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.3s ease;
+	font-size: 0.8rem;
+	padding: 0.3rem 0.2rem;
+
+	@media (min-width: 480px) {
+        font-size: 1rem;
+    }
+	@media (min-width: 720px) {
+        font-size: 1.2rem;
+		padding: 0.6rem 0.45rem;
+    }
+	@media (min-width: 1024px) {
+        font-size: 2rem;
+    }
+	@media (min-width: 1200px) {
+        padding: 0.4rem 0.3rem;
+		font-size: 1.4rem;
+    }
+	@media (min-width: 1300px) {
+        padding: 0.8rem 0.7rem;
+		font-size: 1.4rem;
+    }
 }

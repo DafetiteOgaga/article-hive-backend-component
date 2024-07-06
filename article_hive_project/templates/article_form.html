@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block section %}
+{% with "" as empty %}
+<section class="contact">
+	<div class="content top-drop">
+		<h1 class="right-anime">{{ article }}</h1>
+		<!-- <form id="form" class="form-contact" action="/submit-your-form-handler" method="POST"> -->
+		<form id="form" class="form-contact" action="" method="POST">
+			{% csrf_token %}
+			<div class="down-drop">
+				<span class="required">*</span>
+				<input id="title" name="title" type="text" placeholder="Title of your Article"  required>
+			</div>
+			<div class="down-drop">
+				<span class="required">*</span>
+				<textarea id="content" name="content" placeholder="Compose your Article here" rows="10" required></textarea>
+			</div>
+			<span class="not-required">*</span>
+			<div class="click-anime">
+				<button type="submit">Post</button>
+			</div>
+		</form>
+	</div>
+</section>
+{% endwith %}
+{% endblock section %}

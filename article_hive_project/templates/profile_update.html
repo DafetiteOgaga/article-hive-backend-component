@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+{% comment %}
+<!-- {% load css_styler %} -->
+{% endcomment %}
+{% block section %}
+{% with "" as empty %}
+<section class="register">
+	<div class="content top-drop">
+		<h1 class="right-anime">{{ updateprofile.title|default:empty }} {{ user.first_name|default:empty }}</h1>
+		<!-- <form class="form-register" action="/submit-your-form-handler" method="POST"> -->
+		{% comment %}
+		<form id="form" class="form-register" action="{% url 'profile_update' pk=profile.pk %}" method="POST">
+		{% endcomment %}
+		<form id="form" class="form-register" action="" method="POST">
+			{% csrf_token %}
+			<div class="down-drop">
+				<!-- <span class="required">*</span> -->
+				<span class="not-required">*</span>
+				<input id="first_name" name="first_name" type="text" value="{{ profile.first_name|default:empty }}">
+			</div>
+			<div class="down-drop">
+				<span class="not-required">*</span>
+				<input id="last_name" name="last_name" type="text" placeholder="Last name (Optional)" value="{{ profile.last_name|default:empty }}">
+			</div>
+			<div class="down-drop">
+				<span class="not-required">*</span>
+				<input id="middle_name" name="middle_name" type="text" placeholder="Middle name (Optional)" value="{{ profile.middle_name|default:empty }}">
+			</div>
+			<!-- <div class="down-drop">
+				<span class="required">*</span>
+				<input id="username" name="username" type="text" placeholder="Username" required>
+			</div> -->
+			<!-- <div class="down-drop">
+				<span class="required">*</span>
+				<input id="email" name="email" type="email" placeholder="Email" required>
+			</div> -->
+			<div class="down-drop">
+				<span class="not-required">*</span>
+				<input id="phone" name="phone" type="tel" placeholder="Phone Number (Optional)" value="{{ profile.phone|default:empty }}">
+			</div>
+			<!-- <div class="down-drop">
+				<span class="required">*</span>
+				<input id="password1" name="password1" type="password" placeholder="Password" required>
+			</div>
+			<div class="down-drop">
+				<span class="required">*</span>
+				<input id="password2" name="password2" type="password" placeholder="Enter Password again" required>
+			</div> -->
+			<!-- <div class="down-drop message-box">
+				<p id="password-match-message"></p>
+			</div> -->
+			<div class="down-drop">
+				<span class="not-required">*</span>
+				<input id="website" name="website" type="text" placeholder="Website (Optional)" value="{{ profile.website|default:empty }}">
+			</div>
+			<!-- <div class="down-drop">
+				<span class="not-required">*</span>
+				<textarea id="aboutme" name="aboutme" type="textarea" placeholder="About Me (Optional)">
+			</div> -->
+			<div class="down-drop">
+				<span class="not-required">*</span>
+				<textarea class="profile-update" id="aboutme" name="aboutme" placeholder="About Me" rows="4">{{ profile.aboutme|default:empty }}</textarea>
+			</div>
+			{% comment %}
+			<!-- <div class="down-drop">
+                <span class="not-required">*</span>
+                {{ form.last_name|atrs:"class=css_styler, placeholder=Last name (Optional)" }}
+            </div> -->
+			{% endcomment %}
+			<div>
+				<span class="not-required">*</span>
+				<div class="click-anime">
+					<button type="submit">Update Profile</button>
+				</div>
+			<!-- <p>Already a member? Login<a href="{% url 'login' %}">here</a></p> -->
+		</form>
+	</div>
+</section>
+{% endwith %}
+{% endblock section %}
+
