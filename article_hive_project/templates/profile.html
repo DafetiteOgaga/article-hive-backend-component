@@ -1,23 +1,38 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block section %}
+{% with "" as empty %}
 <section class="profile">
 	<div>
-		<div class="profile-img-container right-anime">
+		<div class="profile-img-container right-anime small-container">
 			<img src="{% static 'images/placeholder.png' %}" alt="search logo" />
-			<h1>{{ profile.author }}</h1>
+			<h1>{{ member.first_name|default:empty|capfirst }} {{ member.middle_name|default:empty|capfirst }} {{ member.last_name|default:empty|capfirst }}</h1>
+			{% if user.is_authenticated %}
+			<div class="click-anime">
+				<div class="profile-buttons">
+					<a href="{% url 'profile_update' user.id %}">
+						<button>Update Profile</button>
+					</a>
+					<a href="{% url 'article_form' %}">
+						<button>Post an Article</button>
+					</a>
+				</div>
+            </div>
+			{% endif %}
 		</div>
-		<p class="down-drop">
-			{{ profile.about_author }}
+		<h1 style="margin-bottom: 0;" class="left-anime">About Me</h1>
+		<p style="margin-top: 0;" class="down-drop">
+			{{ member.aboutme|default:empty }}
 		</p>
 	</div>
 	<div class="top-drop">
-		<p>Number of Articles: {{ profile.number_of_articles }}</p>
-		<p>Rating: {{ profile.rating }}</p>
-		<p>Followers: {{ profile.followers }}</p>
-		<p>Phone {{ profile.phone_number }}</p>
-		<p>Email: {{ profile.email }}</p>
-		<p>Website: {{ profile.website }}</p>
+		<p>Number of Articles: {{ profile.number_of_articles|default:empty }}</p>
+		<p>Rating: {{ profile.rating|default:empty }}</p>
+		<p>Followers: {{ profile.followers|default:empty }}</p>
+		<p>Phone {{ member.phone|default:empty }}</p>
+		<p>Email: {{ member.email|default:empty }}</p>
+		<p>Website: {{ member.website|default:empty }}</p>
 	</div>
 </section>
+{% endwith %}
 {% endblock section %}
