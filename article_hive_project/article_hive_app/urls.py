@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+# from django.contrib.auth import views as auth_views
 
 urlpatterns = [
 	# Create your urlpatterns here.
@@ -14,15 +15,19 @@ urlpatterns = [
 	path('logout/', views.logout_page, name='logout'),
 	path('register/', views.register_page, name='register'),
 
-
 	# path('article/new/<int:pk>/', views.article_form, name='article_form'),
 	path('article/new/', views.article_form, name='article_form'),
 	path('update-article-form/<int:pk>/', views.update_article_form, name='update_article_form'),
 
+	path('password_change/', views.CustomPasswordChangeView.as_view(), name='password_change'),
+    path('password_change/done/', views.CustomPasswordChangeDoneView.as_view(), name='password_change_done'),
+    path('password_reset/', views.CustomPasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done/', views.CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', views.CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', views.CustomPasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
-	# path('', views.article_list, name='article_list'),
-    # path('article/<int:pk>/', views.article_detail, name='article_detail'),
-
+	path('test-email/', views.test_email_view, name='test_email'),
+	path('test-404/', lambda request: None),
 
 	path('test_authentication/', views.test_authentication, name='test_authentication'),
 	path('ports/', views.checkRequest, name='checkRequest'),
