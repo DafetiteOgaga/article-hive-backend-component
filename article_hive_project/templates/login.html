@@ -18,7 +18,13 @@
 				<div class="click-anime">
 					<button type="submit">Log in</button>
 				</div>
-			<p>Not yet a member? Register<a href="{% url 'register' %}">here</a></p>
+				<div class="forgot-password">
+					<!-- <div> -->
+						<p>Not yet a member? Register<a href="{% url 'register' %}">here</a></p>
+						<p>OR</p>
+						<p>Forgot your Password? Reset it<a href="{% url 'password_reset' %}">here</a></p>
+					<!-- </div> -->
+				</div>
 		</form>
 	</div>
 </section>
