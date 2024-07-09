@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block section %}
+<section class="about auth">
+	<h1 style="display: flex; justify-content: center; color: red;" class="right-anime">401 Unauthorized</h1>
+	<p style="display: flex; justify-content: center;" class="left-anime">You must be logged in to view this page.</p>
+	<div class="click-anime">
+		<div class="small-container">
+			<a href="{% url 'home' %}">
+				<button>Go to Home</button>
+			</a>
+		</div>
+	</div>
+</section>
+{% endblock section %}
