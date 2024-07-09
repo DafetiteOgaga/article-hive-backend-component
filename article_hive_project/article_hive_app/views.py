@@ -1,31 +1,36 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.utils.html import escape
 from .mock_data import *
+from django.core.mail import send_mail
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+import random
 from django.contrib.auth.decorators import login_required
 from .models import Article
-from .forms import ContactForm, RegistrationForm, ProfileUpdateForm, ArticleForm
-from django.contrib.auth import authenticate, login, logout
+from .forms import ContactForm, RegistrationForm, ProfileUpdateForm
+from .forms import CustomPasswordChangeForm, CustomPasswordResetForm
+from .forms import CustomSetPasswordForm
+from .forms import ArticleForm
+import time
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import get_user_model
+from django.contrib.auth import views as auth_views
+from django.contrib.auth import authenticate, login, logout, get_user_model
 User = get_user_model()
 
 # from .models import Article, Comment, Contact
 
 # to-do (add login required decorator):
-# 5. PasswordChangeView
-# 6. PasswordResetView
-# 7. PasswordResetConfirmView
-# 8. PasswordResetCompleteView
-#10. pagination for hive page
-#11. register the models with admin
+#13. create superuser (include username, then remove it afterwards)
 
 # Create your views here.
 def home(request):
-    articles = Article.objects.all()[:8]
+    articles = Article.objects.all()
+    ratings = articles[::-1]
+    articles = list(articles[:8])
+    random.shuffle(articles)
     context = {
         'articles': articles,
+        'ratings': ratings,
         # 'items': items,
         'rated': rated,
         'pgname': 'Home'
@@ -34,8 +39,22 @@ def home(request):
 
 def hive(request):
     articles = Article.objects.all()
+    ratings = articles[::-1]
+    articles = list(articles)
+    random.shuffle(articles)
+
+    paginator = Paginator(articles, 8)
+    page_number = request.GET.get('page')
+    try:
+        articles_paginated = paginator.page(page_number)
+    except PageNotAnInteger:
+        articles_paginated = paginator.page(1)
+    except EmptyPage:
+        articles_paginated = paginator.page(paginator.num_pages)
+
     context = {
-        'articles': articles,
+        'articles': articles_paginated,
+        'ratings': ratings,
         # 'items': hives,
         'rated': rated,
         'pgname': 'Hive'
@@ -80,6 +99,8 @@ def contact_page(request):
 def profile_page(request, pk):
     member = get_object_or_404(User, pk=pk)
     print(f"User ID profile: {member.pk}")
+    print(f"Profile picture path: {member.profile_picture}")
+    print(f"Profile aboutme path: {member.aboutme}")
     context = {
         'member': member,
         'profile': profile,
@@ -91,41 +112,37 @@ def profile_page(request, pk):
 def profile_update(request, pk):
     user = get_object_or_404(User, pk=pk)
     print(f"User ID profile update: {user.pk}")
+    old_picture = user.profile_picture
+    print(f"Old profile picture path #####: {old_picture}")
     
     if request.user != user:
         return redirect('home')
     
     if request.method == 'POST':
-        form = ProfileUpdateForm(request.POST, instance=user)
+        form = ProfileUpdateForm(request.POST, request.FILES, instance=user)
         print(f'form content: {request.POST}')
         # print('###################################')
         # print(f'form: {form}')
         # print('###################################')
         if form.is_valid():
             print(f'form.is_valid: {form.is_valid()}')
+            print(f'form cleaned data: {form.cleaned_data}')
+            print(f'form changed data: {form.changed_data}')
+            print(f'str(user.profile_picture) ### 1 : {str(user.profile_picture)}')
+            if 'profile_picture' in form.changed_data:
+                if str(old_picture) != 'profile_pictures/placeholder.png':
+                    print(f'old_picture is NOT placeholder ### 2 : {str(old_picture) == "profile_pictures/placeholder.png"}')
+                    old_picture.delete(save=False)  # Delete the old profile picture from the filesystem
+                # else:
+                #     print(f'old_picture is placeholder ### 2 : {str(old_picture) == "profile_pictures/placeholder.png"}')
+                user.profile_picture = form.cleaned_data['profile_picture']
+                # user.profile_picture = 'profile_pictures/placeholder.png'
             # user = form.save()
             form.save()
+            # old_picture.delete()
             # return redirect('home')
+            # time.sleep(2)
             return redirect('profile', pk=pk)
-            # # password = form.get('password')
-            # # password2 = form.get('password2')
-            # # print(f'password (before): {password}')
-            # # print(f'password2 (before): {password2}')
-            # username = form.cleaned_data.get('email')
-            # password = form.cleaned_data.get('password1') # mandatory
-            # # password2 = form.cleaned_data.get('password2')
-            # # print(f'password (after): {password}')
-            # # print(f'password2 (after): {password2}')
-            # if request.POST.get('password1') == request.POST.get('password2'):
-            #     print(f"password == password2: {request.POST.get('password') == request.POST.get('password2')}")
-            #     user = authenticate(username=username, password=password)
-            #     login(request, user)
-            #     # return redirect('home')
-            #     return redirect('test_authentication')
-            # return JsonResponse({'message': 'incorrect password'})
-        # print('###################################')
-        # print(f'Form errors: {form.errors}')
-        # print('###################################')
         return JsonResponse({'message': 'form invalid', 'errors': form.errors})
     form = ProfileUpdateForm(instance=user)
     context = {
@@ -144,7 +161,8 @@ def profile_update(request, pk):
 def login_page(request):
     if request.method == 'POST':
         form = AuthenticationForm(request=request, data=request.POST)
-        # print(f'post: {request.POST}')
+        print(f'post: {request.POST}')
+        print(f'form.is_valid: {form.is_valid()}')
         if form.is_valid():
             # print(f'form.is_valid: {form.is_valid()}')
             username = form.cleaned_data.get('username')
@@ -157,6 +175,7 @@ def login_page(request):
                 return redirect('home')
                 # return JsonResponse({'message': 'success'})
         # print(f'user is None')
+            return JsonResponse({'message': 'not registered',})
         return JsonResponse({'message': 'error',})
     context = {
         'login': loginText,
@@ -172,7 +191,7 @@ def logout_page(request):
 def register_page(request):
     form = RegistrationForm()
     if request.method == 'POST':
-        form = RegistrationForm(request.POST)
+        form = RegistrationForm(request.POST, request.FILES)
         print(f'form content: {request.POST}')
         # print('###################################')
         # print(f'form: {form}')
@@ -233,19 +252,7 @@ def article_form(request):
     }
     print(f'just an empty form')
     return render(request, 'article_form.html', context)
-#########################################################################################################
-# def article_list(request):
-#     articles = Article.objects.all()
-#     context = {
-#         'articles': articles
-#         }
-#     return render(request, 'article_list.html', context)
-#########################################################################################################
-# def article_detail(request, pk):
-#     article = get_object_or_404(Article, pk=pk)
-#     return render(request, 'article_detail.html', {'article': article})
-#########################################################################################################
-#########################################################################################################
+
 @login_required
 def update_article_form(request, pk):
     article = get_object_or_404(Article, pk=pk)
@@ -280,6 +287,31 @@ def update_article_form(request, pk):
     return render(request, 'update_article_form.html', context)
 #########################################################################################################
 
+class CustomPasswordChangeView(auth_views.PasswordChangeView):
+    form_class = CustomPasswordChangeForm
+    template_name = 'auth/password_change_form.html'
+
+class CustomPasswordChangeDoneView(auth_views.PasswordChangeDoneView):
+    template_name = 'auth/password_change_done.html'
+
+class CustomPasswordResetView(auth_views.PasswordResetView):
+    form_class = CustomPasswordResetForm
+    template_name = 'auth/password_reset_form.html'
+    # for backend email
+    email_template_name = 'auth/password_reset_email.html'
+    subject_template_name = 'auth/password_reset_subject.txt'
+    success_url = '/password_reset/done/'
+
+class CustomPasswordResetDoneView(auth_views.PasswordResetDoneView):
+    template_name = 'auth/password_reset_done.html'
+
+class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
+    form_class = CustomSetPasswordForm
+    template_name = 'auth/password_reset_confirm_form.html'
+    success_url = '/reset/done/'
+
+class CustomPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
+    template_name = 'auth/password_reset_complete.html'
 
 def test_authentication(request):
     context = {
@@ -313,3 +345,16 @@ def checkRequest(request):
         request_info1 += f"<h2>{escape(key)}</h2><pre>{escape(str(value))}</pre>"
     
     return HttpResponse(request_info1+'<br/><hr/><hr/><hr/><hr/><hr/><hr/><br/>')
+
+def test_email_view(request):
+    try:
+        send_mail(
+            'Test Email Subject',
+            'This is a test email body.',
+            'ogagadafetite@gmail.com',
+            ['bettydafetiteogaga@gmail.com'],
+            fail_silently=False,
+        )
+        return HttpResponse('Email sent successfully!')
+    except Exception as e:
+        return HttpResponse(f'Error: {str(e)}')
