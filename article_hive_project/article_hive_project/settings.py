@@ -32,16 +32,12 @@ SECRET_KEY = 'django-insecure-ks%dws4&%hgxe21a(9g+8dmp)9l(tq7k&w&s4cuz2=dy4joql^
 # DEBUG = True
 # ALLOWED_HOSTS = []
 
-DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
-# DEBUG = False # production
+DEBUG = False # production
 ALLOWED_HOSTS = [
-    'article-hive.vercel.app',
+    'dafetite.pythonanywhere.com',
     'localhost',
     '127.0.0.1'
 ]
-VERCEL_URL = os.environ.get('VERCEL_URL')
-if VERCEL_URL:
-    ALLOWED_HOSTS.append(VERCEL_URL)
 
 # Application definition
 
@@ -53,7 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'article_hive_app',		# <- added article_hive_app here
-    'django_extensions',		# <- added django_extensions here
+    # 'django_extensions',		# <- added django_extensions here
 ]
 
 MIDDLEWARE = [
@@ -71,7 +67,7 @@ ROOT_URLCONF = 'article_hive_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -90,21 +86,21 @@ WSGI_APPLICATION = 'article_hive_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'OPTIONS': {
-#             'read_default_file': '../MySQL_credentials.cnf',
-#         },
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {
+            'read_default_file': '../MySQL_credentials.cnf',
+        },
+    }
+}
 
 
 # Password validation
@@ -161,18 +157,19 @@ AUTH_USER_MODEL = 'article_hive_app.User'
 LOGIN_URL = '/login/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.environ.get('email_host')
-EMAIL_PORT = os.environ.get('email_port')
-EMAIL_HOST_USER = os.environ.get('email_user')
-EMAIL_HOST_PASSWORD = os.environ.get('email_password')
-DEFAULT_FROM_EMAIL = os.environ.get('email_default_from')
-EMAIL_USE_TLS = True
-# EMAIL_HOST = config.get('email', 'host')
-# EMAIL_PORT = config.getint('email', 'port')
-# EMAIL_HOST_USER = config.get('email', 'user')
-# EMAIL_HOST_PASSWORD = config.get('email', 'password')
-# EMAIL_USE_TLS = config.getboolean('email', 'use_tls')
-# DEFAULT_FROM_EMAIL = config.get('email', 'default_from')
+# EMAIL_HOST = os.environ.get('email_host')
+# EMAIL_PORT = os.environ.get('email_port')
+# EMAIL_HOST_USER = os.environ.get('email_user')
+# EMAIL_HOST_PASSWORD = os.environ.get('email_password')
+# DEFAULT_FROM_EMAIL = os.environ.get('email_default_from')
+# EMAIL_USE_TLS = True
+# or
+EMAIL_HOST = config.get('email', 'host')
+EMAIL_PORT = config.getint('email', 'port')
+EMAIL_HOST_USER = config.get('email', 'user')
+EMAIL_HOST_PASSWORD = config.get('email', 'password')
+EMAIL_USE_TLS = config.getboolean('email', 'use_tls')
+DEFAULT_FROM_EMAIL = config.get('email', 'default_from')
 
 # # urls for password reset
 # LOGIN_REDIRECT_URL = 'home'
