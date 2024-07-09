@@ -4,8 +4,7 @@
 <section class="register">
 	<div class="content top-drop">
 		<h1 class="right-anime">{{ register.title }}</h1>
-		<!-- <form class="form-register" action="/submit-your-form-handler" method="POST"> -->
-		<form id="form" class="form-register" action="" method="POST">
+		<form id="form" class="form-register" action="" method="POST" enctype="multipart/form-data">
 			{% csrf_token %}
 			<div class="down-drop">
 				<span class="required">*</span>
@@ -46,12 +45,24 @@
 				<span class="not-required">*</span>
 				<input id="website" name="website" type="text" placeholder="Website (Optional)">
 			</div>
+			<div class="down-drop">
+				<span class="not-required">*</span>
+				<hr>
+				<label for="profile_picture">Profile Photo</label>
+				<input id="profile_picture" name="profile_picture" type="file" accept="image/*">
+				<img id="selectedImage" src="#" alt="Profile Picture" width="100" style="display: none;">
+				<!-- {% if profile.profile_picture %}
+					<img src="{{ profile.profile_picture.url }}" alt="Profile Picture" width="100">
+				{% endif %} -->
+			</div>
 			<div>
 				<span class="not-required">*</span>
 				<div class="click-anime">
 					<button type="submit">Register</button>
 				</div>
-			<p>Already a member? Login<a href="{% url 'login' %}">here</a></p>
+			<div class="forgot-password">
+				<p>Already a member? Login<a href="{% url 'login' %}">here</a></p>
+			</div>
 		</form>
 	</div>
 </section>

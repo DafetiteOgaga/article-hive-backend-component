@@ -14,9 +14,9 @@
 						{{ article.content|truncatechars:250|default:empty }}
 					</p>
 					<div class="author-profilePic-date position-h1-new">
-						<img src="{% static 'images/placeholder.png' %}" alt="author image" /><span class="separator">•</span>
+						<img src="{{ article.author.profile_picture.url }}" alt="author image" /><span class="separator">•</span>
 						<h1>{{ article.author.first_name|default:empty|capfirst }}</h1><span class="separator">•</span>
-						<h1>{{ article.date|default:empty }}</h1>
+						<h1>{{ article.date_published|default:empty|date:"jS b, Y" }}</h1>
 					</div>
 				</article>
 			</a>
@@ -24,9 +24,9 @@
 		</div>
 	</div>
 	<div>
-		<h1 class="section-headings right-anime" >Top rated</h1>
+		<h1 class="section-headings right-anime" >Latest Reads</h1>
 		<div>
-			{% for rating in articles|slice:":4" %}
+			{% for rating in ratings|slice:":4" %}
 				<a class="box-link" href="{% url 'article' pk=rating.pk %}">
 					<article class="article-box top-rated index-page left-anime article-rated">
 						<h1 class="hor-align">{{ rating.title|default:empty }}</h1>
@@ -34,18 +34,33 @@
 							{{ rating.content|truncatechars:80|default:empty }}
 						</p>
 						<div class="author-profilePic-date position-h1-new">
-							<h1>{{ rating.author|default:empty|capfirst }}</h1><span class="separator separator-rated">•</span>
-							<h1>{{ rating.date|default:empty }}</h1>
+							<h1>{{ rating.author.first_name|default:empty|capfirst }}</h1><span class="separator separator-rated">•</span>
+							<h1>{{ rating.date_published|default:empty|date:"jS b, Y" }}</h1>
 						</div>
 					</article>
 				</a>
 			{% endfor %}
 		</div>
 	</div>
-	<div style="display: flex; justify-content: center;">
-		<a href="#" class="link-tag">Next 3 4 5 ... </a>
-		<a href="#" class="link-tag">Last</a>
-	</div>
+	<div class="pagination">
+        <span class="step-links">
+            {% if articles.has_previous %}
+                <a href="?page=1"><h1>&laquo; first</h1></a>
+                <a href="?page={{ articles.previous_page_number }}"><h1>previous</h1></a>
+            {% endif %}
+
+            <span class="current">
+				<h1 style="text-decoration: underline;">
+					{{ articles.number }} of {{ articles.paginator.num_pages }}
+				</h1>
+            </span>
+
+            {% if articles.has_next %}
+                <a href="?page={{ articles.next_page_number }}"><h1>next</h1></a>
+                <a href="?page={{ articles.paginator.num_pages }}"><h1>last &raquo;</h1></a>
+            {% endif %}
+        </span>
+    </div>
 </section>
 {% endwith %}
 {% endblock section %}

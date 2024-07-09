@@ -1,46 +1,49 @@
 const form = document.getElementById('form');
 const password = document.getElementById('password1');
 const password2 = document.getElementById('password2');
+const new_password1 = document.getElementById('new_password1');
+const new_password2 = document.getElementById('new_password2');
 const passwordMatchMessage = document.getElementById('password-match-message');
 const submitButton = document.getElementById('submit-button');
 form.addEventListener('submit', submitHandler);
 password.addEventListener('input', checkPasswordMatch);
 password2.addEventListener('input', checkPasswordMatch);
+new_password1.addEventListener('input', checkPasswordMatch);
+new_password2.addEventListener('input', checkPasswordMatch);
 
 // let msg = ''
 
 function checkPasswordMatch() {
-	// submitButton.disabled = true;
-	// passwordMatchMessage.style.fontStyle = 'italic';
-	// passwordMatchMessage.style.color = 'red';
 	passwordMatchMessage.textContent = '';
-	// passwordMatchMessage.style.height = '0';
-	// passwordMatchMessage.style.overflow = 'hidden';
     if (password.value === '' && password2.value === '') {
         passwordMatchMessage.textContent = '';
-        // passwordMatchMessage.style.height = '0';
-        // passwordMatchMessage.style.overflow = 'hidden';
-		// submitButton.disabled = true;
     } else {
         if (password.value === password2.value) {
 			if (password2.value.length < 8) {
 				passwordMatchMessage.textContent = 'Password must be atleast 8 characters.';
-				// passwordMatchMessage.style.color = 'red';
-				// submitButton.disabled = true;
-				// passwordMatchMessage.style.fontStyle = 'italic';
-				// passwordMatchMessage.style.color = 'red';
 			} else {
 				passwordMatchMessage.textContent = 'Passwords match.';
 				passwordMatchMessage.style.color = 'green';
-				// passwordMatchMessage.style.fontStyle = 'italic';
-				// submitButton.disabled = false;
 			}
         } else {
             passwordMatchMessage.textContent = 'Passwords do not match.';
-            // passwordMatchMessage.style.color = 'red';
-			// submitButton.disabled = true;
-			// passwordMatchMessage.style.fontStyle = 'italic';
-			// passwordMatchMessage.style.color = 'red';
+        }
+        passwordMatchMessage.style.height = 'auto';
+        passwordMatchMessage.style.overflow = 'visible';
+    }
+
+	if (new_password1.value === '' && new_password2.value === '') {
+        passwordMatchMessage.textContent = '';
+    } else {
+        if (new_password1.value === new_password2.value) {
+			if (new_password2.value.length < 8) {
+				passwordMatchMessage.textContent = 'Password must be atleast 8 characters.';
+			} else {
+				passwordMatchMessage.textContent = 'Passwords match.';
+				passwordMatchMessage.style.color = 'green';
+			}
+        } else {
+            passwordMatchMessage.textContent = 'Passwords do not match.';
         }
         passwordMatchMessage.style.height = 'auto';
         passwordMatchMessage.style.overflow = 'visible';
@@ -49,8 +52,6 @@ function checkPasswordMatch() {
 
 function submitHandler (e) {
 	e.preventDefault();
-	// console.log('event activated')
-	// console.log(e.target.value)
 
     const formData = new FormData(form);
 	const name = formData.get('name');
@@ -83,8 +84,6 @@ function submitHandler (e) {
 			msg = `Welcome ${username}`;
 		}
     }
-	// alert(msg);
-    // form.reset();
 
 	fetch(form.action, {
 		method: 'POST',
@@ -100,14 +99,17 @@ function submitHandler (e) {
 	})
 	.then(data=>{
 		if (data) {
-			console.log('###################');
-			console.log('Raw response:', data);
-			console.log('###################');
+			// console.log('###################');
+			// console.log('Raw response:', data);
+			// console.log('###################');
 			if (data.message === 'success') {
 				alert(msg);
 				form.reset()
 			} else if (data.message === 'error') {
-				alert('Oopsy! Something went wrong.\nCheck your details again.');
+				alert('Oopsy! Something went wrong.\nCheck your login details again or register if you are not a member yet.');
+				window.location.reload();
+			} else if (data.message === 'not registered') {
+				alert('Oopsy! Not a Member yet.\nRegister for free and sign in.\nThank you.');
 				window.location.reload();
             } else if (data.message === 'incorrect password') {
 				alert('Your passwords does not match.\nCheck your details and try again.');

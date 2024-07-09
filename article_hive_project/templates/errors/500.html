@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block section %}
+<section class="about auth">
+	<h1 style="display: flex; justify-content: center; color: red;" class="right-anime">500 Internal Server Error</h1>
+	<p style="display: flex; justify-content: center;" class="left-anime">Something went wrong on our end. Please try again later.</p>
+	<div class="click-anime">
+		<div class="small-container">
+			<a href="{% url 'home' %}">
+				<button>Go to Home</button>
+			</a>
+		</div>
+	</div>
+</section>
+{% endblock section %}

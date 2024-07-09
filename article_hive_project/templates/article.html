@@ -14,8 +14,6 @@
 	{% endif %}
 	<h1 class="right-anime" style="margin-bottom: 0;">{{ article.title }}</h1>
 	<div class="flex-block top-drop">
-		<!-- <a href="./profile.html">Profile</a> -->
-		<h2>By <a href="{% url 'profile' pk=article.author.pk %}" style="text-decoration: underline; color: rgb(134,77,37);">{{ article.author.first_name|default:empty|capfirst }}</a></h2><span class="separator">•</span><h2>{{ article.date|default:empty }}</h2>
 	</div>
 	<img class="down-drop article-pic" src="{% static 'logo - shade of brown/the-article-hive-favicon-white.png' %}" alt="article photo" />
 	<p class="left-anime">

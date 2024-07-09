@@ -16,9 +16,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
+from .project_views import custom_error_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('article_hive_app.urls')),     # For article_hive_app configuration.
     # path("member/", include("django.contrib.auth.urls")), # for auth
 ]
+
+handler400 = lambda request, exception: custom_error_view(request, exception, 400)
+handler401 = lambda request, exception: custom_error_view(request, exception, 401)
+handler403 = lambda request, exception: custom_error_view(request, exception, 403)
+handler404 = lambda request, exception: custom_error_view(request, exception, 404)
+handler500 = lambda request: custom_error_view(request, status_code=500)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

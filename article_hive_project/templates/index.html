@@ -11,9 +11,9 @@
 					<article class="article-box index-page top-drop article-new">
 						<h1 class="hor-align">{{ item.title|default:empty }}</h1>
 						<div class="author-profilePic-date position-h1-new">
-							<img src="{% static 'images/placeholder.png' %}" alt="author image" /><span class="separator">•</span>
+							<img src="{{ item.author.profile_picture.url }}" alt="author image" /><span class="separator">•</span>
 							<h1>{{ item.author.first_name|default:empty|capfirst }}</h1><span class="separator">•</span>
-							<h1>{{ item.date|default:empty }}</h1>
+							<h1>{{ item.date_published|default:empty|date:"jS b, Y" }}</h1>
 						</div>
 						<p>
 							{{ item.content|truncatechars:250|default:empty }}
@@ -33,9 +33,9 @@
 		</div>
 	</div>
 	<div class="">
-		<h1 class="section-headings right-anime" >Top rated</h1>
+		<h1 class="section-headings right-anime" >Latest Reads</h1>
 		<div>
-			{% for rating in articles|slice:":4" %}
+			{% for rating in ratings|slice:":4" %}
 			<a class="box-link" href="{% url 'article' pk=rating.pk %}">
 					<article class="article-box top-rated index-page left-anime article-rated">
 						<h1 class="hor-align">{{ rating.title }}</h1>
@@ -44,7 +44,7 @@
 						</p>
 						<div class="author-profilePic-date position-h1-new">
 							<h1>{{ rating.author.first_name|default:empty|capfirst }}</h1><span class="separator separator-rated">•</span>
-							<h1>{{ rating.date|default:empty }}</h1>
+							<h1>{{ rating.date_published|default:empty|date:"jS b, Y" }}</h1>
 						</div>
 					</article>
 				</a>
