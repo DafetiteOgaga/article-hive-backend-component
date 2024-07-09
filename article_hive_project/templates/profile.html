@@ -5,7 +5,7 @@
 <section class="profile">
 	<div>
 		<div class="profile-img-container right-anime small-container">
-			<img src="{% static 'images/placeholder.png' %}" alt="search logo" />
+			<img src="{{ member.profile_picture.url|default:empty }}" alt="profile photo" />
 			<h1>{{ member.first_name|default:empty|capfirst }} {{ member.middle_name|default:empty|capfirst }} {{ member.last_name|default:empty|capfirst }}</h1>
 			{% if user.is_authenticated %}
 			<div class="click-anime">
@@ -15,6 +15,9 @@
 					</a>
 					<a href="{% url 'article_form' %}">
 						<button>Post an Article</button>
+					</a>
+					<a href="{% url 'password_change' %}">
+						<button>Change Password</button>
 					</a>
 				</div>
             </div>
@@ -32,6 +35,8 @@
 		<p>Phone {{ member.phone|default:empty }}</p>
 		<p>Email: {{ member.email|default:empty }}</p>
 		<p>Website: {{ member.website|default:empty }}</p>
+		<p>Member since: {{ member.date_joined|default:empty|date:"jS b, Y" }}</p>
+		<p>Last seen: {{ member.last_login|default:empty|date:"jS b, Y" }}</p>
 	</div>
 </section>
 {% endwith %}
