@@ -15,8 +15,8 @@ import os
 import configparser
 import os
 
-config = configparser.ConfigParser()
-config.read('../emailBackend_config.cnf')
+# config = configparser.ConfigParser()
+# config.read('../emailBackend_config.cnf')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -164,12 +164,12 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # DEFAULT_FROM_EMAIL = os.environ.get('email_default_from')
 # EMAIL_USE_TLS = True
 # or
-EMAIL_HOST = config.get('email', 'host')
-EMAIL_PORT = config.getint('email', 'port')
-EMAIL_HOST_USER = config.get('email', 'user')
-EMAIL_HOST_PASSWORD = config.get('email', 'password')
-EMAIL_USE_TLS = config.getboolean('email', 'use_tls')
-DEFAULT_FROM_EMAIL = config.get('email', 'default_from')
+# EMAIL_HOST = config.get('email', 'host')
+# EMAIL_PORT = config.getint('email', 'port')
+# EMAIL_HOST_USER = config.get('email', 'user')
+# EMAIL_HOST_PASSWORD = config.get('email', 'password')
+# EMAIL_USE_TLS = config.getboolean('email', 'use_tls')
+# DEFAULT_FROM_EMAIL = config.get('email', 'default_from')
 
 # # urls for password reset
 # LOGIN_REDIRECT_URL = 'home'
