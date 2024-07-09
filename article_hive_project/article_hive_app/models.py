@@ -1,23 +1,42 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings # use settings.AUTH_USER_MODEL as User
+import os, uuid
+from django.utils import timezone
+# from PIL import Image
+
+def unique_profile_pic(instance, filename):
+    base, ext = os.path.splitext(filename)
+    unique_id = uuid.uuid4().hex
+    new_filename = f"{base}_{unique_id}_{timezone.now().strftime('%Y%m%d%H%M%S')}{ext}"
+    return os.path.join('profile_pictures', new_filename)
 
 # Create your models here.
 class User(AbstractUser):
 	middle_name = models.CharField(max_length=100, null=True, blank=True)
 	email = models.EmailField(max_length=200, unique=True)
-	username = None
+	username = models.CharField(default="ArticleHiveUser", max_length=15)
+	# username = None
 	phone = models.CharField(null=True, blank=True, max_length=14)
 	website = models.URLField(max_length=200, null=True, blank=True)
-	# profile_picture = models.ImageField()
+	profile_picture = models.ImageField(upload_to=unique_profile_pic, null=True, blank=True, default='profile_pictures/placeholder.png')
 	# number_of_articles = models.ForeignKey(null=True, blank=True,)
 	# rating = models.ForeignKey(null=True, blank=True)
 	aboutme = models.TextField()
+	# profile_picture = None
 
 	USERNAME_FIELD = 'email'
 	REQUIRED_FIELDS = []
 	def __str__(self):
 		return self.email
+
+	# def save(self, *args, **kwargs):
+	# 	if self.profile_picture:
+	# 		print('getting and resizing profile picture ####************#####')
+	# 		img = Image.open(self.profile_picture)
+	# 		img = img.resize((300, 300), Image.Resampling.LANCZOS)
+	# 		img.save(self.profile_picture.path)
+	# 	super().save(*args, **kwargs)
 
 class Article(models.Model):
 	title = models.CharField(max_length=200)
