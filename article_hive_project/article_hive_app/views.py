@@ -4,7 +4,8 @@ from django.utils.html import escape
 from .mock_data import *
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-import random
+import random, os
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.contrib.auth.decorators import login_required
 from .models import Article
 from .forms import ContactForm, RegistrationForm, ProfileUpdateForm
@@ -130,15 +131,23 @@ def profile_update(request, pk):
             print(f'form changed data: {form.changed_data}')
             print(f'str(user.profile_picture) ### 1 : {str(user.profile_picture)}')
             if 'profile_picture' in form.changed_data:
-                if str(old_picture) != 'profile_pictures/placeholder.png':
-                    print(f'old_picture is NOT placeholder ### 2 : {str(old_picture) == "profile_pictures/placeholder.png"}')
-                    old_picture.delete(save=False)  # Delete the old profile picture from the filesystem
+                if old_picture and old_picture.name != 'profile_pictures/placeholder.png':
+                    if os.path.isfile(old_picture.path):
+                        os.remove(old_picture.path)
+                # if str(old_picture) != 'profile_pictures/placeholder.png':
+                #     print(f'old_picture is NOT placeholder ### 2 : {str(old_picture) == "profile_pictures/placeholder.png"}')
+                #     old_picture.delete(save=False)  # Delete the old profile picture from the filesystem
                 # else:
                 #     print(f'old_picture is placeholder ### 2 : {str(old_picture) == "profile_pictures/placeholder.png"}')
-                user.profile_picture = form.cleaned_data['profile_picture']
+                new_picture = form.cleaned_data['profile_picture']
+                # Check if the new picture is an uploaded file
+                if isinstance(new_picture, InMemoryUploadedFile):
+                    user.profile_picture = new_picture
+                # user.profile_picture = form.cleaned_data['profile_picture']
                 # user.profile_picture = 'profile_pictures/placeholder.png'
             # user = form.save()
-            form.save()
+            # form.save()
+            user.save()
             # old_picture.delete()
             # return redirect('home')
             # time.sleep(2)
