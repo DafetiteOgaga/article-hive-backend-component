@@ -88,10 +88,22 @@ WSGI_APPLICATION = 'article_hive_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'dafetite$article-hive_db',
+        'USER': 'dafetite',
+        'PASSWORD': 'debbydafe',
+        'HOST': 'dafetite.mysql.pythonanywhere-services.com',
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 
 # DATABASES = {
 #     'default': {
@@ -157,19 +169,12 @@ AUTH_USER_MODEL = 'article_hive_app.User'
 LOGIN_URL = '/login/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = os.environ.get('email_host')
-# EMAIL_PORT = os.environ.get('email_port')
-# EMAIL_HOST_USER = os.environ.get('email_user')
-# EMAIL_HOST_PASSWORD = os.environ.get('email_password')
-# DEFAULT_FROM_EMAIL = os.environ.get('email_default_from')
-# EMAIL_USE_TLS = True
-# or
-# EMAIL_HOST = config.get('email', 'host')
-# EMAIL_PORT = config.getint('email', 'port')
-# EMAIL_HOST_USER = config.get('email', 'user')
-# EMAIL_HOST_PASSWORD = config.get('email', 'password')
-# EMAIL_USE_TLS = config.getboolean('email', 'use_tls')
-# DEFAULT_FROM_EMAIL = config.get('email', 'default_from')
+EMAIL_HOST = 'smtp-relay.brevo.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = '781ac7001@smtp-brevo.com'
+EMAIL_HOST_PASSWORD = 'XbPRYhHEqt9Zpcv1'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'The Article Hive <ogagadafetite@gmail.com>'
 
 # # urls for password reset
 # LOGIN_REDIRECT_URL = 'home'
