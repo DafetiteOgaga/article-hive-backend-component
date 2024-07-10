@@ -1,15 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings # use settings.AUTH_USER_MODEL as User
-import os, uuid
+import os, uuid, io
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.utils import timezone
-# from PIL import Image
+from PIL import Image
 
 def unique_profile_pic(instance, filename):
-    base, ext = os.path.splitext(filename)
-    unique_id = uuid.uuid4().hex
-    new_filename = f"{base}_{unique_id}_{timezone.now().strftime('%Y%m%d%H%M%S')}{ext}"
-    return os.path.join('profile_pictures', new_filename)
+	base, ext = os.path.splitext(filename)
+	unique_id = uuid.uuid4().hex
+	new_filename = f"{base}_{unique_id}_{timezone.now().strftime('%Y%m%d%H%M%S')}{ext}"
+	return os.path.join('profile_pictures', new_filename)
 
 # Create your models here.
 class User(AbstractUser):
@@ -29,6 +30,52 @@ class User(AbstractUser):
 	REQUIRED_FIELDS = []
 	def __str__(self):
 		return self.email
+
+	def save(self, *args, **kwargs):
+		print('entering save method ###### 1')
+		print(f'self.profile_picture: {self.profile_picture}')
+		print(f'isinstance(self.profile_picture, InMemoryUploadedFile: {isinstance(self.profile_picture, InMemoryUploadedFile)}')
+		print('entering save method ###### 2')
+		if self.profile_picture or isinstance(self.profile_picture, InMemoryUploadedFile):
+			# Open the uploaded image
+			img = Image.open(self.profile_picture)
+			print('opened file ######')
+
+			# Convert to RGB if it's not
+			if img.mode != 'RGB':
+				img = img.convert('RGB')
+				print('converted file ######')
+
+			# Crop to square
+			min_dim = min(img.width, img.height)
+			left = (img.width - min_dim) / 2
+			top = (img.height - min_dim) / 2
+			right = (img.width + min_dim) / 2
+			bottom = (img.height + min_dim) / 2
+			img = img.crop((left, top, right, bottom))
+			print('cropped file ######')
+
+			# Resize
+			target_size = (200, 200)  # You can adjust this size
+			img = img.resize(target_size, Image.LANCZOS)
+			print('resize file ######')
+
+			# Save the processed image
+			output = io.BytesIO()
+			img.save(output, format='JPEG', quality=500)  # Adjust quality to reduce file size
+			output.seek(0)
+			print('processed image ######')
+
+			# Replace the image field's file with the processed image
+			self.profile_picture = InMemoryUploadedFile(
+				output, 'ImageField', 
+				f"{unique_profile_pic(self, self.profile_picture.name)}",
+				'image/jpeg', 
+				output.getbuffer().nbytes, 
+				None
+			)
+
+		super().save(*args, **kwargs)
 
 	# def save(self, *args, **kwargs):
 	# 	if self.profile_picture:
@@ -60,3 +107,4 @@ class Contact(models.Model):
 	name = models.CharField(max_length=200)
 	# the_article = models.ForeignKey('Article', on_delete=models.CASCADE)
 	created_at = models.DateTimeField(auto_now_add=True) # creation stamp
+ 
