@@ -36,7 +36,7 @@ class User(AbstractUser):
 		print(f'self.profile_picture: {self.profile_picture}')
 		print(f'isinstance(self.profile_picture, InMemoryUploadedFile: {isinstance(self.profile_picture, InMemoryUploadedFile)}')
 		print('entering save method ###### 2')
-		if self.profile_picture or isinstance(self.profile_picture, InMemoryUploadedFile):
+		if (self.profile_picture or isinstance(self.profile_picture, InMemoryUploadedFile)) and self.first_name:
 			# Open the uploaded image
 			img = Image.open(self.profile_picture)
 			print('opened file ######')
