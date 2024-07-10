@@ -31,7 +31,7 @@ SECRET_KEY = 'django-insecure-ks%dws4&%hgxe21a(9g+8dmp)9l(tq7k&w&s4cuz2=dy4joql^
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 # ALLOWED_HOSTS = []
-
+# DEBUG = True # for development
 DEBUG = False # production
 ALLOWED_HOSTS = [
     'dafetite.pythonanywhere.com',
@@ -83,6 +83,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'article_hive_project.wsgi.application'
 
 
+# Database
+# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -93,15 +96,14 @@ DATABASES = {
     }
 }
 
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 # DATABASES = {
 #     'default': {
-#          'ENGINE': 'django.db.backends.sqlite3',
-#          'NAME': BASE_DIR / 'db.sqlite3',
-#      }
-#  }
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 
 # DATABASES = {
 #     'default': {
