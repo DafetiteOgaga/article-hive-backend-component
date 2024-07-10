@@ -1,0 +1,10 @@
+article_hive_project/article_hive_project/__pycache__
+article_hive_project/article_hive_app/migrations/__pycache__
+article_hive_project/article_hive_app/__pycache__
+article-hive-venv
+article_hive_project/article_hive_app/templatetags/__pycache__
+__pycache__
+emailBackend_config.cnf
+MySQL_credentials.cnf
+article_hive_project/db.sqlite3
+article_hive_project/media/profile_pictures/*.jpeg
