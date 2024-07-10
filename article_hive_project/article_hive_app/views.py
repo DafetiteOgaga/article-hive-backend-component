@@ -34,7 +34,7 @@ def home(request):
         'ratings': ratings,
         # 'items': items,
         'rated': rated,
-        'pgname': 'Home'
+        'pgname': 'The-Article-Hive'
     }
     return render(request, 'index.html', context)
 
