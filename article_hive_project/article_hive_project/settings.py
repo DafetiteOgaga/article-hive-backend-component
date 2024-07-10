@@ -173,21 +173,21 @@ AUTH_USER_MODEL = 'article_hive_app.User'
 # login redirect for anonymous users
 LOGIN_URL = '/login/'
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp-relay.brevo.com'
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = '781ac7001@smtp-brevo.com'
-# EMAIL_HOST_PASSWORD = 'XbPRYhHEqt9Zpcv1'
-# EMAIL_USE_TLS = True
-# DEFAULT_FROM_EMAIL = 'The Article Hive <ogagadafetite@gmail.com>'
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-mail.outlook.com'
+EMAIL_HOST = 'smtp-relay.brevo.com'
 EMAIL_PORT = 587
+EMAIL_HOST_USER = '781ac7001@smtp-brevo.com'
+EMAIL_HOST_PASSWORD = 'XbPRYhHEqt9Zpcv1'
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'responseSenderTeam@outlook.com'
-EMAIL_HOST_PASSWORD = 'debbydafe@123'
-DEFAULT_FROM_EMAIL = 'The Article Hive <no-reply@Ahive.com>'
+DEFAULT_FROM_EMAIL = 'The Article Hive <ogagadafetite@gmail.com>'
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp-mail.outlook.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'responseSenderTeam@outlook.com'
+# EMAIL_HOST_PASSWORD = 'debbydafe@123'
+# DEFAULT_FROM_EMAIL = 'The Article Hive <no-reply@Ahive.com>'
 
 # # urls for password reset
 # LOGIN_REDIRECT_URL = 'home'
