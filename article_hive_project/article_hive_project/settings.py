@@ -31,8 +31,7 @@ SECRET_KEY = 'django-insecure-ks%dws4&%hgxe21a(9g+8dmp)9l(tq7k&w&s4cuz2=dy4joql^
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 # ALLOWED_HOSTS = []
-# DEBUG = True # for development
-DEBUG = False # production
+
 ALLOWED_HOSTS = [
     'dafetite.pythonanywhere.com',
     'localhost',
@@ -86,23 +85,29 @@ WSGI_APPLICATION = 'article_hive_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dafetite$article-hive_db',
-        'USER': 'dafetite',
-        'PASSWORD': 'debbydafe',
-        'HOST': 'dafetite.mysql.pythonanywhere-services.com',
+# print('MY_LOCAL_MACHINE:', os.environ.get('MY_LOCAL_MACHINE'))
+if os.environ.get('MY_LOCAL_MACHINE'):
+    DEBUG = True # for development
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DEBUG = False # production
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'dafetite$article-hive_db',
+            'USER': 'dafetite',
+            'PASSWORD': 'debbydafe',
+            'HOST': 'dafetite.mysql.pythonanywhere-services.com',
+        }
+    }
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+
 
 
 # DATABASES = {
@@ -168,13 +173,21 @@ AUTH_USER_MODEL = 'article_hive_app.User'
 # login redirect for anonymous users
 LOGIN_URL = '/login/'
 
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp-relay.brevo.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = '781ac7001@smtp-brevo.com'
+# EMAIL_HOST_PASSWORD = 'XbPRYhHEqt9Zpcv1'
+# EMAIL_USE_TLS = True
+# DEFAULT_FROM_EMAIL = 'The Article Hive <ogagadafetite@gmail.com>'
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-relay.brevo.com'
+EMAIL_HOST = 'smtp-mail.outlook.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = '781ac7001@smtp-brevo.com'
-EMAIL_HOST_PASSWORD = 'XbPRYhHEqt9Zpcv1'
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'The Article Hive <ogagadafetite@gmail.com>'
+EMAIL_HOST_USER = 'responseSenderTeam@outlook.com'
+EMAIL_HOST_PASSWORD = 'debbydafe@123'
+DEFAULT_FROM_EMAIL = 'The Article Hive <no-reply@Ahive.com>'
 
 # # urls for password reset
 # LOGIN_REDIRECT_URL = 'home'
