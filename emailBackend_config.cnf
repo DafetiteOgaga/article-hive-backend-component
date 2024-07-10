@@ -1,0 +1,7 @@
+[email]
+host = smtp-relay.brevo.com
+port = 587
+user = 781ac7001@smtp-brevo.com
+password = XbPRYhHEqt9Zpcv1
+use_tls = True
+default_from = The Article Hive <ogagadafetite@gmail.com>
