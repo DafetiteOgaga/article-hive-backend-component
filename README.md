@@ -47,6 +47,8 @@ Welcome to **Article Hive**, a dynamic platform where users can read articles an
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/DafetiteOgaga/article-hive-backend-component.git
+    ```
+     ```bash
    cd article-hive
    ```
 
