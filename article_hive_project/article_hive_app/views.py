@@ -1,22 +1,38 @@
 from django.shortcuts import render, redirect, get_object_or_404
+
 from django.http import HttpResponse, JsonResponse
+
 from django.utils.html import escape
-from .mock_data import *
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-import random, os
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.contrib.auth.decorators import login_required
-from .models import Article
-from .forms import ContactForm, RegistrationForm, ProfileUpdateForm
-from .forms import CustomPasswordChangeForm, CustomPasswordResetForm
-from .forms import CustomSetPasswordForm
-from .forms import ArticleForm
-import time
+
+from django.conf import settings
+
+import random, os, time, requests
+
+from django.urls import reverse
+
+from django.template.loader import render_to_string
+
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import views as auth_views
 from django.contrib.auth import authenticate, login, logout, get_user_model
 User = get_user_model()
+
+from .forms import ContactForm, RegistrationForm, ProfileUpdateForm
+from .forms import CustomPasswordChangeForm, CustomPasswordResetForm
+from .forms import CustomSetPasswordForm
+from .forms import ArticleForm
+
+from .models import Article
+
+from .mock_data import *
 
 # from .models import Article, Comment, Contact
 
@@ -303,6 +319,9 @@ class CustomPasswordChangeView(auth_views.PasswordChangeView):
 class CustomPasswordChangeDoneView(auth_views.PasswordChangeDoneView):
     template_name = 'auth/password_change_done.html'
 
+########################################################################
+from django.core.mail import EmailMessage
+########################################################################
 class CustomPasswordResetView(auth_views.PasswordResetView):
     form_class = CustomPasswordResetForm
     template_name = 'auth/password_reset_form.html'
@@ -310,6 +329,59 @@ class CustomPasswordResetView(auth_views.PasswordResetView):
     email_template_name = 'auth/password_reset_email.html'
     subject_template_name = 'auth/password_reset_subject.txt'
     success_url = '/password_reset/done/'
+
+    def form_valid(self, form):
+        response = super().form_valid(form)  # Call the original form_valid method
+
+        # Iterate through users and send password reset email via FastAPI
+        user = get_object_or_404(User, email=form.cleaned_data['email'])
+        if user:
+            protocol = self.request.scheme
+            domain = self.request.get_host()
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            reset_url = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+            reset_link = f"{protocol}://{domain}{reset_url}"
+
+            # Render the email body and subject templates
+            email_body = render_to_string(self.email_template_name, {
+                'user': user,
+                'protocol': protocol,
+                'domain': domain,
+                'uid': uid,
+                'token': token,
+                'reset_link': reset_link
+            })
+            email_subject = render_to_string(self.subject_template_name, {'user': user}).strip()
+            print('######################################################################')
+            print(f'email_subject: {email_subject}')
+            print('######################################################################')
+            print(f'email_body: {email_body}')
+            print('######################################################################')
+
+            # Prepare email data to be sent to FastAPI
+            email_data = {
+                "email": user.email,
+                "subject": email_subject,
+                "body": email_body
+            }
+            send_email = EmailMessage(
+                subject=email_data['subject'],
+                body=email_data['body'],
+                from_email="ogagadafetite@gmail.com",
+                to=[email_data['email']]
+            )
+            send_email.send()
+            print(f'email_data: {email_data}')
+            print('######################################################################')
+            print('####################### EMAIL SENT! #################################')
+            print('######################################################################')
+
+            # # Send a POST request to FastAPI email sending endpoint
+            # requests.post("http://localhost:8000/send-email/", json=email_data)
+            print(f'RESPONSE: {response} #####################')
+            print('######################################################################')
+        return response  # Return the original response
 
 class CustomPasswordResetDoneView(auth_views.PasswordResetDoneView):
     template_name = 'auth/password_reset_done.html'
