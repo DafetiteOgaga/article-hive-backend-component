@@ -23,10 +23,10 @@
 			{% endfor %}
 		</div>
 	</div>
-	<div>
+	<div class="rating-section">
 		<h1 class="section-headings right-anime" >Latest Reads</h1>
 		<div>
-			{% for rating in ratings|slice:":4" %}
+			{% for rating in ratings|slice:":6" %}
 				<a class="box-link" href="{% url 'article' pk=rating.pk %}">
 					<article class="article-box top-rated index-page left-anime article-rated">
 						<h1 class="hor-align">{{ rating.title|default:empty }}</h1>
@@ -42,7 +42,7 @@
 			{% endfor %}
 		</div>
 	</div>
-	<div class="pagination">
+	<div class="pagination right-anime text-sizes">
         <span class="step-links">
             {% if articles.has_previous %}
                 <a href="?page=1"><h1>&laquo; first</h1></a>
