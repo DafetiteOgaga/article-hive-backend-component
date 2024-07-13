@@ -1,3 +1,25 @@
+/* Global box-sizing rule */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+	/* padding: 4rem; */ /* original consideration */
+	/* background-color: black; */
+	/* background-color: #222; */
+	background-color: rgba(0, 0, 0, 0.966);
+	/* background-color: #296233; */
+	/* removes horizontal scrolling */
+	width: 100%;
+    overflow-x: hidden;
+}
+
+/* Debugging CSS to highlight all elements with a red outline */
+* {
+    outline: 1px solid red;
+}
+
+
 @keyframes dropdown {
     from {
         transform: translateY(-100%);
@@ -153,14 +175,6 @@ h1, h2, h3, h4, h5, h6, p, button, .link-tag {
 	display: flex;
     flex-direction: row;
     align-items: center;
-}
-
-body {
-	/* padding: 4rem; */ /* original consideration */
-	/* background-color: black; */
-	/* background-color: #222; */
-	background-color: rgba(0, 0, 0, 0.966);
-	/* background-color: #296233; */
 }
 
 header {
@@ -365,23 +379,30 @@ article p {
 	gap: .1rem;
 }
 
+.section-background-color {
+	background-color: #e0e0e0;
+	padding-top: 0.5rem;
+}
+
 .new-and-rated {
 	display: grid;
 	/* grid-template-columns: 2fr .5fr; */
-	grid-template-rows: 2fr .5fr;
+	/* grid-template-rows: 2fr 0.5fr; */
 	gap: .1rem;
 	/* padding-top: 2rem; */
 	/* background-color: #4f33ec2f; */
 	/* background-color: #3399FF; */
-	background-color: #e0e0e0;
+	/* background-color: #e0e0e0; */
 	/* background-color: #222; */
 	padding: .5rem 1rem; /* under consideration */
 
 	@media (min-width: 480px) {
         font-size: 1rem;
+    }@media (max-width: 1199px) {
+        grid-template-rows: 2fr 0.5fr;
     }
 	@media (min-width: 1200px) {
-        grid-template-columns: 2fr .5fr;
+        grid-template-columns: 2fr 0.5fr;
     }
 }
 
