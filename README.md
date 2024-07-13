@@ -2,41 +2,47 @@
 
 Welcome to **Article Hive**, a dynamic platform where users can read articles and explore author profiles, while authors can create and manage their own content. Built with a robust architecture leveraging modern web technologies, Article Hive aims to provide a seamless experience for both readers and writers.
 
+<br>
+
+**Click here: [Article Hive](https://dafetite.pythonanywhere.com) to go the WebApp**
+
+<br>
+
 ## Features
 
-### For Readers
+#### For Readers
 - **Explore Articles**: Access a diverse collection of articles on various topics.
 - **Author Profiles**: Learn more about the authors behind the articles.
   
-### For Authors
+#### For Authors
 - **Create and Publish**: Write and publish articles with a user-friendly editor.
 - **Manage Profile**: Build and update your author profile.
 - **Engage with Readers**: Interact with your audience through comments and discussions.
 
 ## Architecture
 
-### Languages and Frameworks
+#### Languages and Frameworks
 - **Python**: The core language used for backend development.
 - **Django**: A high-level Python web framework that encourages rapid development and clean, pragmatic design.
 - **HTML**: For structuring the web pages.
 - **CSS**: For styling the web pages.
 - **JavaScript**: For adding interactive elements to the web pages.
 
-### Databases
+#### Databases
 - **MySQL**: Used for production database management.
 - **SQLite**: Used for local development and testing.
 
-### Email Service
+#### Email Service
 - **Brevo (SMTP)**: Used for sending emails, such as account verification and password reset links.
 
 ## Installation
 
-### Prerequisites
+#### Prerequisites
 - Python 3.x
 - Django 3.x or higher
 - MySQL and SQLite
 
-### Steps
+#### Steps
 
 1. **Clone the repository:**
    ```bash
@@ -50,6 +56,7 @@ Welcome to **Article Hive**, a dynamic platform where users can read articles an
     python -m venv env
     ```
     On Windows, use `env\Scripts\activate` to activate env.
+    <br>
     On Linux, use `source env/bin/activate` to activate env
     ```bash
     pip install -r requirements.txt
@@ -87,7 +94,7 @@ Email Settings
 To configure email settings for Brevo (SMTP), add the following to your settings.py:
 
 
-### **Contributing**
+## **Contributing**
 We welcome contributions! Please fork the repository and submit pull requests for any enhancements, bug fixes, or new features.
 
 **Fork the repository.**
@@ -97,10 +104,10 @@ We welcome contributions! Please fork the repository and submit pull requests fo
 - Submit a pull request.
 
 
-### **License**
+## **License**
 This project is licensed under the MIT License. See the LICENSE file for details.
 
-### **Contact**
+## **Contact**
 For any questions or feedback, please contact me at ogagadafetite@gmail.com.
 
 Thank you for visiting Article Hive! We hope you enjoy reading and contributing to our platform.
