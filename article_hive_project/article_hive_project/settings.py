@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
-import configparser
+# import configparser
 import os
 
 # config = configparser.ConfigParser()
@@ -94,6 +94,15 @@ if os.environ.get('MY_LOCAL_MACHINE'):
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = os.environ.get('EMAILBACKEND_HOST')
+    EMAIL_PORT = os.environ.get('EMAILBACKEND_PORT')
+    EMAIL_HOST_USER = os.environ.get('EMAILBACKEND_USER')
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAILBACKEND_PASSWORD')
+    EMAIL_USE_TLS = os.environ.get('EMAILBACKEND_TLS')
+    DEFAULT_FROM_EMAIL = os.environ.get('EMAILBACKEND_DEFAULT_FROM')
+
 else:
     DEBUG = False # production
     DATABASES = {
@@ -172,22 +181,6 @@ AUTH_USER_MODEL = 'article_hive_app.User'
 
 # login redirect for anonymous users
 LOGIN_URL = '/login/'
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-relay.brevo.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = '781ac7001@smtp-brevo.com'
-EMAIL_HOST_PASSWORD = 'XbPRYhHEqt9Zpcv1'
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'The Article Hive <ogagadafetite@gmail.com>'
-
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp-mail.outlook.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'responseSenderTeam@outlook.com'
-# EMAIL_HOST_PASSWORD = 'debbydafe@123'
-# DEFAULT_FROM_EMAIL = 'The Article Hive <no-reply@Ahive.com>'
 
 # # urls for password reset
 # LOGIN_REDIRECT_URL = 'home'

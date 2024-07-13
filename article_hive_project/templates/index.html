@@ -32,10 +32,10 @@
 			</div>
 		</div>
 	</div>
-	<div class="">
+	<div class="rating-section">
 		<h1 class="section-headings right-anime" >Latest Reads</h1>
 		<div>
-			{% for rating in ratings|slice:":4" %}
+			{% for rating in ratings|slice:":6" %}
 			<a class="box-link" href="{% url 'article' pk=rating.pk %}">
 					<article class="article-box top-rated index-page left-anime article-rated">
 						<h1 class="hor-align">{{ rating.title }}</h1>

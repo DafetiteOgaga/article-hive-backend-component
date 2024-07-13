@@ -7,7 +7,7 @@
 	<!-- <div class="nav-and-user"> -->
 		<div style="display: flex;">
 			<nav class="left-anime nav">
-				<ul>
+				<ul class="nav-anchor">
 					<!-- <li class="right-anime"><a href="./index-static.html">Home</a></li> -->
 					<li class="right-anime"><a href="{% url 'home' %}">Home</a></li>
 					<li class="right-anime"><a href="{% url 'hive' %}">Hive</a></li>
@@ -25,11 +25,17 @@
 	<!-- </div> -->
 </header>
 {% if user.is_authenticated %}
-<div class="greeting nav left-align-mini-header">
+<div style="padding-bottom: 2rem;" class="greeting nav left-align-mini-header">
 	<div class="mini-header">
 		<a class="bounce-head" style="text-decoration: none;" href="{% url 'profile' user.id %}"><h1 class="click-anime">Welcome {{ user.first_name|default:empty|capfirst }}</h1></a>
 		<a class="bounce-head" style="text-decoration: none;" href="{% url 'article_form' %}"><h1 class="click-anime">Post an Article</h1></a>
 	</div>
 </div>
 {% endif %}
+{% comment %}
+<!-- <div class="bubble-msg bubble-align nav-anchor text-sizes">
+	<a style="text-decoration: none;" href="{% url 'register' %}"><p>Register to post your article.</p></a>
+</div>
+{% endif %} -->
+{% endcomment %}
 {% endwith %}

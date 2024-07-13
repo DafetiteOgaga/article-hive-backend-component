@@ -4,7 +4,10 @@
 <section class="about">
 	<h1 class="right-anime">{{ about.title }}</h1>
 	<p class="left-anime">
-		{{ about.content }}
+		{% for paragraph in about.content %}
+			{{ paragraph }}
+			<br>
+		{% endfor %}
 	</p>
 </section>
 {% endblock section %}
