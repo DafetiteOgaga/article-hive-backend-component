@@ -4,7 +4,7 @@ Welcome to **Article Hive**, a dynamic platform where users can read articles an
 
 <br>
 
-**Click here: [Article Hive](https://dafetite.pythonanywhere.com) to go the WebApp**
+**Click here: [Article Hive](https://dafetite.pythonanywhere.com) to visit the WebApp**
 
 <br>
 

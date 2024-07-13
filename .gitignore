@@ -7,5 +7,4 @@ __pycache__
 emailBackend_config.cnf
 MySQL_credentials.cnf
 article_hive_project/db.sqlite3
-article_hive_project/media/profile_pictures/*.jpeg
-article_hive_project/media/profile_pictures/*.jpg
+article_hive_project/media/profile_pictures/*_20??*
