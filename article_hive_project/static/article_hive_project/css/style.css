@@ -14,10 +14,10 @@ html, body {
     overflow-x: hidden;
 }
 
-/* Debugging CSS to highlight all elements with a red outline */
-* {
+/* CSS Debugging style: highlight all elements with a red outline */
+/* * {
     outline: 1px solid red;
-}
+} */
 
 
 @keyframes dropdown {
