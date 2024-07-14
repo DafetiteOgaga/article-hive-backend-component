@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block section %}
+{% with "" as empty %}
+<section class="section-background-color">
+	<h1 class="section-headings left-anime"><a class="nav-anchor a" href="{% url 'profile' pk=member.id %}">{{ member.first_name }}'s Hive</a></h1>
+	<div class="new-and-rated">
+		<div style="padding-bottom: 3rem;">
+			<div class="responsive">
+				{% for article in articles %}
+				<a class="box-link" href="{% url 'article' pk=article.pk %}">
+					<article class="article-box index-page top-drop article-new">
+						<h1 class="hor-align">{{ article.title|default:empty }}</h1>
+						<p>
+							{{ article.content|truncatechars:250|default:empty }}
+						</p>
+						<div class="author-profilePic-date position-h1-new">
+							<img src="{{ article.author.profile_picture.url }}" alt="author image" /><span class="separator">•</span>
+							<h1>{{ article.author.first_name|default:empty|capfirst }}</h1><span class="separator">•</span>
+							<h1>{{ article.date_published|default:empty|date:"jS b, Y" }}</h1>
+						</div>
+					</article>
+				</a>
+				{% endfor %}
+			</div>
+		</div>
+		<div class="rating-section">
+			<h1 class="section-headings right-anime" >Latest Reads</h1>
+			<div>
+				{% for rating in ratings|slice:":4" %}
+					<a class="box-link" href="{% url 'article' pk=rating.pk %}">
+						<article class="article-box top-rated index-page left-anime article-rated">
+							<h1 class="hor-align">{{ rating.title|default:empty }}</h1>
+							<p>
+								{{ rating.content|truncatechars:80|default:empty }}
+							</p>
+							<div class="author-profilePic-date position-h1-new">
+								<h1>{{ rating.author.first_name|default:empty|capfirst }}</h1><span class="separator separator-rated">•</span>
+								<h1>{{ rating.date_published|default:empty|date:"jS b, Y" }}</h1>
+							</div>
+						</article>
+					</a>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	<div class="pagination right-anime text-sizes">
+		<span class="step-links">
+			{% if articles.has_previous %}
+				<a href="?page=1"><h1>&laquo; first</h1></a>
+				<a href="?page={{ articles.previous_page_number }}"><h1>previous</h1></a>
+			{% endif %}
+
+			<span class="current">
+				<h1 style="text-decoration: underline;">
+					{{ articles.number }} of {{ articles.paginator.num_pages }}
+				</h1>
+			</span>
+
+			{% if articles.has_next %}
+				<a href="?page={{ articles.next_page_number }}"><h1>next</h1></a>
+				<a href="?page={{ articles.paginator.num_pages }}"><h1>last &raquo;</h1></a>
+			{% endif %}
+		</span>
+	</div>
+	
+</section>
+{% endwith %}
+{% endblock section %}
