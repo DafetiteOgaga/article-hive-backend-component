@@ -6,7 +6,6 @@ urlpatterns = [
 	# Create your urlpatterns here.
 	path('', views.home, name='home'),
 	path('hive/', views.hive, name='hive'),
-	path('article/<int:pk>/', views.article, name='article'),
 	path('about/', views.about_page, name='about'),
 	path('contact/', views.contact_page, name='contact'),
 	path('profile/<int:pk>/', views.profile_page, name='profile'),
@@ -16,8 +15,11 @@ urlpatterns = [
 	path('register/', views.register_page, name='register'),
 
 	# path('article/new/<int:pk>/', views.article_form, name='article_form'),
+	path('article/<int:pk>/', views.article, name='article'),
+	path('author-response/<int:pk>/', views.author_response, name='author_response'),
 	path('article/new/', views.article_form, name='article_form'),
 	path('update-article-form/<int:pk>/', views.update_article_form, name='update_article_form'),
+	path('member-articles/<int:pk>/', views.article_list, name='article_list'),
 
 	path('password_change/', views.CustomPasswordChangeView.as_view(), name='password_change'),
     path('password_change/done/', views.CustomPasswordChangeDoneView.as_view(), name='password_change_done'),
@@ -25,6 +27,9 @@ urlpatterns = [
     path('password_reset/done/', views.CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', views.CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', views.CustomPasswordResetCompleteView.as_view(), name='password_reset_complete'),
+
+	path('feedback/', views.feedback_view, name='feedback_view'),
+	path('feedback-details/<int:pk>/', views.feedback_details, name='feedback_details'),
 
 	path('test-email/', views.test_email_view, name='test_email'),
 	path('test-404/', lambda request: None),
