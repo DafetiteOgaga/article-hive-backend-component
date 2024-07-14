@@ -25,12 +25,12 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth import authenticate, login, logout, get_user_model
 User = get_user_model()
 
-from .forms import ContactForm, RegistrationForm, ProfileUpdateForm
+from .forms import RegistrationForm, ProfileUpdateForm
 from .forms import CustomPasswordChangeForm, CustomPasswordResetForm
-from .forms import CustomSetPasswordForm
-from .forms import ArticleForm
+from .forms import CustomSetPasswordForm, Author_replyForm
+from .forms import ArticleForm, CommentForm, ContactForm
 
-from .models import Article
+from .models import Article, Comment, Contact
 
 from .mock_data import *
 
@@ -80,8 +80,47 @@ def hive(request):
 
 def article(request, pk):
     article = get_object_or_404(Article, pk=pk)
+    article_comments = Comment.objects.filter(article=article).select_related('author_reply')
     author = article.author
     user = request.user
+    is_owner = author == user
+    is_member = False
+    for comment in article_comments:
+        if comment.user != None and comment.user.is_active:
+            is_member = True
+            print(f"Commentor {comment.user.first_name} is an active member.")
+        else:
+            print(f"Commentor is not an active member.")
+    # is_member = article_comments.user.is_active()
+    if request.method == 'POST':
+        print(f'original request payload: {request.POST}')
+        post_data = request.POST.copy()
+        print(f'copied request payload: {post_data}')
+        print(f'copied request payload dict: {dict(post_data)}')
+        print(f'copied request payload dict-keys: {(dict(post_data).keys())}')
+        if 'name' not in (dict(post_data)).keys() or post_data['name'] == '':
+            post_data['name'] = 'Anonymous User'
+            # request.POST.set('name', 'Anonymous User')
+        form = CommentForm(post_data)
+        if form.is_valid():
+            print(f'form is valid: {form.is_valid()}')
+            comment = form.save(commit=False)
+            comment.article = article
+            # if is_owner:
+            #     print(f"commentor is author: {author.first_name}")
+            #     comment.user = 'Author'
+            if user.is_authenticated:
+                print(f"commentor is member: {user.first_name}")
+                comment.user = request.user
+            else:
+                print(f"commentor is guest: Guest")
+                # comment.user = 'Anonymous Reader'
+            comment.save()
+            print(f"comment saved")
+            return redirect('article', pk=pk)
+    # article = get_object_or_404(Article, pk=pk)
+    # author = article.author
+    # user = request.user
     # print('author:', author)
     # print('user:', user)
     is_owner = author == user
@@ -89,10 +128,69 @@ def article(request, pk):
     context = {
         'article': article,
         'is_owner': is_owner,
+        'is_member': is_member,
+        'article_comments': article_comments,
         'article_title': articles,
         'pgname': 'Article'
     }
     return render(request, 'article.html', context)
+
+def article_list(request, pk):
+    member = get_object_or_404(User, pk=pk)
+    articles = member.articles.all()
+    ratings = Article.objects.all()[::-1]
+    # ratings = articles[::-1]
+
+    paginator = Paginator(articles, 8)
+    page_number = request.GET.get('page')
+    try:
+        articles_paginated = paginator.page(page_number)
+    except PageNotAnInteger:
+        articles_paginated = paginator.page(1)
+    except EmptyPage:
+        articles_paginated = paginator.page(paginator.num_pages)
+
+    # author = article.author
+    # user = request.user
+    # print('author:', author)
+    # print('user:', user)
+    is_owner = member == request.user
+    # print('is_owner:', is_owner)
+    context = {
+        'member': member,
+        'articles': articles_paginated,
+        'ratings': ratings,
+        'is_owner': is_owner,
+        # 'article_title': articles,
+        'pgname': f"{member.first_name}'s Articles"
+    }
+    return render(request, 'article_list.html', context)
+
+@login_required
+def author_response(request, pk):
+    if request.method == 'POST':
+        form = Author_replyForm(request.POST)
+        print('comment pk:', pk)
+        comment = Comment.objects.get(pk=pk)
+        print('comment:', comment)
+        the_article = comment.article
+        print('the_article:', the_article)
+        pk = the_article.pk
+        print('article pk:', pk)
+        print('request.Post:', request.POST)
+        if form.is_valid():
+            print(f'form.is_valid: {form.is_valid()}')
+            reply = form.save(commit=False)
+            reply.comment = comment
+            reply.save()
+            print(f"respose saved")
+            return redirect('article', pk=pk)
+        #     return JsonResponse({'message': 'success'})
+        return JsonResponse({'message': 'error'})
+    response_form = Author_replyForm()
+    context = {'response_form': response_form, 'pgname': 'Author Response'}
+    return render(request, 'author_comment_response_form.html', context)
+
 
 def about_page(request):
     context = {
@@ -118,8 +216,12 @@ def profile_page(request, pk):
     print(f"User ID profile: {member.pk}")
     print(f"Profile picture path: {member.profile_picture}")
     print(f"Profile aboutme path: {member.aboutme}")
+    number_of_articles = len(member.articles.all())
+    print(f"Number of articles: {number_of_articles}")
+    is_owner = member == request.user
     context = {
         'member': member,
+        'is_owner': is_owner,
         'profile': profile,
         'pgname': 'Profile'
     }
@@ -330,58 +432,58 @@ class CustomPasswordResetView(auth_views.PasswordResetView):
     subject_template_name = 'auth/password_reset_subject.txt'
     success_url = '/password_reset/done/'
 
-    def form_valid(self, form):
-        response = super().form_valid(form)  # Call the original form_valid method
+    # def form_valid(self, form):
+    #     response = super().form_valid(form)  # Call the original form_valid method
 
-        # Iterate through users and send password reset email via FastAPI
-        user = get_object_or_404(User, email=form.cleaned_data['email'])
-        if user:
-            protocol = self.request.scheme
-            domain = self.request.get_host()
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            token = default_token_generator.make_token(user)
-            reset_url = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
-            reset_link = f"{protocol}://{domain}{reset_url}"
+    #     # Iterate through users and send password reset email via FastAPI
+    #     user = get_object_or_404(User, email=form.cleaned_data['email'])
+    #     if user:
+    #         protocol = self.request.scheme
+    #         domain = self.request.get_host()
+    #         uid = urlsafe_base64_encode(force_bytes(user.pk))
+    #         token = default_token_generator.make_token(user)
+    #         reset_url = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+    #         reset_link = f"{protocol}://{domain}{reset_url}"
 
-            # Render the email body and subject templates
-            email_body = render_to_string(self.email_template_name, {
-                'user': user,
-                'protocol': protocol,
-                'domain': domain,
-                'uid': uid,
-                'token': token,
-                'reset_link': reset_link
-            })
-            email_subject = render_to_string(self.subject_template_name, {'user': user}).strip()
-            print('######################################################################')
-            print(f'email_subject: {email_subject}')
-            print('######################################################################')
-            print(f'email_body: {email_body}')
-            print('######################################################################')
+    #         # Render the email body and subject templates
+    #         email_body = render_to_string(self.email_template_name, {
+    #             'user': user,
+    #             'protocol': protocol,
+    #             'domain': domain,
+    #             'uid': uid,
+    #             'token': token,
+    #             'reset_link': reset_link
+    #         })
+    #         email_subject = render_to_string(self.subject_template_name, {'user': user}).strip()
+    #         print('######################################################################')
+    #         print(f'email_subject: {email_subject}')
+    #         print('######################################################################')
+    #         print(f'email_body: {email_body}')
+    #         print('######################################################################')
 
-            # Prepare email data to be sent to FastAPI
-            email_data = {
-                "email": user.email,
-                "subject": email_subject,
-                "body": email_body
-            }
-            send_email = EmailMessage(
-                subject=email_data['subject'],
-                body=email_data['body'],
-                from_email="ogagadafetite@gmail.com",
-                to=[email_data['email']]
-            )
-            send_email.send()
-            print(f'email_data: {email_data}')
-            print('######################################################################')
-            print('####################### EMAIL SENT! #################################')
-            print('######################################################################')
+    #         # Prepare email data to be sent to FastAPI
+    #         email_data = {
+    #             "email": user.email,
+    #             "subject": email_subject,
+    #             "body": email_body
+    #         }
+    #         send_email = EmailMessage(
+    #             subject=email_data['subject'],
+    #             body=email_data['body'],
+    #             from_email="ogagadafetite@gmail.com",
+    #             to=[email_data['email']]
+    #         )
+    #         send_email.send()
+    #         print(f'email_data: {email_data}')
+    #         print('######################################################################')
+    #         print('####################### EMAIL SENT! #################################')
+    #         print('######################################################################')
 
-            # # Send a POST request to FastAPI email sending endpoint
-            # requests.post("http://localhost:8000/send-email/", json=email_data)
-            print(f'RESPONSE: {response} #####################')
-            print('######################################################################')
-        return response  # Return the original response
+    #         # # Send a POST request to FastAPI email sending endpoint
+    #         # requests.post("http://localhost:8000/send-email/", json=email_data)
+    #         print(f'RESPONSE: {response} #####################')
+    #         print('######################################################################')
+    #     return response  # Return the original response
 
 class CustomPasswordResetDoneView(auth_views.PasswordResetDoneView):
     template_name = 'auth/password_reset_done.html'
@@ -393,6 +495,52 @@ class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
 
 class CustomPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
     template_name = 'auth/password_reset_complete.html'
+
+def is_superuser(req_obj):
+    if req_obj.user.is_authenticated and req_obj.user.is_superuser:
+        return True
+    return False
+
+def feedback_view(request):
+    superuser_access = is_superuser(request)
+    print(f'Access granted:', superuser_access)
+    print(f'is superuser?',superuser_access )
+    if not superuser_access:
+        return redirect('home')
+    articles = Article.objects.all()
+    ratings = articles[::-1]
+    
+    feedbacks = Contact.objects.all().order_by('-id')
+    print(f"feedbacks:", feedbacks)
+    paginator = Paginator(feedbacks, 8)
+    page_number = request.GET.get('page')
+    print(f"page_number:", page_number)
+    try:
+        feedbacks_paginated = paginator.page(page_number)
+    except PageNotAnInteger:
+        feedbacks_paginated = paginator.page(1)
+    except EmptyPage:
+        feedbacks_paginated = paginator.page(paginator.num_pages)
+    print(f"feedbacks_paginated:", feedbacks_paginated)
+    context = {
+        'feedbacks': feedbacks_paginated,
+        'ratings': ratings,
+        'pgname': 'Feedback'
+    }
+    return render(request, 'feedback_view.html', context)
+
+def feedback_details(request, pk):
+    superuser_access = is_superuser(request)
+    print(f'is superuser?',superuser_access )
+    print(f'Access granted:', superuser_access)
+    if not superuser_access:
+        return redirect('home')
+    feedback = get_object_or_404(Contact, pk=pk)
+    context = {
+        'feedback': feedback,
+        'pgname': 'Feedback Details'
+    }
+    return render(request, 'feedback_detail_view.html', context)
 
 def test_authentication(request):
     context = {
