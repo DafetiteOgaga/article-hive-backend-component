@@ -20,8 +20,85 @@
 		{{ article.content|default:empty }}
 	</p>
 	<div class="flex-block top-drop">
-		<p>Written by <a href="{% url 'profile' pk=article.author.pk %}" style="text-decoration: underline; color: rgb(134,77,37);">{{ article.author.first_name|default:empty|capfirst }} {{ article.author.last_name|default:empty|capfirst }}</a></h2> on {{ article.date_published|default:empty }}</p>
+		<p class="nav-anchor" >Written by <a href="{% url 'profile' pk=article.author.pk %}">{{ article.author.first_name|default:empty|capfirst }} {{ article.author.last_name|default:empty|capfirst }}</a></h2> on {{ article.date_published|default:empty }}</p>
 		<p>Views: {{ article.views|default:empty }} | Rating: {{ article.rating|default:empty }}</p>
+	</div>
+	{% if article_comments.exists %}
+	<div class="comment-disp">
+		<div class="comments-section">
+			<h2 class="right-anime comment-head">Comments</h2>
+			{% for article_comment in article_comments %}
+				<div class="comment">
+					{% if article_comment.user %}
+						<p class="left-anime nav-anchor comment-author" >
+							<a href="{% url 'profile' article_comment.user.id %}">{{ article_comment.user.first_name|default:article_comment.name|capfirst }}
+								{% if article_comment.user == article_comment.article.author %}
+									(Author)
+								{% endif %}
+							</a>
+							Wrote:
+						</p>
+					{% else %}
+						<p class="left-anime comment-author">{{ article_comment.name|capfirst }} Wrote: </p>
+					{% endif %}
+					<div class="right-anime comment-text"><p>{{ article_comment.comment }}</p></div>
+					<div class="right-anime comment-date"><p>On {{ article_comment.date_commented }}</p></div>
+					{% if article_comment.author_reply %}
+						<div class="comment">
+							{% if article_comment.user %}
+								<p class="left-anime nav-anchor comment-author" >
+								<a href="{% url 'profile' article_comment.user.id %}">{{ article_comment.user.first_name|default:article_comment.name|capfirst }}
+									{% if article_comment.user == article_comment.article.author %}
+										(Author)
+									{% endif %}
+								</a>
+								Responded:
+							</p>
+							{% else %}
+								<p class="left-anime comment-author">{{ article_comment.name|capfirst }} Responded: </p>
+							{% endif %}
+							<!-- <div class="comment-author">Sasha</div> -->
+							<div class="right-anime comment-text"><p>{{ article_comment.author_reply.reply }}</p></div>
+							<div class="right-anime comment-date"><p>On {{ article_comment.author_reply.date_replied }}</p></div>
+						</div>
+					{% else %}
+						{% if user.is_authenticated and is_owner %}
+							<div class="click-anime">
+								<div class="comments-container">
+									<a href="{% url 'author_response' article_comment.id %}">
+										<button><strong>Respond</strong></button>
+									</a>
+								</div>
+							</div>
+						{% endif %}
+					{% endif %}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+	{% endif %}
+	<div class="top-drop">
+		<p class="left-anime comment-head" style="padding-top: 2rem;">Leave a comment</p>
+		<form id="form" class="article-comments-form" action="" method="POST">
+			{% csrf_token %}
+
+			{% if not user.is_authenticated %}
+			<div class="down-drop">
+				<span class="not-required">*</span>
+				<input id="name" name="name" type="text" placeholder="Enter your name">
+			</div>
+			{% endif %}
+
+			<div class="down-drop">
+				<span class="required" style="color: white;">*</span>
+				<textarea id="comment" name="comment" placeholder="Comment here" rows="4" required></textarea>
+			</div>
+			<span class="not-required">*</span>
+			<div class="click-anime">
+				<button type="submit">Submit</button>
+			</div>
+		</form>
 	</div>
 	</section>
 {% endwith %}
