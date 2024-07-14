@@ -62,10 +62,11 @@ function submitHandler (e) {
 
     for (let [key, value] of formData.entries()) {
         console.log(`${key}: ${value}`);
-		if (key == 'comment') {
-			msg = `Dear ${first_name}, your comment has been updated and the author will be duly informed.\nThank you.`;
-			break;
-		} else if (key == 'contact') {
+		// if (key == 'comment') {
+		// 	msg = `Dear ${first_name}, your comment has been updated and the author will be duly informed.\nThank you.`;
+		// 	break;
+		// } else 
+		if (key == 'contact') {
 			msg = `Thank You ${name} for reaching out to us!\nYour comment is currently under review and we promise to take it with utmost importance.\nWe value your input and we will keep working to improve your experience.`;
 			// form.reset();
 			break;
@@ -106,6 +107,7 @@ function submitHandler (e) {
 				alert(msg);
 				form.reset()
 			} else if (data.message === 'error') {
+				// fix for contact us and author response
 				alert('Oopsy! Something went wrong.\nCheck your login details again or register if you are not a member yet.');
 				window.location.reload();
 			} else if (data.message === 'not registered') {
