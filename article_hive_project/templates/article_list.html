@@ -3,7 +3,7 @@
 {% block section %}
 {% with "" as empty %}
 <section class="section-background-color">
-	<h1 class="section-headings left-anime">The Hive</h1>
+	<h1 class="section-headings left-anime"><a class="nav-anchor a" href="{% url 'profile' pk=member.id %}">{{ member.first_name }}'s Hive</a></h1>
 	<div class="new-and-rated">
 		<div style="padding-bottom: 3rem;">
 			<div class="responsive">
@@ -23,25 +23,6 @@
 				</a>
 				{% endfor %}
 			</div>
-			<!-- <div class="pagination right-anime text-sizes">
-				<span class="step-links">
-					{% if articles.has_previous %}
-						<a href="?page=1"><h1>&laquo; first</h1></a>
-						<a href="?page={{ articles.previous_page_number }}"><h1>previous</h1></a>
-					{% endif %}
-		
-					<span class="current">
-						<h1 style="text-decoration: underline;">
-							{{ articles.number }} of {{ articles.paginator.num_pages }}
-						</h1>
-					</span>
-		
-					{% if articles.has_next %}
-						<a href="?page={{ articles.next_page_number }}"><h1>next</h1></a>
-						<a href="?page={{ articles.paginator.num_pages }}"><h1>last &raquo;</h1></a>
-					{% endif %}
-				</span>
-			</div> -->
 		</div>
 		<div class="rating-section">
 			<h1 class="section-headings right-anime" >Latest Reads</h1>

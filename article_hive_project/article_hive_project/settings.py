@@ -94,15 +94,15 @@ if os.environ.get('MY_LOCAL_MACHINE'):
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-    EMAIL_BACKEND = 'article_hive_app.brevo_EmailBackend.BrevoEmailBackend'
-    BREVO_API_KEY = os.getenv('EMAILBACKEND_API_PASSWORD')
+    # EMAIL_BACKEND = 'article_hive_app.brevo_EmailBackend.BrevoEmailBackend'
+    # BREVO_API_KEY = os.getenv('EMAILBACKEND_API_PASSWORD')
 
-    # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    # EMAIL_HOST = os.environ.get('EMAILBACKEND_HOST')
-    # EMAIL_PORT = os.environ.get('EMAILBACKEND_PORT')
-    # EMAIL_HOST_USER = os.environ.get('EMAILBACKEND_USER')
-    # EMAIL_HOST_PASSWORD = os.environ.get('EMAILBACKEND_PASSWORD')
-    # EMAIL_USE_TLS = os.environ.get('EMAILBACKEND_TLS')
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = os.environ.get('EMAILBACKEND_HOST')
+    EMAIL_PORT = os.environ.get('EMAILBACKEND_PORT')
+    EMAIL_HOST_USER = os.environ.get('EMAILBACKEND_USER')
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAILBACKEND_PASSWORD')
+    EMAIL_USE_TLS = os.environ.get('EMAILBACKEND_TLS')
     DEFAULT_FROM_EMAIL = os.environ.get('EMAILBACKEND_DEFAULT_FROM')
 
 else:
@@ -116,10 +116,6 @@ else:
             'HOST': 'dafetite.mysql.pythonanywhere-services.com',
         }
     }
-
-
-
-
 
 # DATABASES = {
 #     'default': {

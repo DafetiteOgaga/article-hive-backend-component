@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 from django.contrib.auth.forms import SetPasswordForm
-from .models import User, Contact, Comment
+from .models import User, Contact, Comment, Author_reply
 
 class ContactForm(forms.ModelForm):
     class Meta:
@@ -27,6 +27,11 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['comment', 'name']
+
+class Author_replyForm(forms.ModelForm):
+    class Meta:
+        model = Author_reply
+        fields = [ 'reply', ]
 
 from django import forms
 from .models import Article

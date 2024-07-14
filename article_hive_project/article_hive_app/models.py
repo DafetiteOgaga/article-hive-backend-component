@@ -102,9 +102,16 @@ class Comment(models.Model):
 	article = models.ForeignKey('Article', on_delete=models.CASCADE, related_name='comments')
 	date_commented = models.DateTimeField(auto_now=True) # last modified stamp
 
+class Author_reply(models.Model):
+    reply = models.TextField(max_length=500)
+    # comment = models.TextField(max_length=500)
+    # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+    # name = models.CharField(max_length=100, null=True, blank=True)
+    comment = models.OneToOneField('Comment', on_delete=models.CASCADE, related_name='author_reply')
+    date_replied = models.DateTimeField(auto_now=True) # last modified stamp
+
 class Contact(models.Model):
 	contact = models.TextField(max_length=500)
 	name = models.CharField(max_length=200)
 	# the_article = models.ForeignKey('Article', on_delete=models.CASCADE)
 	created_at = models.DateTimeField(auto_now_add=True) # creation stamp
- 

@@ -155,6 +155,7 @@ h1, h2, h3, h4, h5, h6, p, button, .link-tag {
 	/* font-family: 'Alice', 'Courier New', Courier, monospace; */
 	color: #001f3f;
 	font-size: small;
+	font-family: Arial, sans-serif;
 	/* font-size: large; */
 
 	/* @media (min-width: 480px) {
@@ -628,7 +629,7 @@ footer img {
 	color: whitesmoke; /* check */
 	font-size: 2.1rem;
 }
-.about p, .article p, .profile p {
+.about p, .article p, .article h2, .profile p {
 	color: whitesmoke; /* check */
 }
 .article img {
@@ -739,6 +740,82 @@ form button:active {
 	}
 }
 
+.article-comments-form {
+    /* width: 110%; */
+    /* max-width: 400px; */
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    background-color: #001f3f;
+    box-sizing: border-box;
+
+	@media (min-width: 480px) {
+		width: 100%;
+	}
+	@media (min-width: 720px) {
+		width: 80%;
+	}
+	@media (min-width: 1200px) {
+		width: 50%;
+	}
+}
+/* input, textarea {
+	
+	border: 1px solid #ccc;
+	border-radius: 0.3rem;
+	box-sizing: border-box;
+	padding: 0.5rem;
+	font-size: 0.5rem;
+
+	@media (min-width: 480px) {
+		padding: 0.5rem;
+		font-size: 0.5rem;
+	}
+
+} */
+.article-comments-form input {
+	width: 100%;
+
+	@media (min-width: 720px) {
+		font-size: 0.9rem;
+	}
+	@media (min-width: 1024px) {
+		font-size: 1.5rem;
+	}
+	@media (min-width: 1200px) {
+		font-size: 1.2rem;
+	}
+}
+.article-comments-form textarea {
+	width: 100%;
+
+	@media (min-width: 720px) {
+		font-size: 0.9rem;
+	}
+	@media (min-width: 1024px) {
+		font-size: 1.5rem;
+	}
+	@media (min-width: 1200px) {
+		font-size: 1.2rem;
+	}
+}
+.article-comments-form button {
+	background-color: rgb(134,77,37);
+	color: white;
+	padding: 0.4rem 1.25rem;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.article-comments-form button:hover {
+	background-color: #632400;
+	transform: scale(1.2);
+}
+.article-comments-form button:active {
+	transform: scale(0.95);
+}
+
 .register, .login, .contact {
 	display: flex;
 	justify-content: center;
@@ -785,7 +862,7 @@ form p {
 	padding-top: 1rem;
 }
 form p a {
-	color: rgb(134,77,37);;
+	color: rgb(134,77,37);
 	padding-left: 0.2rem;
 }
 form p a:hover {
@@ -860,7 +937,7 @@ form p a:active {
 	padding-right: 0;
 }
 .greeting h1 {
-	box-shadow: 0 4px 8px rgb(206, 149, 112);;
+	box-shadow: 0 4px 8px rgb(206, 149, 112);
 	font-size: small;
 	margin: 0;
 	color: rgb(206, 149, 112);;
@@ -1135,4 +1212,107 @@ form p a:active {
 }
 .nav-anchor a:hover {
 	color: rgb(172, 77, 15);
+}
+
+/* Style the comments section */
+/* .comments-section { */
+    /* font-family: Arial, sans-serif; */
+    /* color: #333; */
+    /* max-width: 600px; */
+    /* margin: 0 auto; */
+    /* padding: 20px; */
+    /* border: 1px solid #ddd; */
+    /* border-radius: 4px; */
+/* } */
+
+.comment {
+	font-family: Arial, sans-serif;
+	color: whitesmoke;
+    margin-top: 0;
+    padding-left: 2rem;
+    border-left: 2px solid #ccc;
+}
+
+.comment-author {
+    font-weight: bold;
+    margin-bottom: 0.1rem;
+}
+
+.comment-text p {
+    margin-bottom: 0.1rem;
+	margin-top: 0.1rem;
+}
+
+.comment-date p {
+	margin-bottom: 0.1rem;
+	margin-top: 0.1rem;
+	font-style: italic;
+}
+/* .comment-margin {
+    margin-bottom: 0.5rem;
+} */
+
+.comments-container button {
+	/* background-color: rgb(134,77,37); */
+	background-color: rgba(200, 200, 231, 0.61);
+	color:  #001f3f;;
+	border: none;
+	border-radius: 0.4rem;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.3s ease;
+	font-size: 0.7rem;
+	padding: 0.5rem 0.8rem;
+
+	/* @media (min-width: 480px) {
+        font-size: 1rem;
+    }
+	@media (min-width: 720px) {
+        font-size: 1.2rem;
+		padding: 0.6rem 0.45rem;
+    }
+	@media (min-width: 1024px) {
+        font-size: 2rem;
+    }
+	@media (min-width: 1200px) {
+        padding: 0.4rem 0.3rem;
+		font-size: 1.4rem;
+    }
+	@media (min-width: 1300px) {
+        padding: 0.8rem 0.7rem;
+		font-size: 1.4rem;
+    } */
+}
+.comments-container button:hover {
+	background-color: whitesmoke;
+	transform: scale(1.05);
+}
+.comments-container button:active {
+	transform: scale(0.95);
+}
+
+.comment-disp p {
+	font-size: small;
+	@media (min-width: 1024px) {
+		font-size: large;
+	}
+	@media (min-width: 1200px) {
+		font-size: large;
+	}
+	@media (min-width: 1300px) {
+		font-size: larger;
+	}
+}
+
+.comment-head {
+	font-size: large;
+	margin-bottom: 0;
+	@media (min-width: 1024px) {
+		font-size: 2.5rem;
+	}
+	@media (min-width: 1200px) {
+		font-size: 2rem;
+	}
+	/* @media (min-width: 1300px) {
+		font-size: larger;
+	} */
 }

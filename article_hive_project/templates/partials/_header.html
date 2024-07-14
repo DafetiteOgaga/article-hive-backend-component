@@ -19,6 +19,9 @@
 					{% else %}
 					<li class="right-anime"><a href="{% url 'login' %}">Register/Login</a></li>
 					{% endif %}
+					{% if user.is_superuser %}
+						<li class="right-anime"><a href="{% url 'feedback_view' %}">Feedback</a></li>
+					{% endif %}
 				</ul>
 			</nav>
 		</div>
@@ -32,10 +35,4 @@
 	</div>
 </div>
 {% endif %}
-{% comment %}
-<!-- <div class="bubble-msg bubble-align nav-anchor text-sizes">
-	<a style="text-decoration: none;" href="{% url 'register' %}"><p>Register to post your article.</p></a>
-</div>
-{% endif %} -->
-{% endcomment %}
 {% endwith %}

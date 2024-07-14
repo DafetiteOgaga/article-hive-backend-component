@@ -28,8 +28,13 @@
 			{{ member.aboutme|default:empty }}
 		</p>
 	</div>
-	<div class="top-drop">
-		<p>Number of Articles: {{ profile.number_of_articles|default:empty }}</p>
+	<div class="top-drop nav-anchor">
+		{% if user.is_authenticated and is_owner %}
+			<p><strong><a href="{% url 'article_list' member.id %}">Open Your Hive</a></strong></p>
+		{% else %}
+			<p><strong><a href="{% url 'article_list' member.id %}">Open {{ member.first_name|capfirst }}'s Hive</a></strong></p>
+		{% endif %}
+		<p>Number of Articles: {{ member.articles.all.count|default:empty }}</p>
 		<p>Rating: {{ profile.rating|default:empty }}</p>
 		<p>Followers: {{ profile.followers|default:empty }}</p>
 		<p>Phone {{ member.phone|default:empty }}</p>
