@@ -30,21 +30,18 @@ from .forms import CustomPasswordChangeForm, CustomPasswordResetForm
 from .forms import CustomSetPasswordForm, Author_replyForm
 from .forms import ArticleForm, CommentForm, ContactForm
 
-from .models import Article, Comment, Contact
+from .models import Article, Comment, Contact, Author_reply
 
 from .mock_data import *
-
-# from .models import Article, Comment, Contact
-
-# to-do (add login required decorator):
-#13. create superuser (include username, then remove it afterwards)
 
 # Create your views here.
 def home(request):
     articles = Article.objects.all()
     ratings = articles[::-1]
-    articles = list(articles[:8])
-    random.shuffle(articles)
+    # ratings = articles.reverse()
+    articles = articles.order_by("?")[:8]
+    # articles = articles[:8]
+    # random.shuffle(articles)
     context = {
         'articles': articles,
         'ratings': ratings,
@@ -57,8 +54,10 @@ def home(request):
 def hive(request):
     articles = Article.objects.all()
     ratings = articles[::-1]
-    articles = list(articles)
-    random.shuffle(articles)
+    # ratings = articles.reverse()
+    articles = articles.order_by("?")[:8]
+    # articles = list(articles)
+    # random.shuffle(articles)
 
     paginator = Paginator(articles, 8)
     page_number = request.GET.get('page')
@@ -79,9 +78,23 @@ def hive(request):
     return render(request, 'hive.html', context)
 
 def article(request, pk):
-    article = get_object_or_404(Article, pk=pk)
-    article_comments = Comment.objects.filter(article=article).select_related('author_reply')
+    # article = get_object_or_404(Article, pk=pk)
+    # article_comments = Comment.objects.filter(article=article).select_related('author_reply')
+    # author = article.author
+    
+    article = Article.objects.prefetch_related('comments').filter(pk=pk).first()
     author = article.author
+    article_comments = article.comments.all()
+    # print(f"article2 #1 : {article2}")
+    print(f"article #1 : {article}")
+    print()
+    # print(f"author2 #1 : {author2}")
+    print(f"author #1 : {author}")
+    print()
+    # print(f"comments #1 : {comments2}")
+    print(f"article_comments #1 : {article_comments}")
+    print()
+
     user = request.user
     is_owner = author == user
     is_member = False
@@ -136,12 +149,26 @@ def article(request, pk):
     return render(request, 'article.html', context)
 
 def article_list(request, pk):
-    member = get_object_or_404(User, pk=pk)
-    articles = member.articles.all()
-    ratings = Article.objects.all()[::-1]
-    # ratings = articles[::-1]
+    member = User.objects.prefetch_related('articles').filter(pk=pk).first()
+    # member = get_object_or_404(User, pk=pk)
+    user_articles = member.articles.all()
+    
+    articles = Article.objects.all()
+    ratings = articles[::-1]
+    # ratings = articles.reverse()
+    print(f'pk #1: {pk}')
+    print(f'member #1: {member}')
+    # print(f'member #2: {article1}')
+    print()
+    print(f'user_articles #1: {user_articles}')
+    # print(f'user_articles #2: {article1.articles.all()}')
+    print()
+    # print(f'user_articles #1: {user_articles}')
+    # print(f'user_articles #2: {article1.user.all()}')
+    print()
+    
 
-    paginator = Paginator(articles, 8)
+    paginator = Paginator(user_articles, 8)
     page_number = request.GET.get('page')
     try:
         articles_paginated = paginator.page(page_number)
@@ -212,12 +239,18 @@ def contact_page(request):
     return render(request, 'contact.html', context)
 
 def profile_page(request, pk):
-    member = get_object_or_404(User, pk=pk)
+    member = User.objects.prefetch_related('articles').filter(pk=pk).first()
+    # member = get_object_or_404(User, pk=pk)
     print(f"User ID profile: {member.pk}")
     print(f"Profile picture path: {member.profile_picture}")
     print(f"Profile aboutme path: {member.aboutme}")
-    number_of_articles = len(member.articles.all())
-    print(f"Number of articles: {number_of_articles}")
+    print(f"member #1: {member}")
+    # print(f"prof #2: {prof}")
+    
+    # number_of_articles = member.articles.all().count()
+    # print(f"Number of articles #1: {number_of_articles}")
+    number_of_articles = member.articles.all().count()
+    print(f"Number of articles #2: {number_of_articles}")
     is_owner = member == request.user
     context = {
         'member': member,
@@ -501,15 +534,16 @@ def is_superuser(req_obj):
         return True
     return False
 
-def feedback_view(request):
+def feedback_contact_list_view(request):
     superuser_access = is_superuser(request)
     print(f'Access granted:', superuser_access)
     print(f'is superuser?',superuser_access )
     if not superuser_access:
         return redirect('home')
-    articles = Article.objects.all()
-    ratings = articles[::-1]
-    
+    # articles = Article.objects.all()
+    # ratings = articles[::-1]
+    # ratings = articles.reverse()
+
     feedbacks = Contact.objects.all().order_by('-id')
     print(f"feedbacks:", feedbacks)
     paginator = Paginator(feedbacks, 8)
@@ -524,12 +558,12 @@ def feedback_view(request):
     print(f"feedbacks_paginated:", feedbacks_paginated)
     context = {
         'feedbacks': feedbacks_paginated,
-        'ratings': ratings,
+        # 'ratings': ratings,
         'pgname': 'Feedback'
     }
-    return render(request, 'feedback_view.html', context)
+    return render(request, 'feedback_contact_list_view.html', context)
 
-def feedback_details(request, pk):
+def feedback_contact_detail_view(request, pk):
     superuser_access = is_superuser(request)
     print(f'is superuser?',superuser_access )
     print(f'Access granted:', superuser_access)
@@ -540,7 +574,247 @@ def feedback_details(request, pk):
         'feedback': feedback,
         'pgname': 'Feedback Details'
     }
-    return render(request, 'feedback_detail_view.html', context)
+    return render(request, 'feedback_contact_detail_view.html', context)
+
+#############################################
+
+def feedback_article_list_view(request):
+    superuser_access = is_superuser(request)
+    print(f'Access granted:', superuser_access)
+    print(f'is superuser?',superuser_access )
+    if not superuser_access:
+        return redirect('home')
+    # articles = Article.objects.all()
+    # ratings = articles[::-1]
+    # ratings = articles.reverse()
+    
+    feedbacks = Article.objects.all().order_by('-id')
+    print(f"feedbacks:", feedbacks)
+    paginator = Paginator(feedbacks, 8)
+    page_number = request.GET.get('page')
+    print(f"page_number:", page_number)
+    try:
+        feedbacks_paginated = paginator.page(page_number)
+    except PageNotAnInteger:
+        feedbacks_paginated = paginator.page(1)
+    except EmptyPage:
+        feedbacks_paginated = paginator.page(paginator.num_pages)
+    print(f"feedbacks_paginated:", feedbacks_paginated)
+    context = {
+        'feedbacks': feedbacks_paginated,
+        # 'ratings': ratings,
+        'pgname': 'Feedback'
+    }
+    return render(request, 'feedback_article_list_view.html', context)
+
+def feedback_article_detail_view(request, pk):
+    superuser_access = is_superuser(request)
+    print(f'is superuser?',superuser_access )
+    print(f'Access granted:', superuser_access)
+    if not superuser_access:
+        return redirect('home')
+
+    feedback = Article.objects.prefetch_related('comments').filter(pk=pk).first()
+    author = feedback.author
+    article_comments = feedback.comments.all()
+    # print(f"article2 #1 : {article2}")
+    print(f"article #1 : {feedback}")
+    print()
+    # print(f"author2 #1 : {author2}")
+    print(f"author #1 : {author}")
+    print()
+    # print(f"comments #1 : {comments2}")
+    print(f"article_comments #1 : {article_comments}")
+    print()
+
+    user = request.user
+    is_owner = author == user
+    is_member = False
+    for comment in article_comments:
+        if comment.user != None and comment.user.is_active:
+            is_member = True
+            print(f"Commentor {comment.user.first_name} is an active member.")
+        else:
+            print(f"Commentor is not an active member.")
+
+    is_owner = author == user
+    # print('is_owner:', is_owner)
+    context = {
+        'feedback': feedback,
+        # 'article': article,
+        # 'is_owner': is_owner,
+        # 'is_member': is_member,
+        'article_comments': article_comments,
+        # 'article_title': articles,
+        'pgname': 'Feedback Details'
+    }
+    return render(request, 'feedback_article_detail_view.html', context)
+
+#############################################
+
+def feedback_author_reply_list_view(request):
+    superuser_access = is_superuser(request)
+    print(f'Access granted:', superuser_access)
+    print(f'is superuser?',superuser_access )
+    if not superuser_access:
+        return redirect('home')
+    # articles = Article.objects.all()
+    # ratings = articles[::-1]
+    # ratings = articles.reverse()
+    
+    feedbacks = Author_reply.objects.all().order_by('-id')
+    print(f"feedbacks:", feedbacks)
+    paginator = Paginator(feedbacks, 8)
+    page_number = request.GET.get('page')
+    print(f"page_number:", page_number)
+    try:
+        feedbacks_paginated = paginator.page(page_number)
+    except PageNotAnInteger:
+        feedbacks_paginated = paginator.page(1)
+    except EmptyPage:
+        feedbacks_paginated = paginator.page(paginator.num_pages)
+    print(f"feedbacks_paginated:", feedbacks_paginated)
+    context = {
+        'feedbacks': feedbacks_paginated,
+        # 'ratings': ratings,
+        'pgname': 'Feedback'
+    }
+    return render(request, 'feedback_author_reply_list_view.html', context)
+
+def feedback_author_reply_detail_view(request, pk):
+    superuser_access = is_superuser(request)
+    print(f'is superuser?',superuser_access )
+    print(f'Access granted:', superuser_access)
+    if not superuser_access:
+        return redirect('home')
+    feedback = get_object_or_404(Author_reply, pk=pk)
+    context = {
+        'feedback': feedback,
+        'pgname': 'Feedback Details'
+    }
+    return render(request, 'feedback_author_reply_detail_view.html', context)
+
+#############################################
+
+def feedback_comment_list_view(request):
+    superuser_access = is_superuser(request)
+    print(f'Access granted:', superuser_access)
+    print(f'is superuser?',superuser_access )
+    if not superuser_access:
+        return redirect('home')
+    # articles = Article.objects.all()
+    # ratings = articles[::-1]
+    # ratings = articles.reverse()
+    
+    feedbacks = Comment.objects.all().order_by('-id')
+    print(f"feedbacks:", feedbacks)
+    paginator = Paginator(feedbacks, 8)
+    page_number = request.GET.get('page')
+    print(f"page_number:", page_number)
+    try:
+        feedbacks_paginated = paginator.page(page_number)
+    except PageNotAnInteger:
+        feedbacks_paginated = paginator.page(1)
+    except EmptyPage:
+        feedbacks_paginated = paginator.page(paginator.num_pages)
+    print(f"feedbacks_paginated:", feedbacks_paginated)
+    context = {
+        'feedbacks': feedbacks_paginated,
+        # 'ratings': ratings,
+        'pgname': 'Feedback'
+    }
+    return render(request, 'feedback_comment_list_view.html', context)
+
+def feedback_comment_detail_view(request, pk):
+    superuser_access = is_superuser(request)
+    print(f'is superuser?',superuser_access )
+    print(f'Access granted:', superuser_access)
+    if not superuser_access:
+        return redirect('home')
+    feedback = get_object_or_404(Comment, pk=pk)
+    context = {
+        'feedback': feedback,
+        'pgname': 'Feedback Details'
+    }
+    return render(request, 'feedback_comment_detail_view.html', context)
+
+#############################################
+
+def feedback_user_list_view(request):
+    superuser_access = is_superuser(request)
+    print(f'Access granted:', superuser_access)
+    print(f'is superuser?',superuser_access )
+    if not superuser_access:
+        return redirect('home')
+    # articles = Article.objects.all()
+    # ratings = articles[::-1]
+    # ratings = articles.reverse()
+    
+    feedbacks = User.objects.all().order_by('-id')
+    print(f"feedbacks:", feedbacks)
+    paginator = Paginator(feedbacks, 8)
+    page_number = request.GET.get('page')
+    print(f"page_number:", page_number)
+    try:
+        feedbacks_paginated = paginator.page(page_number)
+    except PageNotAnInteger:
+        feedbacks_paginated = paginator.page(1)
+    except EmptyPage:
+        feedbacks_paginated = paginator.page(paginator.num_pages)
+    print(f"feedbacks_paginated:", feedbacks_paginated)
+    context = {
+        'feedbacks': feedbacks_paginated,
+        # 'ratings': ratings,
+        'pgname': 'Feedback'
+    }
+    return render(request, 'feedback_user_list_view.html', context)
+
+def feedback_user_detail_view(request, pk):
+    superuser_access = is_superuser(request)
+    print(f'is superuser?',superuser_access )
+    print(f'Access granted:', superuser_access)
+    if not superuser_access:
+        return redirect('home')
+    feedback = get_object_or_404(User, pk=pk)
+    _is_active = feedback.is_active
+    _is_staff = feedback.is_staff
+    _is_superuser = feedback.is_superuser
+    _profile_picture = feedback.profile_picture.url
+    print(f'user object: {feedback}')
+    print(f'user active: {feedback.is_active}')
+    print(f'user staff: {feedback.is_staff}')
+    print(f'user superuser: {feedback.is_superuser}')
+    print(f'user profile_picture: {feedback.profile_picture}')
+    print(f'user profile_picture: {feedback.profile_picture.url}')
+    context = {
+        'feedback': feedback,
+        'is_active': _is_active,
+        'is_staff': _is_staff,
+        'is_superuser': _is_superuser,
+        'profile_picture': _profile_picture,
+        'pgname': 'Feedback Details'
+    }
+    return render(request, 'feedback_user_detail_view.html', context)
+
+#############################################
+
+def feedback_list_view(request):
+    superuser_access = is_superuser(request)
+    print(f'is superuser?',superuser_access )
+    print(f'Access granted:', superuser_access)
+    if not superuser_access:
+        return redirect('home')
+    context = {
+        'feedbacks': [
+            {'title': 'Articles', 'url': 'article/'},
+            {'title': 'Author Replies', 'url': 'author-reply/'},
+            {'title': 'Comments', 'url': 'comment/'},
+            {'title': 'Contacts', 'url': 'contact/'},
+            {'title': 'Users', 'url': 'user/'},
+        ],
+        'pgname': 'Feedback Details'
+    }
+    return render(request, 'feedback_list_view.html', context)
 
 def test_authentication(request):
     context = {
