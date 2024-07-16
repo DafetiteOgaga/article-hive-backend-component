@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block section %}
+{% with "" as Anonymous %}
+<section class="section-background-color">
+	<h1 class="section-headings left-anime">Public Feedback</h1>
+	<div>
+		<div style="padding-bottom: 3rem;">
+			<div class="responsive">
+				{% for feedback in feedbacks %}
+				<a class="box-link" href="{% url 'feedback_contact_detail_view' pk=feedback.id %}">
+					<article class="article-box index-page top-drop article-new">
+						<h1 class="hor-align">{{ feedback.name|default:Anonymous }}</h1>
+						<p>
+							{{ feedback.contact|truncatechars:250|default:Anonymous }}
+						</p>
+						<div class="author-profilePic-date position-h1-new">
+							<h1>{{ feedback.created_at|date:"jS b, Y" }}</h1>
+						</div>
+					</article>
+				</a>
+				{% endfor %}
+			</div>
+			<div class="button-container">
+				<div class="click-anime">
+					<a href="/admin">
+						<button>Admin Panel</button>
+					</a>
+				</div>
+			</div>
+		</div>
+		<!-- <div class="rating-section">
+			<h1 class="section-headings right-anime" >Latest Reads</h1>
+			<div>
+				{% for rating in ratings|slice:":4" %}
+					<a class="box-link" href="{% url 'article' pk=rating.pk %}">
+						<article class="article-box top-rated index-page left-anime article-rated">
+							<h1 class="hor-align">{{ rating.title }}</h1>
+							<p>
+								{{ rating.content|truncatechars:80 }}
+							</p>
+							<div class="author-profilePic-date position-h1-new">
+								<h1>{{ rating.author.first_name|capfirst }}</h1><span class="separator separator-rated">•</span>
+								<h1>{{ rating.date_published|date:"jS b, Y" }}</h1>
+							</div>
+						</article>
+					</a>
+				{% endfor %}
+			</div>
+		</div> -->
+	</div>
+	<div class="pagination right-anime text-sizes">
+		<span class="step-links">
+			{% if feedbacks.has_previous %}
+				<a href="?page=1"><h1>&laquo; first</h1></a>
+				<a href="?page={{ feedbacks.previous_page_number }}"><h1>previous</h1></a>
+			{% endif %}
+
+			<span class="current">
+				<h1 style="text-decoration: underline;">
+					{{ feedbacks.number }} of {{ feedbacks.paginator.num_pages }}
+				</h1>
+			</span>
+
+			{% if articles.has_next %}
+				<a href="?page={{ feedbacks.next_page_number }}"><h1>next</h1></a>
+				<a href="?page={{ feedbacks.paginator.num_pages }}"><h1>last &raquo;</h1></a>
+			{% endif %}
+		</span>
+	</div>
+	
+</section>
+{% endwith %}
+{% endblock section %}
