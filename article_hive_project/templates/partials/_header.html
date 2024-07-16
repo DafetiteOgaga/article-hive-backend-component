@@ -20,7 +20,7 @@
 					<li class="right-anime"><a href="{% url 'login' %}">Register/Login</a></li>
 					{% endif %}
 					{% if user.is_superuser %}
-						<li class="right-anime"><a href="{% url 'feedback_view' %}">Feedback</a></li>
+						<li class="right-anime"><a href="{% url 'feedback_list_view' %}">Feedback</a></li>
 					{% endif %}
 				</ul>
 			</nav>
