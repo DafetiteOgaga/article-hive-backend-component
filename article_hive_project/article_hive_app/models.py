@@ -37,16 +37,11 @@ class User(AbstractUser):
 		print(f'isinstance(self.profile_picture, InMemoryUploadedFile: {isinstance(self.profile_picture, InMemoryUploadedFile)}')
 		print('entering save method ###### 2')
 		if (self.profile_picture or isinstance(self.profile_picture, InMemoryUploadedFile)) and self.first_name:
-			# Open the uploaded image
 			img = Image.open(self.profile_picture)
 			print('opened file ######')
-
-			# Convert to RGB if it's not
 			if img.mode != 'RGB':
 				img = img.convert('RGB')
 				print('converted file ######')
-
-			# Crop to square
 			min_dim = min(img.width, img.height)
 			left = (img.width - min_dim) / 2
 			top = (img.height - min_dim) / 2
@@ -54,19 +49,13 @@ class User(AbstractUser):
 			bottom = (img.height + min_dim) / 2
 			img = img.crop((left, top, right, bottom))
 			print('cropped file ######')
-
-			# Resize
-			target_size = (200, 200)  # You can adjust this size
+			target_size = (200, 200)
 			img = img.resize(target_size, Image.LANCZOS)
 			print('resize file ######')
-
-			# Save the processed image
 			output = io.BytesIO()
-			img.save(output, format='JPEG', quality=500)  # Adjust quality to reduce file size
+			img.save(output, format='JPEG', quality=500)
 			output.seek(0)
 			print('processed image ######')
-
-			# Replace the image field's file with the processed image
 			self.profile_picture = InMemoryUploadedFile(
 				output, 'ImageField', 
 				f"{unique_profile_pic(self, self.profile_picture.name)}",
@@ -97,7 +86,7 @@ class Article(models.Model):
 
 class Comment(models.Model):
 	comment = models.TextField(max_length=500)
-	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user', null=True, blank=True)
 	name = models.CharField(max_length=100, null=True, blank=True)
 	article = models.ForeignKey('Article', on_delete=models.CASCADE, related_name='comments')
 	date_commented = models.DateTimeField(auto_now=True) # last modified stamp
