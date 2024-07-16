@@ -28,11 +28,20 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', views.CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', views.CustomPasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
-	path('feedback/', views.feedback_view, name='feedback_view'),
-	path('feedback-details/<int:pk>/', views.feedback_details, name='feedback_details'),
+	path('feedback/article/', views.feedback_article_list_view, name='feedback_article_list_view'),
+	path('feedback/article-detail/<int:pk>/', views.feedback_article_detail_view, name='feedback_article_detail_view'),
+	path('feedback/author-reply/', views.feedback_author_reply_list_view, name='feedback_author_reply_list_view'),
+	path('feedback/author-reply-detail/<int:pk>/', views.feedback_author_reply_detail_view, name='feedback_author_reply_detail_view'),
+	path('feedback/comment/', views.feedback_comment_list_view, name='feedback_comment_list_view'),
+	path('feedback/comment-detail/<int:pk>/', views.feedback_comment_detail_view, name='feedback_comment_detail_view'),
+	path('feedback/contact/', views.feedback_contact_list_view, name='feedback_contact_list_view'),
+	path('feedback/contact-detail/<int:pk>/', views.feedback_contact_detail_view, name='feedback_contact_detail_view'),
+	path('feedback/user/', views.feedback_user_list_view, name='feedback_user_list_view'),
+	path('feedback/user-detail/<int:pk>/', views.feedback_user_detail_view, name='feedback_user_detail_view'),
+	path('feedback/', views.feedback_list_view, name='feedback_list_view'),
 
 	path('test-email/', views.test_email_view, name='test_email'),
-	path('test-404/', lambda request: None),
+	# path('test-404/', lambda request: None),
 
 	path('test_authentication/', views.test_authentication, name='test_authentication'),
 	path('ports/', views.checkRequest, name='checkRequest'),
