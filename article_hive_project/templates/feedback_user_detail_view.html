@@ -41,7 +41,7 @@
 		<p>Staff: {{ is_staff }}</p>
 		<p>Superuser: {{ is_superuser }}</p>
 		<p>Website: {{ feedback.website|default:empty }}</p>
-		<p>Profile Picture: {{ profile_picture }}</p>
+		<p style="overflow-wrap: break-word;">Profile Picture: {{ profile_picture }}</p>
 		<p>Rating: {{ profile.rating|default:empty }}</p>
 		<p>Followers: {{ profile.followers|default:empty }}</p>
 		<p>Member since: {{ feedback.date_joined|default:empty|date:"jS b, Y" }}</p>

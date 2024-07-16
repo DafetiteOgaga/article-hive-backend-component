@@ -3,23 +3,23 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 
 from django.utils.html import escape
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
+# from django.utils.http import urlsafe_base64_encode
+# from django.utils.encoding import force_bytes
 
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.contrib.auth.decorators import login_required
 
-from django.conf import settings
+# from django.conf import settings
 
-import random, os, time, requests
+import os #, time, requests, random
 
-from django.urls import reverse
+# from django.urls import reverse
 
-from django.template.loader import render_to_string
+# from django.template.loader import render_to_string
 
-from django.contrib.auth.tokens import default_token_generator
+# from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import views as auth_views
 from django.contrib.auth import authenticate, login, logout, get_user_model
