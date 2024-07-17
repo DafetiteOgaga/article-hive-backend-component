@@ -1035,6 +1035,15 @@ form p a:active {
 }
 .search-header {
 	padding-left: 4rem;
+	@media (min-width: 360px) {
+		padding-left: 5.7rem;
+	}
+	@media (min-width: 390px) {
+		padding-left: 6.7rem;
+	}
+	@media (min-width: 430px) {
+		padding-left: 7.7rem;
+	}
 	@media (min-width: 480px) {
 		padding-left: 8.3rem;
 	}
