@@ -33,6 +33,7 @@
 			<p><strong><a href="{% url 'article_list' feedback.id %}">Open Your Hive</a></strong></p>
 			<p><strong><a href="{% url 'article_list' feedback.id %}">Open {{ feedback.first_name|capfirst }}'s Hive</a></strong></p>
 		{% endcomment %}
+		<p>Username: {{ feedback.userame|default:empty }}</p>
 		<p>Number of Articles: {{ feedback.articles.all.count|default:empty }}</p>
 		<p>Phone {{ feedback.phone|default:empty }}</p>
 		<p>Email: {{ feedback.email|default:empty }}</p>
