@@ -1047,6 +1047,9 @@ form p a:active {
 	@media (min-width: 480px) {
 		padding-left: 8.3rem;
 	}
+	@media (min-width: 650px) {
+		padding-left: 13.3rem;
+	}
 	@media (min-width: 720px) {
 		padding-left: 2rem;
 	}
@@ -1118,6 +1121,14 @@ form p a:active {
 }
 .search-font-color a {
 	color: rgb(133, 76, 38);;
+}
+
+.welcome-header {
+	display: flex;
+	padding-left: 7.3rem;
+	@media (min-width: 660px) {
+		justify-self: end;
+    }
 }
 
 .left-align-mini-header {
