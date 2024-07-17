@@ -1031,7 +1031,7 @@ form p a:active {
 		padding-right: 6rem;
 	}
 	@media (min-width: 1024px) {
-		padding-right: 3rem;
+		padding-right: 5rem;
 	}
 	@media (min-width: 1200px) {
 		padding-right: 7rem;
@@ -1507,4 +1507,50 @@ form p a:active {
     .search-result {
         flex: 1 1 calc(100% - 16px); /* 1 item per row on very small screens */
     }
+}
+
+.animated-banner {
+    text-align: center;
+    color: whitesmoke;
+    /* background-color: #007bff; */
+}
+.signup {
+    border-right: .15em solid whitesmoke;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typing 3.5s steps(30, end), blink-caret .75s step-end infinite;
+}
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: #fff; }
+}
+
+.anime-text-color {
+	color: rgb(206, 149, 112);
+	cursor: pointer;
+	font-size: small;
+	/* font-family: Arial, sans-serif; */
+	/* font-size: large; */
+
+	@media (min-width: 480px) {
+		font-size: 0.9rem;
+	}
+	@media (min-width: 1024px) {
+		/* padding-right: 2rem; */
+		font-size: 1.6rem;
+	}
+	@media (min-width: 1200px) {
+		font-size: 1.3rem;
+	}
+	@media (min-width: 1300px) {
+		font-size: 1.37rem;
+	}
+}
+.anime-text-color:hover {
+	color: rgb(172, 77, 15);
 }
