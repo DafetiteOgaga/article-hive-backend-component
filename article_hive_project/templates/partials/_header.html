@@ -42,7 +42,9 @@
 					<a class="bounce-head" style="text-decoration: none;" href="{% url 'profile' user.id %}"><h1 class="click-anime">Welcome {{ user.first_name|default:empty|capfirst }}</h1></a>
 					<a class="bounce-head" style="text-decoration: none;" href="{% url 'article_form' %}"><h1 class="click-anime">Post an Article</h1></a>
 				{% else %}
-					<input style="background-color: transparent; border: solid transparent;" disabled>
+					<div class="animated-banner">
+						<a style="text-decoration: none;" href="{% url 'register' %}"><hi class="signup anime-text-color"></hi></a>
+					</div>
 				{% endif %}
 			</div>
 		</div>
