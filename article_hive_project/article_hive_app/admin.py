@@ -23,5 +23,7 @@ admin.site.register(User, CustomUserAdmin)
 admin.site.register(Article)
 admin.site.register(Comment)
 admin.site.register(Contact)
+admin.site.register(Author_reply)
+admin.site.register(SearchHistory)
 
 # admin.site.register(User, UserAdmin)
