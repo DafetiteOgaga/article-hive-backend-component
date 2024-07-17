@@ -9,9 +9,11 @@ from django.utils.html import escape
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 
 # from django.conf import settings
+
+from django.db.models import Q
 
 import os #, time, requests, random
 
@@ -21,6 +23,7 @@ import os #, time, requests, random
 
 # from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth import views as auth_views
 from django.contrib.auth import authenticate, login, logout, get_user_model
 User = get_user_model()
@@ -30,7 +33,7 @@ from .forms import CustomPasswordChangeForm, CustomPasswordResetForm
 from .forms import CustomSetPasswordForm, Author_replyForm
 from .forms import ArticleForm, CommentForm, ContactForm
 
-from .models import Article, Comment, Contact, Author_reply
+from .models import Article, Comment, Contact, Author_reply, SearchHistory
 
 from .mock_data import *
 
@@ -391,6 +394,7 @@ def register_page(request):
 
 @login_required
 def article_form(request):
+    print('user id:', request.user.id)
     # user = get_object_or_404(User, pk=pk)
     # if request.user != user:
     #     return redirect('home')
@@ -403,7 +407,7 @@ def article_form(request):
             article.author = request.user
             article.save()
             # return redirect('article_detail', pk=pk)
-            return redirect('hive')
+            return redirect('article_list', pk=request.user.id)
     form = ArticleForm()
     context = {
         'form': form,
@@ -539,7 +543,7 @@ def feedback_contact_list_view(request):
     print(f'Access granted:', superuser_access)
     print(f'is superuser?',superuser_access )
     if not superuser_access:
-        return redirect('home')
+        return redirect_to_login(next=request.path)
     # articles = Article.objects.all()
     # ratings = articles[::-1]
     # ratings = articles.reverse()
@@ -568,7 +572,7 @@ def feedback_contact_detail_view(request, pk):
     print(f'is superuser?',superuser_access )
     print(f'Access granted:', superuser_access)
     if not superuser_access:
-        return redirect('home')
+        return redirect_to_login(next=request.path)
     feedback = get_object_or_404(Contact, pk=pk)
     context = {
         'feedback': feedback,
@@ -583,7 +587,7 @@ def feedback_article_list_view(request):
     print(f'Access granted:', superuser_access)
     print(f'is superuser?',superuser_access )
     if not superuser_access:
-        return redirect('home')
+        return redirect_to_login(next=request.path)
     # articles = Article.objects.all()
     # ratings = articles[::-1]
     # ratings = articles.reverse()
@@ -602,7 +606,7 @@ def feedback_article_list_view(request):
     print(f"feedbacks_paginated:", feedbacks_paginated)
     context = {
         'feedbacks': feedbacks_paginated,
-        # 'ratings': ratings,
+        'ratings': feedbacks,
         'pgname': 'Feedback'
     }
     return render(request, 'feedback_article_list_view.html', context)
@@ -612,7 +616,7 @@ def feedback_article_detail_view(request, pk):
     print(f'is superuser?',superuser_access )
     print(f'Access granted:', superuser_access)
     if not superuser_access:
-        return redirect('home')
+        return redirect_to_login(next=request.path)
 
     feedback = Article.objects.prefetch_related('comments').filter(pk=pk).first()
     author = feedback.author
@@ -657,7 +661,7 @@ def feedback_author_reply_list_view(request):
     print(f'Access granted:', superuser_access)
     print(f'is superuser?',superuser_access )
     if not superuser_access:
-        return redirect('home')
+        return redirect_to_login(next=request.path)
     # articles = Article.objects.all()
     # ratings = articles[::-1]
     # ratings = articles.reverse()
@@ -686,7 +690,7 @@ def feedback_author_reply_detail_view(request, pk):
     print(f'is superuser?',superuser_access )
     print(f'Access granted:', superuser_access)
     if not superuser_access:
-        return redirect('home')
+        return redirect_to_login(next=request.path)
     feedback = get_object_or_404(Author_reply, pk=pk)
     context = {
         'feedback': feedback,
@@ -701,7 +705,7 @@ def feedback_comment_list_view(request):
     print(f'Access granted:', superuser_access)
     print(f'is superuser?',superuser_access )
     if not superuser_access:
-        return redirect('home')
+        return redirect_to_login(next=request.path)
     # articles = Article.objects.all()
     # ratings = articles[::-1]
     # ratings = articles.reverse()
@@ -730,7 +734,7 @@ def feedback_comment_detail_view(request, pk):
     print(f'is superuser?',superuser_access )
     print(f'Access granted:', superuser_access)
     if not superuser_access:
-        return redirect('home')
+        return redirect_to_login(next=request.path)
     feedback = get_object_or_404(Comment, pk=pk)
     context = {
         'feedback': feedback,
@@ -745,7 +749,7 @@ def feedback_user_list_view(request):
     print(f'Access granted:', superuser_access)
     print(f'is superuser?',superuser_access )
     if not superuser_access:
-        return redirect('home')
+        return redirect_to_login(next=request.path)
     # articles = Article.objects.all()
     # ratings = articles[::-1]
     # ratings = articles.reverse()
@@ -774,7 +778,7 @@ def feedback_user_detail_view(request, pk):
     print(f'is superuser?',superuser_access )
     print(f'Access granted:', superuser_access)
     if not superuser_access:
-        return redirect('home')
+        return redirect_to_login(next=request.path)
     feedback = get_object_or_404(User, pk=pk)
     _is_active = feedback.is_active
     _is_staff = feedback.is_staff
@@ -798,12 +802,58 @@ def feedback_user_detail_view(request, pk):
 
 #############################################
 
+def feedback_search_history_list_view(request):
+    superuser_access = is_superuser(request)
+    print(f'Access granted:', superuser_access)
+    print(f'is superuser?',superuser_access )
+    if not superuser_access:
+        return redirect_to_login(next=request.path)
+    # articles = Article.objects.all()
+    # ratings = articles[::-1]
+    # ratings = articles.reverse()
+    
+    feedbacks = SearchHistory.objects.all().order_by('-id')
+    print(f"feedbacks:", feedbacks)
+    paginator = Paginator(feedbacks, 8)
+    page_number = request.GET.get('page')
+    print(f"page_number:", page_number)
+    try:
+        feedbacks_paginated = paginator.page(page_number)
+    except PageNotAnInteger:
+        feedbacks_paginated = paginator.page(1)
+    except EmptyPage:
+        feedbacks_paginated = paginator.page(paginator.num_pages)
+    print(f"feedbacks_paginated:", feedbacks_paginated)
+    context = {
+        'feedbacks': feedbacks_paginated,
+        # 'ratings': ratings,
+        'pgname': 'Feedback'
+    }
+    return render(request, 'feedback_search_history_list_view.html', context)
+
+# def feedback_search_history_detail_view(request, str):
+#     superuser_access = is_superuser(request)
+#     print(f'is superuser?',superuser_access )
+#     print(f'Access granted:', superuser_access)
+#     if not superuser_access:
+#         return redirect_to_login(next=request.path)
+#     # return redirect('advanced_search', str)
+#     feedback = get_object_or_404(SearchHistory, pk=pk)
+#     context = {
+#         'feedback': feedback,
+#         'pgname': 'Feedback Details'
+#     }
+#     return render(request, 'feedback_search_history_detail_view.html', context)
+
+
+#############################################
+
 def feedback_list_view(request):
     superuser_access = is_superuser(request)
     print(f'is superuser?',superuser_access )
     print(f'Access granted:', superuser_access)
     if not superuser_access:
-        return redirect('home')
+        return redirect_to_login(next=request.path)
     context = {
         'feedbacks': [
             {'title': 'Articles', 'url': 'article/'},
@@ -811,10 +861,98 @@ def feedback_list_view(request):
             {'title': 'Comments', 'url': 'comment/'},
             {'title': 'Contacts', 'url': 'contact/'},
             {'title': 'Users', 'url': 'user/'},
+            {'title': 'SearchHistory', 'url': 'search-history/'},
         ],
         'pgname': 'Feedback Details'
     }
     return render(request, 'feedback_list_view.html', context)
+
+######################
+def advanced_search(request):
+    query = request.GET.get('q', '')
+    page = request.GET.get('page', 1)
+    
+    if query:
+        # User
+        user_results = User.objects.filter(
+            Q(username__icontains=query) |
+            Q(email__icontains=query) |
+            Q(first_name__icontains=query) |
+            Q(last_name__icontains=query) |
+            Q(aboutme__icontains=query)
+        )
+
+        # Article
+        article_results = Article.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query)
+        )
+
+        # Comment
+        comment_results = Comment.objects.filter(
+            Q(comment__icontains=query) |
+            Q(name__icontains=query)
+        )
+
+        # Author_reply
+        reply_results = Author_reply.objects.filter(
+            Q(reply__icontains=query)
+        )
+
+        # Contact
+        contact_results = Contact.objects.filter(
+            Q(contact__icontains=query) |
+            Q(name__icontains=query)
+        )
+
+        # Combine all results
+        all_results = list(user_results) + list(article_results) + list(comment_results) + list(reply_results) + list(contact_results)
+        
+        if request.user.is_authenticated:
+            SearchHistory.objects.create(user=request.user, query=query)
+    else:
+        all_results = []
+    
+    paginator = Paginator(all_results, 10)
+    try:
+        results = paginator.page(page)
+    except PageNotAnInteger:
+        results = paginator.page(1)
+    except EmptyPage:
+        results = paginator.page(paginator.num_pages)
+    
+    history = []
+    if request.user.is_authenticated:
+        history = SearchHistory.objects.filter(user=request.user).order_by('-timestamp')[:5]
+    
+    context = {
+        'results': results,
+        'query': query,
+        'history': history,
+    }
+    
+    return render(request, 'partials/_search_results.html', context)
+
+def autocomplete(request):
+    query = request.GET.get('q', '')
+    
+    # Autocomplete for Article titles
+    article_results = Article.objects.filter(title__istartswith=query)[:3]
+    
+    # Autocomplete for User names
+    user_results = User.objects.filter(
+        Q(username__istartswith=query) |
+        Q(first_name__istartswith=query) |
+        Q(last_name__istartswith=query)
+    )[:2]
+    
+    data = (
+        list(article_results.values('id', 'title')) +
+        list(user_results.values('id', 'username', 'first_name', 'last_name'))
+    )
+    
+    return JsonResponse(data, safe=False)
+######################
 
 def test_authentication(request):
     context = {
@@ -861,4 +999,3 @@ def test_email_view(request):
         return HttpResponse('Email sent successfully!')
     except Exception as e:
         return HttpResponse(f'Error: {str(e)}')
-    
