@@ -27,23 +27,25 @@
 		</div>
 	<!-- </div> -->
 </header>
-{% if user.is_authenticated %}
 <div style="padding-bottom: 0.5rem;" class="greeting nav left-align-mini-header">
 	<div class="">
 		<div class="inner-min-header">
 			<div  class="search-header click-anime">
-				<form action="{% url 'advanced_search' %}" method="get">
+				<form style="gap: 0.2rem;" class="center-form-search" action="{% url 'advanced_search' %}" method="get">
 					<input class="right-anime" name="q" type="text" id="search-input" placeholder="Search..." value="{{ query }}">
 					<button class="left-anime" type="submit">Search</button>
 				</form>
 				<!-- <a class="bounce-head" style="text-decoration: none;" href="{% url 'article_form' %}"><h1 class="click-anime">Article</h1></a> -->
 			</div>
 			<div class="welcome-header">
-				<a class="bounce-head" style="text-decoration: none;" href="{% url 'profile' user.id %}"><h1 class="click-anime">Welcome {{ user.first_name|default:empty|capfirst }}</h1></a>
-				<a class="bounce-head" style="text-decoration: none;" href="{% url 'article_form' %}"><h1 class="click-anime">Post an Article</h1></a>
+				{% if user.is_authenticated %}
+					<a class="bounce-head" style="text-decoration: none;" href="{% url 'profile' user.id %}"><h1 class="click-anime">Welcome {{ user.first_name|default:empty|capfirst }}</h1></a>
+					<a class="bounce-head" style="text-decoration: none;" href="{% url 'article_form' %}"><h1 class="click-anime">Post an Article</h1></a>
+				{% else %}
+					<input style="background-color: transparent; border: solid transparent;" disabled>
+				{% endif %}
 			</div>
 		</div>
 	</div>
 </div>
-{% endif %}
 {% endwith %}
