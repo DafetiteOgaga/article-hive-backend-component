@@ -1,0 +1,19 @@
+<div class="pagination right-anime text-sizes">
+	<span class="step-links">
+		{% if feedbacks.has_previous %}
+			<a href="?page=1"><h1>&laquo; first</h1></a>
+			<a href="?page={{ feedbacks.previous_page_number }}"><h1>previous</h1></a>
+		{% endif %}
+
+		<span class="current">
+			<h1 style="text-decoration: underline;">
+				{{ feedbacks.number }} of {{ feedbacks.paginator.num_pages }}
+			</h1>
+		</span>
+
+		{% if feedbacks.has_next %}
+			<a href="?page={{ feedbacks.next_page_number }}"><h1>next</h1></a>
+			<a href="?page={{ feedbacks.paginator.num_pages }}"><h1>last &raquo;</h1></a>
+		{% endif %}
+	</span>
+</div>
