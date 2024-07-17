@@ -26,6 +26,7 @@
 				{% endfor %}
 			</div>
 		</div>
+		{% include 'partials/_latest.html' %}
 	</div>
 	<div class="button-container">
 		<div class="click-anime">
@@ -34,7 +35,7 @@
 			</a>
 		</div>
 	</div>
-	<div class="pagination right-anime text-sizes">
+	<!-- <div class="pagination right-anime text-sizes">
 		<span class="step-links">
 			{% if feedbacks.has_previous %}
 				<a href="?page=1"><h1>&laquo; first</h1></a>
@@ -52,7 +53,8 @@
 				<a href="?page={{ feedbacks.paginator.num_pages }}"><h1>last &raquo;</h1></a>
 			{% endif %}
 		</span>
-	</div>
+	</div> -->
+	{% include 'partials/_pagination.html' %}
 	
 </section>
 {% endwith %}

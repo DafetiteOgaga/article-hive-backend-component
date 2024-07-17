@@ -38,7 +38,12 @@ urlpatterns = [
 	path('feedback/contact-detail/<int:pk>/', views.feedback_contact_detail_view, name='feedback_contact_detail_view'),
 	path('feedback/user/', views.feedback_user_list_view, name='feedback_user_list_view'),
 	path('feedback/user-detail/<int:pk>/', views.feedback_user_detail_view, name='feedback_user_detail_view'),
+	path('feedback/search-history/', views.feedback_search_history_list_view, name='feedback_search_history_list_view'),
+	# path('feedback/search-history-detail/<str:pk>/', views.feedback_search_history_detail_view, name='feedback_search_history_detail_view'),
 	path('feedback/', views.feedback_list_view, name='feedback_list_view'),
+
+	path('search/', views.advanced_search, name='advanced_search'),
+    path('autocomplete/', views.autocomplete, name='autocomplete'),
 
 	path('test-email/', views.test_email_view, name='test_email'),
 	# path('test-404/', lambda request: None),

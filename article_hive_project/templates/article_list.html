@@ -24,27 +24,9 @@
 				{% endfor %}
 			</div>
 		</div>
-		<div class="rating-section">
-			<h1 class="section-headings right-anime" >Latest Reads</h1>
-			<div>
-				{% for rating in ratings|slice:":4" %}
-					<a class="box-link" href="{% url 'article' pk=rating.pk %}">
-						<article class="article-box top-rated index-page left-anime article-rated">
-							<h1 class="hor-align">{{ rating.title|default:empty }}</h1>
-							<p>
-								{{ rating.content|truncatechars:80|default:empty }}
-							</p>
-							<div class="author-profilePic-date position-h1-new">
-								<h1>{{ rating.author.first_name|default:empty|capfirst }}</h1><span class="separator separator-rated">•</span>
-								<h1>{{ rating.date_published|default:empty|date:"jS b, Y" }}</h1>
-							</div>
-						</article>
-					</a>
-				{% endfor %}
-			</div>
-		</div>
+		{% include 'partials/_latest.html' %}
 	</div>
-	<div class="pagination right-anime text-sizes">
+	<!-- <div class="pagination right-anime text-sizes">
 		<span class="step-links">
 			{% if articles.has_previous %}
 				<a href="?page=1"><h1>&laquo; first</h1></a>
@@ -62,8 +44,10 @@
 				<a href="?page={{ articles.paginator.num_pages }}"><h1>last &raquo;</h1></a>
 			{% endif %}
 		</span>
-	</div>
-	
+	</div> -->
+	{% with articles as feedbacks %}
+		{% include 'partials/_pagination.html' %}
+	{% endwith %}
 </section>
 {% endwith %}
 {% endblock section %}
