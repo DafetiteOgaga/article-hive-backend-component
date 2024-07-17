@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block section %}
+{% with "" as empty %}
+
+<div class="search-font-color click-anime">
+  <ul style="margin: 0;"><h2>Search Results for "{{ query }}"</h2></ul>
+  {% if results %}
+  <ul>
+  <div class="search-result-container">
+   
+      {% for result in results %}
+      <div class="search-result">
+        <li>
+          {% if result|class_name == 'User' %}
+          <h4>Member: <a href="{% url 'profile' result.id %}">{{ result.first_name|default:empty|capfirst }} {{ result.middle_name|default:empty|capfirst }} {{ result.last_name|default:empty|capfirst }}</a></h4>
+            <!-- <p>{{ result.email }}</p> -->
+          {% elif result|class_name == 'Article' %}
+            <h4>Article: <a style="color: whitesmoke;" href="{% url 'article' result.id %}">{{ result.title|truncatewords:4 }}</h4>
+            <p>{{ result.content|truncatewords:10 }}</a></p>
+          {% elif result|class_name == 'Comment' %}
+            {% if result.user %}
+              <h4>Comment by <a style="color: whitesmoke;" href="{% url 'article' result.id %}">{{ result.user.first_name }}:</a></h4>
+            {% else %}
+              <h4>Comment by <a style="color: whitesmoke;" href="{% url 'article' result.id %}">{{ result.name }}:</a></h4>
+            {% endif %}
+            <p><a style="color: whitesmoke;" href="{% url 'article' result.id %}">{{ result.comment|truncatewords:30 }}</a></p>
+          {% elif result|class_name == 'Author_reply' %}
+            <h4><a style="color: whitesmoke;" href="{% url 'article' result.id %}">{{ result.comment.article.author.first_name }} replied:</h4>
+            <p>{{ result.reply|truncatewords:10 }}</a></p>
+      {% comment %}
+          {% elif result|class_name == 'Contact' %}
+            <h4><a style="color: whitesmoke;" href="{% url 'feedback_contact_detail_view' result.id %}">Contact: {{ result.name }}</h4>
+            <p>{{ result.contact|truncatewords:10 }}</a></p>
+      {% endcomment %}
+          {% endif %}
+        </li>
+      </div>
+      {% endfor %}
+      </ul>
+  </div>
+  {% else %}
+    <ul><p>No results found.</p></ul>
+  {% endif %}
+
+
+  <ul style="display: grid;" class="search-font-color">
+    <h3>Recent Searches</h3>
+  {% for item in history %}
+    <li><a href="?q={{ item.query }}&page=1">{{ item.query }}</a></li>
+  {% endfor %}
+  </ul>
+
+  <!-- ......................................... -->
+  {% comment %}
+  <!-- {% if articles.has_previous %}
+    <a href="?page=1"><h1>&laquo; first</h1></a>
+    <a href="?page={{ articles.previous_page_number }}"><h1>previous</h1></a>
+  {% endif %}
+
+  <span class="current">
+    <h1 style="text-decoration: underline;">
+      {{ articles.number }} of {{ articles.paginator.num_pages }}
+    </h1>
+  </span>
+
+  {% if articles.has_next %}
+    <a href="?page={{ articles.next_page_number }}"><h1>next</h1></a>
+    <a href="?page={{ articles.paginator.num_pages }}"><h1>last &raquo;</h1></a>
+  {% endif %} -->
+  {% endcomment %}
+  <!-- ......................................... -->
+
+  {% comment %}
+  {% if results.has_other_pages %}
+  {% endcomment %}
+    <div class="pagination">
+      {% if results.has_previous %}
+        <a href="?q={{ query }}&page=1"><h1>&laquo; first</h1></a>
+        <a href="?q={{ query }}&page={{ results.previous_page_number }}"><h1>Previous</h1></a>
+      {% endif %}
+
+      <span class="current">
+        <h1 style="text-decoration: underline;">
+          <a href="?q={{ query }}&page=1">{{ results.number }} of {{ results.paginator.num_pages }}</a>
+        </h1>
+      </span>
+
+      {% if results.has_next %}
+        <a href="?q={{ query }}&page={{ results.next_page_number }}"><h1>Next</h1></a>
+        <a href="?q={{ query }}&page={{ results.paginator.num_pages }}"><h1>Last</h1></a>
+      {% endif %}
+
+    {% comment %}
+      <!-- {% if results.has_previous %}
+        <a href="?q={{ query }}&page={{ results.previous_page_number }}">&laquo; Previous</a>
+      {% endif %}
+
+      {% for i in results.paginator.page_range %}
+        {% if results.number == i %}
+          <span class="current">{{ i }}</span>
+        {% else %}
+          <a href="?q={{ query }}&page={{ i }}">{{ i }}</a>
+        {% endif %}
+       
+      {% endfor %}
+
+      {% for i in results.paginator.page_range %}
+      <a href="?q={{ query }}&page={{ i }}">check: {{ i }}</a>
+      {% endfor %}
+
+      {% if results.has_next %}
+        <a href="?q={{ query }}&page={{ results.next_page_number }}">Next &raquo;</a>
+      {% endif %} -->
+    {% endcomment %}
+    </div>
+    {% comment %}
+  {% endif %}
+  {% endcomment %}
+</div>
+{% endwith %}
+{% endblock %}
