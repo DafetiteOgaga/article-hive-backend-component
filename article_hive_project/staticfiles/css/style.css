@@ -1030,6 +1030,9 @@ form p a:active {
 		grid-template-columns: 1fr 1fr;
 		padding-right: 6rem;
 	}
+	@media (min-width: 1024px) {
+		padding-right: 3rem;
+	}
 	@media (min-width: 1200px) {
 		padding-right: 7rem;
 	}
@@ -1042,7 +1045,7 @@ form p a:active {
 	grid-template-columns: 1fr 1fr; */
 }
 .search-header {
-	padding-left: 5.5rem;
+	/* padding-left: 5.5rem; */
 	/* @media (min-width: 360px) {
 		padding-left: 5rem;
 	}
@@ -1053,6 +1056,11 @@ form p a:active {
 		padding-left: 0;
 		margin-left: -8rem;
 	}
+}
+.center-form-search {
+	/* padding-left: 10rem; */
+	display: flex;
+	justify-content: center;
 }
 	/* @media (min-width: 430px) {
 		padding-left: 7.7rem;
