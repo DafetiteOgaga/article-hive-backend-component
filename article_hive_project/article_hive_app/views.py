@@ -563,9 +563,10 @@ def custom_password_reset(request):
             email = form.cleaned_data['email']
             print(f"email: {email}")
             # user = get_object_or_404(User, email=email)
-            user = User.objects.filter(email=email)
+            user = User.objects.filter(email=email).first()
             print(f"get user: {user}")
             if user:
+                # user.first()
                 print(f"if user: {user != None}")
                 protocol = request.scheme
                 domain = request.get_host()
