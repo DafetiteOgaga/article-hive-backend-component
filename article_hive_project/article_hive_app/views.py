@@ -577,6 +577,10 @@ def custom_password_reset(request):
 
                 # Render the subject template
                 subject = render_to_string('auth/password_reset_subject.txt', {'user': user}).strip()
+                email_body = render_to_string('auth/password_reset_email.html', {
+                'user': user.first_name,
+                'reset_link': reset_link
+            })
 
                 print(f"my key #1: {api_key}")
                 print(f"user: {user}")
@@ -589,7 +593,7 @@ def custom_password_reset(request):
                     'sender': {'name': 'Article-Hive', 'email': 'ogagadafetite@gmail.com'},  # Sender info
                     'to': [{'email': user.email, 'name': user.first_name}],  # Recipient info
                     'subject': subject,  # Subject line
-                    'htmlContent': f'<html><body><h1>Password Reset</h1><p>{reset_link}</p></body></html>',  # HTML content
+                    'htmlContent': f'{email_body}',  # HTML content
                     'textContent': f'Password Reset Link: {reset_link}'  # Text content
                 }
 
