@@ -17,7 +17,7 @@ from django.db.models import Q
 
 import os, time, requests, random, json, sys
 
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
 from django.template.loader import render_to_string
 
@@ -611,6 +611,7 @@ def custom_password_reset(request):
                 else:
                     print(f'Failed to send email: {response.status_code}')
                     print(response.text)
+                    return redirect('password_reset_failed.html')
 
             return redirect('password_reset_done')
     else:
@@ -626,7 +627,10 @@ class CustomPasswordResetDoneView(auth_views.PasswordResetDoneView):
 class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
     form_class = CustomSetPasswordForm
     template_name = 'auth/password_reset_confirm_form.html'
-    success_url = '/reset/done/'
+    success_url = reverse_lazy('login')
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        return redirect(self.success_url)
 
 class CustomPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
     template_name = 'auth/password_reset_complete.html'
