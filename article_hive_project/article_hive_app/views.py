@@ -562,7 +562,8 @@ def custom_password_reset(request):
             print(f"form.is_valid: {form.is_valid()}")
             email = form.cleaned_data['email']
             print(f"email: {email}")
-            user = get_object_or_404(User, email=email)
+            # user = get_object_or_404(User, email=email)
+            user = User.objects.filter(email=email)
             print(f"get user: {user}")
             if user:
                 print(f"if user: {user != None}")
@@ -578,9 +579,9 @@ def custom_password_reset(request):
                 # Render the subject template
                 subject = render_to_string('auth/password_reset_subject.txt', {'user': user}).strip()
                 email_body = render_to_string('auth/password_reset_email.html', {
-                'user': user.first_name,
-                'reset_link': reset_link
-            })
+                    'user': user.first_name,
+                    'reset_link': reset_link
+                })
 
                 print(f"my key #1: {api_key}")
                 print(f"user: {user}")
@@ -611,8 +612,10 @@ def custom_password_reset(request):
                 else:
                     print(f'Failed to send email: {response.status_code}')
                     print(response.text)
-                    return redirect('password_reset_failed.html')
-
+                    return redirect('oopsy')
+            else:
+                print('User not found')
+                return redirect('password_reset_failed')
             return redirect('password_reset_done')
     else:
         print("just empty form")
@@ -620,6 +623,12 @@ def custom_password_reset(request):
 
     return render(request, 'auth/password_reset_form.html', {'form': form})
     # ........................................................................
+
+def password_reset_failed_view(request):
+    return render(request, 'auth/password_reset_failed.html')
+
+def oopsy_view(request):
+    return render(request, 'auth/oopsy.html')
 
 class CustomPasswordResetDoneView(auth_views.PasswordResetDoneView):
     template_name = 'auth/password_reset_done.html'

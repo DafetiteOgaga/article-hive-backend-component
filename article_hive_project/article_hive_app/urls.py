@@ -26,6 +26,7 @@ urlpatterns = [
     # path('password_reset/', views.CustomPasswordResetView.as_view(), name='password_reset'),
     path('password_reset/', views.custom_password_reset, name='password_reset'),
     path('password_reset/done/', views.CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('password_reset/failed/', views.password_reset_failed_view, name='password_reset_failed'),
     path('reset/<uidb64>/<token>/', views.CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', views.CustomPasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
@@ -42,6 +43,8 @@ urlpatterns = [
 	path('feedback/search-history/', views.feedback_search_history_list_view, name='feedback_search_history_list_view'),
 	# path('feedback/search-history-detail/<str:pk>/', views.feedback_search_history_detail_view, name='feedback_search_history_detail_view'),
 	path('feedback/', views.feedback_list_view, name='feedback_list_view'),
+
+	path('oopsy/', views.oopsy_view, name='oopsy'),
 
 	path('search/', views.advanced_search, name='advanced_search'),
     path('autocomplete/', views.autocomplete, name='autocomplete'),
