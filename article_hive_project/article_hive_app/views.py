@@ -553,6 +553,7 @@ class CustomPasswordChangeDoneView(auth_views.PasswordChangeDoneView):
 
 def custom_password_reset(request):
     print('in password reset logic')
+    print(f"my key #0: {api_key}")
     print(f"request.method: {request.method}")
     if request.method == 'POST':
         print(f"request.POST: {request.POST}")
@@ -577,6 +578,7 @@ def custom_password_reset(request):
                 # Render the subject template
                 subject = render_to_string('auth/password_reset_subject.txt', {'user': user}).strip()
 
+                print(f"my key #1: {api_key}")
                 print(f"user: {user}")
                 print(f"email: {user.email}")
                 print(f"firstname: {user.first_name}")
