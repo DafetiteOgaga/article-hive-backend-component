@@ -578,7 +578,7 @@ def custom_password_reset(request):
                 b = 'dd164370bb4277e07b33bdcb8a822b17e'
                 c = '5c046dda76de8ddd77f8dce57c0d215'
                 d = 'MieNCnxBfzu3SzQe'
-                mhykhehy = f'{a}-{b}{c}-{d}'  # Brevo API key
+                mhykhehy = f'{a}-{b}{c}-{d}'
                 url = 'https://api.brevo.com/v3/smtp/email'
 
                 # Render the subject template
