@@ -3,8 +3,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 
 from django.utils.html import escape
-# from django.utils.http import urlsafe_base64_encode
-# from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -15,13 +15,13 @@ from django.contrib.auth.decorators import login_required, permission_required
 
 from django.db.models import Q
 
-import os #, time, requests, random
+import os, time, requests, random, json
 
-# from django.urls import reverse
+from django.urls import reverse
 
-# from django.template.loader import render_to_string
+from django.template.loader import render_to_string
 
-# from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth import views as auth_views
@@ -459,68 +459,159 @@ class CustomPasswordChangeDoneView(auth_views.PasswordChangeDoneView):
     template_name = 'auth/password_change_done.html'
 
 ########################################################################
-from django.core.mail import EmailMessage
+# from django.core.mail import EmailMessage
 ########################################################################
-class CustomPasswordResetView(auth_views.PasswordResetView):
-    form_class = CustomPasswordResetForm
-    template_name = 'auth/password_reset_form.html'
-    # for backend email
-    email_template_name = 'auth/password_reset_email.html'
-    subject_template_name = 'auth/password_reset_subject.txt'
-    success_url = '/password_reset/done/'
+# class CustomPasswordResetView(auth_views.PasswordResetView):
+#     form_class = CustomPasswordResetForm
+#     template_name = 'auth/password_reset_form.html'
+#     # for backend email
+#     email_template_name = 'auth/password_reset_email.html'
+#     subject_template_name = 'auth/password_reset_subject.txt'
+#     success_url = '/password_reset/done/'
 
-    # def form_valid(self, form):
-    #     response = super().form_valid(form)  # Call the original form_valid method
+#     # ........................................................................
 
-    #     # Iterate through users and send password reset email via FastAPI
-    #     user = get_object_or_404(User, email=form.cleaned_data['email'])
-    #     if user:
-    #         protocol = self.request.scheme
-    #         domain = self.request.get_host()
-    #         uid = urlsafe_base64_encode(force_bytes(user.pk))
-    #         token = default_token_generator.make_token(user)
-    #         reset_url = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
-    #         reset_link = f"{protocol}://{domain}{reset_url}"
+#     def form_valid(self, form):
+#         response = super().form_valid(form)  # Call the original form_valid method
 
-    #         # Render the email body and subject templates
-    #         email_body = render_to_string(self.email_template_name, {
-    #             'user': user,
-    #             'protocol': protocol,
-    #             'domain': domain,
-    #             'uid': uid,
-    #             'token': token,
-    #             'reset_link': reset_link
-    #         })
-    #         email_subject = render_to_string(self.subject_template_name, {'user': user}).strip()
-    #         print('######################################################################')
-    #         print(f'email_subject: {email_subject}')
-    #         print('######################################################################')
-    #         print(f'email_body: {email_body}')
-    #         print('######################################################################')
+#         # Iterate through users and send password reset email via FastAPI
+#         user = get_object_or_404(User, email=form.cleaned_data['email'])
+#         if user:
+#             protocol = self.request.scheme
+#             domain = self.request.get_host()
+#             uid = urlsafe_base64_encode(force_bytes(user.pk))
+#             token = default_token_generator.make_token(user)
+#             reset_url = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+#             # required
+#             reset_link = f"{protocol}://{domain}{reset_url}"
+#             api_key = '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'
+#             url = 'https://api.brevo.com/v3/smtp/email'
+#             subjectx = self.subject_template_name, {'user': user}
 
-    #         # Prepare email data to be sent to FastAPI
-    #         email_data = {
-    #             "email": user.email,
-    #             "subject": email_subject,
-    #             "body": email_body
-    #         }
-    #         send_email = EmailMessage(
-    #             subject=email_data['subject'],
-    #             body=email_data['body'],
-    #             from_email="ogagadafetite@gmail.com",
-    #             to=[email_data['email']]
-    #         )
-    #         send_email.send()
-    #         print(f'email_data: {email_data}')
-    #         print('######################################################################')
-    #         print('####################### EMAIL SENT! #################################')
-    #         print('######################################################################')
+#             email_data = {
+#                 'sender': {'name': 'Article-Hive', 'email': 'ogagadafetite@gmail.com'},
+#                 'to': [{'email': f'{user}', 'name': f'{user.first_name}'}],
+#                 'subject': f'{render_to_string(subjectx.strip())}',
+#                 'htmlContent': f'<html><body><h1>This is a test email</h1><p>{reset_link}</p><p>Hello, this is a test email sent using Brevo API.</p></body></html>',
+#                 'textContent': 'This is a textContent test email. Hello, this the textContent test email sent using Brevo API.'
+#             }
+#             headers = {
+#                 'accept': 'application/json',
+#                 'api-key': api_key,
+#                 'content-type': 'application/json'
+#             }
+#             response = requests.post(url, headers=headers, data=json.dumps(email_data))
+#             if response.status_code == 201:
+#                 print('Email sent successfully')
+#             else:
+#                 print(f'Failed to send email: {response.status_code}')
+#                 print(response.text)
 
-    #         # # Send a POST request to FastAPI email sending endpoint
-    #         # requests.post("http://localhost:8000/send-email/", json=email_data)
-    #         print(f'RESPONSE: {response} #####################')
-    #         print('######################################################################')
-    #     return response  # Return the original response
+            
+#             # Render the email body and subject templates
+#             email_body = render_to_string(self.email_template_name, {
+#                 'user': user,
+#                 'protocol': protocol,
+#                 'domain': domain,
+#                 'uid': uid,
+#                 'token': token,
+#                 'reset_link': reset_link
+#             })
+#             email_subject = render_to_string(self.subject_template_name, {'user': user}).strip()
+#             print('######################################################################')
+#             print(f'email_subject: {email_subject}')
+#             print('######################################################################')
+#             print(f'email_body: {email_body}')
+#             print('######################################################################')
+
+#             # # Prepare email data to be sent to FastAPI
+#             # email_data = {
+#             #     "email": user.email,
+#             #     "subject": email_subject,
+#             #     "body": email_body
+#             # }
+#             # send_email = EmailMessage(
+#             #     subject=email_data['subject'],
+#             #     body=email_data['body'],
+#             #     from_email="ogagadafetite@gmail.com",
+#             #     to=[email_data['email']]
+#             # )
+#             # send_email.send()
+#             # print(f'email_data: {email_data}')
+#             # print('######################################################################')
+#             # print('####################### EMAIL SENT! #################################')
+#             # print('######################################################################')
+
+#             # # # Send a POST request to FastAPI email sending endpoint
+#             # # requests.post("http://localhost:8000/send-email/", json=email_data)
+#             # print(f'RESPONSE: {response} #####################')
+#             # print('######################################################################')
+#         return response  # Return the original response
+    
+
+def custom_password_reset(request):
+    print('in password reset logic')
+    print(f"request.method: {request.method}")
+    if request.method == 'POST':
+        print(f"request.POST: {request.POST}")
+        form = CustomPasswordResetForm(request.POST)
+        if form.is_valid():
+            print(f"form.is_valid: {form.is_valid()}")
+            email = form.cleaned_data['email']
+            print(f"email: {email}")
+            user = get_object_or_404(User, email=email)
+            print(f"get user: {user}")
+            if user:
+                print(f"if user: {user != None}")
+                protocol = request.scheme
+                domain = request.get_host()
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                token = default_token_generator.make_token(user)
+                reset_url = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+                # required
+                reset_link = f"{protocol}://{domain}{reset_url}"
+                api_key = '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'  # Brevo API key
+                url = 'https://api.brevo.com/v3/smtp/email'
+
+                # Render the subject template
+                subject = render_to_string('auth/password_reset_subject.txt', {'user': user}).strip()
+
+                print(f"user: {user}")
+                print(f"email: {user.email}")
+                print(f"firstname: {user.first_name}")
+                print(f"subject: {subject}")
+                print(f"reset link: {reset_link}")
+                # Email data to be sent to Brevo
+                email_data = {
+                    'sender': {'name': 'Article-Hive', 'email': 'ogagadafetite@gmail.com'},  # Sender info
+                    'to': [{'email': user.email, 'name': user.first_name}],  # Recipient info
+                    'subject': subject,  # Subject line
+                    'htmlContent': f'<html><body><h1>Password Reset</h1><p>{reset_link}</p></body></html>',  # HTML content
+                    'textContent': f'Password Reset Link: {reset_link}'  # Text content
+                }
+
+                # Request headers
+                headers = {
+                    'accept': 'application/json',  # Accept JSON response
+                    'api-key': api_key,  # API key header
+                    'content-type': 'application/json'  # Content type header
+                }
+
+                # Send POST request to Brevo
+                response = requests.post(url, headers=headers, data=json.dumps(email_data))
+                if response.status_code == 201:  # Check if email was sent successfully
+                    print('Email sent successfully')
+                else:
+                    print(f'Failed to send email: {response.status_code}')
+                    print(response.text)
+
+            return redirect('password_reset_done')
+    else:
+        print("just empty form")
+        form = CustomPasswordResetForm()
+
+    return render(request, 'auth/password_reset_form.html', {'form': form})
+    # ........................................................................
 
 class CustomPasswordResetDoneView(auth_views.PasswordResetDoneView):
     template_name = 'auth/password_reset_done.html'
