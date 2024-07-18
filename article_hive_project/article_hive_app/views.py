@@ -15,7 +15,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 
 from django.db.models import Q
 
-import os, time, requests, random, json
+import os, time, requests, random, json, sys
 
 from django.urls import reverse
 
@@ -36,6 +36,9 @@ from .forms import ArticleForm, CommentForm, ContactForm
 from .models import Article, Comment, Contact, Author_reply, SearchHistory
 
 from .mock_data import *
+
+sys.path.append(os.path.expanduser("~"))
+from mhykhehy import api_key
 
 # Create your views here.
 def home(request):
@@ -484,11 +487,6 @@ class CustomPasswordChangeDoneView(auth_views.PasswordChangeDoneView):
 #             reset_url = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
 #             # required
 #             reset_link = f"{protocol}://{domain}{reset_url}"
-            # a = 'xkeysib'
-            # b = 'dd164370bb4277e07b33bdcb8a822b17e'
-            # c = '5c046dda76de8ddd77f8dce57c0d215'
-            # d = 'MieNCnxBfzu3SzQe'
-#             mhykhehy = f'{a}-{b}{c}-{d}'
 #             url = 'https://api.brevo.com/v3/smtp/email'
 #             subjectx = self.subject_template_name, {'user': user}
 
@@ -501,7 +499,7 @@ class CustomPasswordChangeDoneView(auth_views.PasswordChangeDoneView):
 #             }
 #             headers = {
 #                 'accept': 'application/json',
-#                 'api-key': mhykhehy,
+#                 'api-key': api_key,
 #                 'content-type': 'application/json'
 #             }
 #             response = requests.post(url, headers=headers, data=json.dumps(email_data))
@@ -574,11 +572,6 @@ def custom_password_reset(request):
                 reset_url = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
                 # required
                 reset_link = f"{protocol}://{domain}{reset_url}"
-                a = 'xkeysib'
-                b = 'dd164370bb4277e07b33bdcb8a822b17e'
-                c = '5c046dda76de8ddd77f8dce57c0d215'
-                d = 'MieNCnxBfzu3SzQe'
-                mhykhehy = f'{a}-{b}{c}-{d}'
                 url = 'https://api.brevo.com/v3/smtp/email'
 
                 # Render the subject template
@@ -601,7 +594,7 @@ def custom_password_reset(request):
                 # Request headers
                 headers = {
                     'accept': 'application/json',  # Accept JSON response
-                    'api-key': mhykhehy,  # API key header
+                    'api-key': api_key,  # API key header
                     'content-type': 'application/json'  # Content type header
                 }
 
