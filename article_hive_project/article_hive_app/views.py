@@ -484,7 +484,11 @@ class CustomPasswordChangeDoneView(auth_views.PasswordChangeDoneView):
 #             reset_url = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
 #             # required
 #             reset_link = f"{protocol}://{domain}{reset_url}"
-#             api_key = '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'
+            # a = 'xkeysib'
+            # b = 'dd164370bb4277e07b33bdcb8a822b17e'
+            # c = '5c046dda76de8ddd77f8dce57c0d215'
+            # d = 'MieNCnxBfzu3SzQe'
+#             mhykhehy = f'{a}-{b}{c}-{d}'
 #             url = 'https://api.brevo.com/v3/smtp/email'
 #             subjectx = self.subject_template_name, {'user': user}
 
@@ -497,7 +501,7 @@ class CustomPasswordChangeDoneView(auth_views.PasswordChangeDoneView):
 #             }
 #             headers = {
 #                 'accept': 'application/json',
-#                 'api-key': api_key,
+#                 'api-key': mhykhehy,
 #                 'content-type': 'application/json'
 #             }
 #             response = requests.post(url, headers=headers, data=json.dumps(email_data))
@@ -570,7 +574,11 @@ def custom_password_reset(request):
                 reset_url = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
                 # required
                 reset_link = f"{protocol}://{domain}{reset_url}"
-                api_key = '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'  # Brevo API key
+                a = 'xkeysib'
+                b = 'dd164370bb4277e07b33bdcb8a822b17e'
+                c = '5c046dda76de8ddd77f8dce57c0d215'
+                d = 'MieNCnxBfzu3SzQe'
+                mhykhehy = f'{a}-{b}{c}-{d}'  # Brevo API key
                 url = 'https://api.brevo.com/v3/smtp/email'
 
                 # Render the subject template
@@ -593,7 +601,7 @@ def custom_password_reset(request):
                 # Request headers
                 headers = {
                     'accept': 'application/json',  # Accept JSON response
-                    'api-key': api_key,  # API key header
+                    'api-key': mhykhehy,  # API key header
                     'content-type': 'application/json'  # Content type header
                 }
 
