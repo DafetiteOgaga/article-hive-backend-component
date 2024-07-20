@@ -964,8 +964,8 @@ form p a:active {
 }
 
 .small-container button {
-	background-color: rgb(134,77,37);
-	color: white;
+	background-color: rgb(146, 90, 52);
+	color: rgba(245, 245, 245, 0.658);
 	border: none;
 	border-radius: .6rem;
 	cursor: pointer;
@@ -1484,14 +1484,14 @@ form p a:active {
 .search-result-container {
     display: flex;
     flex-wrap: wrap;
-    /* gap: 16px; */
-	 /* Adjust the gap between items as needed */
+}
+.search-result-container a {
+    color: whitesmoke;
+	text-decoration: none;
 }
 
 .search-result {
-    flex: 1 1 calc(25% - 16px); /* 25% width minus the gap */
-    /* box-sizing: border-box;
-    border: 1px solid #ccc; */
+    flex: 1 1 calc(25% - 16px);
     padding: 0.5rem;
     text-align: center;
 }
@@ -1505,7 +1505,7 @@ form p a:active {
 
 @media (max-width: 480px) {
     .search-result {
-        flex: 1 1 calc(100% - 16px); /* 1 item per row on very small screens */
+        flex: 1 1 calc(100% - 16px);
     }
 }
 
