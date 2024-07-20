@@ -3,23 +3,23 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 
 from django.utils.html import escape
-from django.utils.http import urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_encode #, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required #, permission_required
 
 # from django.conf import settings
 
 from django.db.models import Q
 
-import os, time, requests, random, json, sys
+import os #, time, requests, random, json, sys
 
 from django.urls import reverse, reverse_lazy
 
-from django.template.loader import render_to_string
+# from django.template.loader import render_to_string
 
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.forms import AuthenticationForm
@@ -37,8 +37,7 @@ from .models import Article, Comment, Contact, Author_reply, SearchHistory
 
 from .mock_data import *
 
-sys.path.append(os.path.expanduser("~"))
-from mhykhehy import api_key
+from .send_mail import *
 
 # Create your views here.
 def home(request):
@@ -136,6 +135,23 @@ def article(request, pk):
                 # comment.user = 'Anonymous Reader'
             comment.save()
             print(f"comment saved")
+            if comment.user != None:
+                comment_author = comment.user.first_name
+            else:
+                comment_author = post_data["name"]
+            article_path = reverse('article', args=[pk])
+            article_url = f"{request.scheme}://{request.get_host()}{article_path}"
+            new_comment = Comment.objects.get(comment=post_data['comment'])
+            print(f"article: {article}")
+            print(f"comment_author: {comment_author}")
+            print(f"new_comment: {new_comment}")
+            response = comment_notification_email(request=request, comment_author=comment_author, comment=new_comment, article_url=article_url)
+            # sys.exit(0)
+            if response.status_code == 201:
+                    print(f'Email sent successfully to {comment.article.author.email}')
+            else:
+                print(f'Failed to send email: {response.status_code}')
+                print(response.text)
             return redirect('article', pk=pk)
     # article = get_object_or_404(Article, pk=pk)
     # author = article.author
@@ -216,7 +232,19 @@ def author_response(request, pk):
             reply = form.save(commit=False)
             reply.comment = comment
             reply.save()
-            print(f"respose saved")
+            print(f"response saved")
+            # protocol = request.scheme
+            # domain = request.get_host()
+            if comment.user != None:
+                new_reply = Author_reply.objects.get(reply=form.cleaned_data['reply'])
+                article_path = reverse('article', args=[new_reply.comment.article.id])
+                article_url = f"{request.scheme}://{request.get_host()}{article_path}"
+                response = author_reply_notification_email(request=request, reply=new_reply, article_url=article_url)
+                if response.status_code == 201:
+                        print(f'Email sent successfully to {new_reply.comment.user.email}')
+                else:
+                    print(f'Failed to send email: {response.status_code}')
+                    print(response.text)
             return redirect('article', pk=pk)
         #     return JsonResponse({'message': 'success'})
         return JsonResponse({'message': 'error'})
@@ -378,6 +406,14 @@ def register_page(request):
                 print(f"password == password2: {request.POST.get('password') == request.POST.get('password2')}")
                 user = authenticate(username=username, password=password)
                 login(request, user)
+                article_url = f"{request.scheme}://{request.get_host()}"
+                response = welcome_email(request=request, user=user, article_url=article_url)
+                if response.status_code == 201:
+                    print(f'Email sent successfully to {user.email}')
+                else:
+                    print(f'Failed to send email: {response.status_code}')
+                    print(response.text)
+                    # return redirect('oopsy')
                 # return redirect('home')
                 return redirect('home')
             return JsonResponse({'message': 'incorrect password'})
@@ -397,7 +433,14 @@ def register_page(request):
 
 @login_required
 def article_form(request):
-    print('user id:', request.user.id)
+    pk=request.user.id
+    print('user id:', pk)
+    # user = User.objects.prefetch_related('articles').filter(pk=pk).first()
+    # print('user:', user)
+    # print('all articles:', user.articles.all())
+    # print('no of articles:', user.articles.all().count())
+    # k =1
+    # if k != 1:
     # user = get_object_or_404(User, pk=pk)
     # if request.user != user:
     #     return redirect('home')
@@ -410,7 +453,20 @@ def article_form(request):
             article.author = request.user
             article.save()
             # return redirect('article_detail', pk=pk)
-            return redirect('article_list', pk=request.user.id)
+            user = User.objects.prefetch_related('articles').filter(pk=pk).first()
+            print('user:', user)
+            print('all articles:', user.articles.all())
+            print('no of articles:', user.articles.all().count())
+            if user.articles.all().count() == 1:
+                article_path = reverse('article_form')
+                article_url = f"{request.scheme}://{request.get_host()}{article_path}"
+                response = congratulations_first_post(request=request, user=user, article_url=article_url)
+                if response.status_code == 201:
+                    print(f'Email sent successfully to {user.email}')
+                else:
+                    print(f'Failed to send email: {response.status_code}')
+                    print(response.text)
+            return redirect('article_list', pk=pk)
     form = ArticleForm()
     context = {
         'form': form,
@@ -457,9 +513,49 @@ def update_article_form(request, pk):
 class CustomPasswordChangeView(auth_views.PasswordChangeView):
     form_class = CustomPasswordChangeForm
     template_name = 'auth/password_change_form.html'
+    success_url = reverse_lazy('password_change_done')
+
+    def form_valid(self, form):
+        print('111111111111111111')
+        response = super().form_valid(form)
+        print('22222222222222222222')
+        user = self.request.user
+        # article_path = reverse('contact')
+        # article_url = f"{self.request.scheme}://{self.request.get_host()}{article_path}"
+        email_response = password_change_done_email(request=self.request, user=user) #, article_url=article_url)
+
+        # print(f"Password change form is valid. User: {user}, Article URL: {article_url}")
+        if email_response.status_code == 201:
+            print(f'Email sent successfully to {user.email}')
+        else:
+            print(f'Failed to send email: {email_response.status_code}')
+            print(email_response.text)
+        print('3333333333333333333333333')
+        return response
+
+    def form_invalid(self, form):
+        print(f"Password change form is invalid. Errors: {form.errors}")
+
+        print('###################################')
+        print(f'Form errors: {form.errors}')
+        print('###################################')
+
+        return JsonResponse({'message': 'form invalid', 'errors': form.errors}, status=400)
 
 class CustomPasswordChangeDoneView(auth_views.PasswordChangeDoneView):
     template_name = 'auth/password_change_done.html'
+    # def dispatch(self, request, *args, **kwargs):
+    #     user = request.user
+    #     article_path = reverse('contact')
+    #     article_url = f"{request.scheme}://{request.get_host()}{article_path}"
+    #     response = password_change_done_email(user=user, article_url=article_url)
+    #     if response.status_code == 201:
+    #         print(f'Email sent successfully to {user.email}')
+    #     else:
+    #         print(f'Failed to send email: {response.status_code}')
+    #         print(response.text)
+
+    #     return super().dispatch(request, *args, **kwargs)
 
 ########################################################################
 # from django.core.mail import EmailMessage
@@ -553,7 +649,7 @@ class CustomPasswordChangeDoneView(auth_views.PasswordChangeDoneView):
 
 def custom_password_reset(request):
     print('in password reset logic')
-    print(f"my key #0: {api_key}")
+    # print(f"my key #0: {api_key}")
     print(f"request.method: {request.method}")
     if request.method == 'POST':
         print(f"request.POST: {request.POST}")
@@ -575,41 +671,42 @@ def custom_password_reset(request):
                 reset_url = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
                 # required
                 reset_link = f"{protocol}://{domain}{reset_url}"
-                url = 'https://api.brevo.com/v3/smtp/email'
+                # url = 'https://api.brevo.com/v3/smtp/email'
 
                 # Render the subject template
-                subject = render_to_string('auth/password_reset_subject.txt', {'user': user}).strip()
-                email_body = render_to_string('auth/password_reset_email.html', {
-                    'user': user.first_name,
-                    'reset_link': reset_link
-                })
+                # subject = render_to_string('auth/password_reset_subject.txt', {'user': user}).strip()
+                # email_body = render_to_string('auth/password_reset_email.html', {
+                #     'user': user.first_name,
+                #     'reset_link': reset_link
+                # })
 
-                print(f"my key #1: {api_key}")
-                print(f"user: {user}")
-                print(f"email: {user.email}")
-                print(f"firstname: {user.first_name}")
-                print(f"subject: {subject}")
-                print(f"reset link: {reset_link}")
+                # print(f"my key #1: {api_key}")
+                # print(f"user: {user}")
+                # print(f"email: {user.email}")
+                # print(f"firstname: {user.first_name}")
+                # print(f"subject: {subject}")
+                # print(f"reset link: {reset_link}")
                 # Email data to be sent to Brevo
-                email_data = {
-                    'sender': {'name': 'Article-Hive', 'email': 'ogagadafetite@gmail.com'},  # Sender info
-                    'to': [{'email': user.email, 'name': user.first_name}],  # Recipient info
-                    'subject': subject,  # Subject line
-                    'htmlContent': f'{email_body}',  # HTML content
-                    'textContent': f'Password Reset Link: {reset_link}'  # Text content
-                }
+                # email_data = {
+                #     'sender': {'name': 'Article-Hive', 'email': 'ogagadafetite@gmail.com'},  # Sender info
+                #     'to': [{'email': user.email, 'name': user.first_name}],  # Recipient info
+                #     'subject': subject,  # Subject line
+                #     'htmlContent': f'{email_body}',  # HTML content
+                #     'textContent': f'Password Reset Link: {reset_link}'  # Text content
+                # }
 
-                # Request headers
-                headers = {
-                    'accept': 'application/json',  # Accept JSON response
-                    'api-key': api_key,  # API key header
-                    'content-type': 'application/json'  # Content type header
-                }
+                # # Request headers
+                # headers = {
+                #     'accept': 'application/json',  # Accept JSON response
+                #     'api-key': api_key,  # API key header
+                #     'content-type': 'application/json'  # Content type header
+                # }
 
                 # Send POST request to Brevo
-                response = requests.post(url, headers=headers, data=json.dumps(email_data))
+                # response = requests.post(url, headers=headers, data=json.dumps(email_data))
+                response = send_password_reset_email(request=request, user=user, reset_link=reset_link)
                 if response.status_code == 201:  # Check if email was sent successfully
-                    print('Email sent successfully')
+                    print(f'Email sent successfully to {user.email}')
                 else:
                     print(f'Failed to send email: {response.status_code}')
                     print(response.text)
@@ -637,13 +734,60 @@ class CustomPasswordResetDoneView(auth_views.PasswordResetDoneView):
 class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
     form_class = CustomSetPasswordForm
     template_name = 'auth/password_reset_confirm_form.html'
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('password_reset_complete')
+
+    def form_invalid(self, form):
+        print(f"Password change form is invalid. Errors: {form.errors}")
+
+        print('###################################')
+        print(f'Form errors: {form.errors}')
+        print('###################################')
+
+        return JsonResponse({'message': 'form invalid', 'errors': form.errors}, status=400)
+
     def form_valid(self, form):
         response = super().form_valid(form)
-        return redirect(self.success_url)
+
+        user = form.user
+        print(f"user ##### : {user}")
+        try:
+            # article_path = reverse('contact')
+            # article_url = f"{self.request.scheme}://{self.request.get_host()}{article_path}"
+            email_response = password_reset_complete_email(request=self.request, user=user) #, article_url=article_url)
+
+            if email_response.status_code == 201:
+                print(f'Email sent successfully to {user.email}')
+            else:
+                print(f'Failed to send email: {email_response.status_code}')
+                print(email_response.text)
+        except Exception as e:
+            print(f"Error during sending password change email: {str(e)}")
+
+        return response
 
 class CustomPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
     template_name = 'auth/password_reset_complete.html'
+    # def dispatch(self, request, *args, **kwargs):
+        # try:
+        #     uidb64 = self.request.session.get('uidb64')
+        #     print(f"uidb64: {uidb64}")
+        #     if uidb64 is not None:
+        #         uid = urlsafe_base64_decode(uidb64).decode()
+        #         print(f"uid: {uid}")
+        #         user = get_object_or_404(User, pk=uid)
+        #         print(f"user: {user}")
+        #         response = password_reset_complete_email(user)
+        #         if response.status_code == 201:
+        #             print(f'Email sent successfully to {user.email}')
+        #         else:
+        #             print(f'Failed to send email: {response.status_code}')
+        #             print(response.text)
+        #     else:
+        #         print("No uidb64 found in session.")
+        # except Exception as e:
+        #     print(f"Error during password reset email: {str(e)}")
+
+        # return super().dispatch(request, *args, **kwargs)
 
 def is_superuser(req_obj):
     if req_obj.user.is_authenticated and req_obj.user.is_superuser:
