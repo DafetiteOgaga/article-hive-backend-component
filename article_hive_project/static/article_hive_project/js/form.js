@@ -1,15 +1,15 @@
 const form = document.getElementById('form');
 const password = document.getElementById('password1');
 const password2 = document.getElementById('password2');
-const new_password1 = document.getElementById('new_password1');
-const new_password2 = document.getElementById('new_password2');
+// const new_password1 = document.getElementById('new_password1');
+// const new_password2 = document.getElementById('new_password2');
 const passwordMatchMessage = document.getElementById('password-match-message');
 const submitButton = document.getElementById('submit-button');
 form.addEventListener('submit', submitHandler);
 password.addEventListener('input', checkPasswordMatch);
 password2.addEventListener('input', checkPasswordMatch);
-new_password1.addEventListener('input', checkPasswordMatch);
-new_password2.addEventListener('input', checkPasswordMatch);
+// new_password1.addEventListener('input', checkPasswordMatch);
+// new_password2.addEventListener('input', checkPasswordMatch);
 
 // let msg = ''
 
@@ -32,22 +32,22 @@ function checkPasswordMatch() {
         passwordMatchMessage.style.overflow = 'visible';
     }
 
-	if (new_password1.value === '' && new_password2.value === '') {
-        passwordMatchMessage.textContent = '';
-    } else {
-        if (new_password1.value === new_password2.value) {
-			if (new_password2.value.length < 8) {
-				passwordMatchMessage.textContent = 'Password must be atleast 8 characters.';
-			} else {
-				passwordMatchMessage.textContent = 'Passwords match.';
-				passwordMatchMessage.style.color = 'green';
-			}
-        } else {
-            passwordMatchMessage.textContent = 'Passwords do not match.';
-        }
-        passwordMatchMessage.style.height = 'auto';
-        passwordMatchMessage.style.overflow = 'visible';
-    }
+	// if (new_password1.value === '' && new_password2.value === '') {
+    //     passwordMatchMessage.textContent = '';
+    // } else {
+    //     if (new_password1.value === new_password2.value) {
+	// 		if (new_password2.value.length < 8) {
+	// 			passwordMatchMessage.textContent = 'Password must be atleast 8 characters.';
+	// 		} else {
+	// 			passwordMatchMessage.textContent = 'Passwords match.';
+	// 			passwordMatchMessage.style.color = 'green';
+	// 		}
+    //     } else {
+    //         passwordMatchMessage.textContent = 'Passwords do not match.';
+    //     }
+    //     passwordMatchMessage.style.height = 'auto';
+    //     passwordMatchMessage.style.overflow = 'visible';
+    // }
 }
 
 function submitHandler (e) {

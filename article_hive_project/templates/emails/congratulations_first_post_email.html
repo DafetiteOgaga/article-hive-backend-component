@@ -1,0 +1,15 @@
+{% extends 'emails/base_emails.html' %}
+{% block email %}
+<p>Congratulations on publishing your first post on Article Hive!</p>
+<p>Your insights and knowledge are valuable to our community, and we are excited to see what you will share next. Remember, the more you post, the more you inspire and engage with others.</p>
+<p>Here are some ideas to keep the momentum going:</p>
+<ul>
+	<li>Share your experiences and lessons learned.</li>
+	<li>Write about topics you are passionate about.</li>
+	<li>Engage with other authors by commenting on their posts.</li>
+	<li>Ask questions and start discussions.</li>
+</ul>
+<p>We are here to support you every step of the way. If you have any questions or need assistance, feel free to reach out to us.</p>
+<p><a href="{{ article_url }}">Write Another Post</a></p>
+<p>Keep sharing your voice with the world!</p>
+{% endblock email %}

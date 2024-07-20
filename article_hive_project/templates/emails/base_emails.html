@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Article Hive</title>
+</head>
+<body style="font-family: Arial, sans-serif; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 4px;">
+        <img src="cid:logo.png" alt="The Article Hive Logo" style="display: block; margin: 0 auto; max-width: 200px;" />
+        <h2 style="color: rgb(134,77,37);">{{ heading }}</h2>
+        <p>Hello {{ user|capfirst }},</p>
+        {% block email %}{% endblock email %}
+        <p>If you have any questions or need assistance, feel free to reach out to our support team.</p>
+        <a href="{{ article_support_url }}" style="color: rgb(134,77,37);"><p>Article Hive Support</p></a>
+		<p>Best regards,<br>The Article Hive Team</p>
+    </div>
+</body>
+</html>

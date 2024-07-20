@@ -1,0 +1,6 @@
+{% extends 'emails/base_emails.html' %}
+{% block email %}
+<p>Welcome to Article Hive! We're thrilled to have you join our community of passionate readers and writers.</p>
+<a href="{{ article_url }}" style="color: rgb(134,77,37);"><p>Explore Articles</p></a>
+<p>Jump right in and make your first post <a href="{{ article_url }}/article/new/" style="color: rgb(134,77,37);">First post</a>.</p>
+{% endblock email %}

@@ -1,0 +1,6 @@
+{% extends 'emails/base_emails.html' %}
+{% block email %}
+<p>{{ comment_author|capfirst }} has commented on your article: "{{ comment.article.title }}" and said</p>
+<p>{{ comment.comment|truncatechars:30 }}.</p>
+<a href="{{ article_url }}" style="color: rgb(134,77,37);"><p>Checkout the comment</p></a>
+{% endblock email %}

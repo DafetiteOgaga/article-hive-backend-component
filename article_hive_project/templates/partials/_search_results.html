@@ -14,24 +14,24 @@
       <div class="search-result">
         <li>
           {% if result|class_name == 'User' %}
-          <h4>Member: <a href="{% url 'profile' result.id %}">{{ result.first_name|default:empty|capfirst }} {{ result.middle_name|default:empty|capfirst }} {{ result.last_name|default:empty|capfirst }}</a></h4>
+          <h4>Member: <a style="color: rgb(206, 149, 112);" href="{% url 'profile' result.id %}">{{ result.first_name|default:empty|capfirst }} {{ result.middle_name|default:empty|capfirst }} {{ result.last_name|default:empty|capfirst }}</a></h4>
             <!-- <p>{{ result.email }}</p> -->
           {% elif result|class_name == 'Article' %}
-            <h4>Article: <a style="color: whitesmoke;" href="{% url 'article' result.id %}">{{ result.title|truncatewords:4 }}</h4>
+            <h4>Article: <a href="{% url 'article' result.id %}">{{ result.title|truncatewords:4 }}</h4>
             <p>{{ result.content|truncatewords:10 }}</a></p>
           {% elif result|class_name == 'Comment' %}
             {% if result.user %}
-              <h4>Comment by <a style="color: whitesmoke;" href="{% url 'article' result.id %}">{{ result.user.first_name }}:</a></h4>
+              <h4>Comment by <a href="{% url 'article' result.id %}">{{ result.user.first_name }}:</a></h4>
             {% else %}
-              <h4>Comment by <a style="color: whitesmoke;" href="{% url 'article' result.id %}">{{ result.name }}:</a></h4>
+              <h4>Comment by <a href="{% url 'article' result.id %}">{{ result.name }}:</a></h4>
             {% endif %}
-            <p><a style="color: whitesmoke;" href="{% url 'article' result.id %}">{{ result.comment|truncatewords:30 }}</a></p>
+            <p><a href="{% url 'article' result.id %}">{{ result.comment|truncatewords:30 }}</a></p>
           {% elif result|class_name == 'Author_reply' %}
-            <h4><a style="color: whitesmoke;" href="{% url 'article' result.id %}">{{ result.comment.article.author.first_name }} replied:</h4>
+            <h4><a href="{% url 'article' result.id %}">{{ result.comment.article.author.first_name }} replied:</h4>
             <p>{{ result.reply|truncatewords:10 }}</a></p>
       {% comment %}
           {% elif result|class_name == 'Contact' %}
-            <h4><a style="color: whitesmoke;" href="{% url 'feedback_contact_detail_view' result.id %}">Contact: {{ result.name }}</h4>
+            <h4><a href="{% url 'feedback_contact_detail_view' result.id %}">Contact: {{ result.name }}</h4>
             <p>{{ result.contact|truncatewords:10 }}</a></p>
       {% endcomment %}
           {% endif %}

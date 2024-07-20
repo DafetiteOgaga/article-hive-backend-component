@@ -84,6 +84,9 @@ class Article(models.Model):
 	# comments = models.ForeignKey('Comment', on_delete=models.CASCADE)
 	rating = models.IntegerField(default=0)
 
+	def __str__(self) -> str:
+		return self.title
+
 class Comment(models.Model):
 	comment = models.TextField(max_length=500)
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user', null=True, blank=True)
