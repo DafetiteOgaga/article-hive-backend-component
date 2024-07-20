@@ -23,6 +23,7 @@
 		<p class="nav-anchor" >Written by <a href="{% url 'profile' pk=article.author.pk %}">{{ article.author.first_name|default:empty|capfirst }} {{ article.author.last_name|default:empty|capfirst }}</a></h2> on {{ article.date_published|default:empty }}</p>
 		<p>Views: {{ article.views|default:empty }} | Rating: {{ article.rating|default:empty }}</p>
 	</div>
+	<!-- comment section -->
 	{% if article_comments.exists %}
 	<div class="comment-disp">
 		<div class="comments-section">
@@ -43,20 +44,33 @@
 					{% endif %}
 					<div class="right-anime comment-text"><p>{{ article_comment.comment }}</p></div>
 					<div class="right-anime comment-date"><p>On {{ article_comment.date_commented }}</p></div>
+					<!-- author reply section -->
 					{% if article_comment.author_reply %}
 						<div class="comment">
-							{% if article_comment.user %}
-								<p class="left-anime nav-anchor comment-author" >
-								<a href="{% url 'profile' article_comment.user.id %}">{{ article_comment.user.first_name|default:article_comment.name|capfirst }}
-									{% if article_comment.user == article_comment.article.author %}
-										(Author)
-									{% endif %}
+							<p class="left-anime nav-anchor comment-author" >
+								<a href="{% url 'profile' article_comment.article.author.id %}">
+									{{ article_comment.article.author.first_name|default:article_comment.name|capfirst }}
+									(Author)
 								</a>
 								Responded:
 							</p>
-							{% else %}
-								<p class="left-anime comment-author">{{ article_comment.name|capfirst }} Responded: </p>
-							{% endif %}
+							<!-- commented out -->
+							{% comment %}
+								{% if article_comment.user %}
+									<p class="left-anime nav-anchor comment-author" >
+									<a href="{% url 'profile' article_comment.article.author.id %}">
+										{{ article_comment.article.author.first_name|default:article_comment.name|capfirst }}
+										{% if article_comment.user == article_comment.article.author %}
+											(Author)
+										{% endif %}
+									</a>
+									Responded:
+								</p>
+								{% else %}
+									<p class="left-anime comment-author">{{ article_comment.name|capfirst }} Responded: </p>
+								{% endif %}
+							{% endcomment %}
+							<!-- commented out end -->
 							<!-- <div class="comment-author">Sasha</div> -->
 							<div class="right-anime comment-text"><p>{{ article_comment.author_reply.reply }}</p></div>
 							<div class="right-anime comment-date"><p>On {{ article_comment.author_reply.date_replied }}</p></div>
@@ -72,12 +86,14 @@
 							</div>
 						{% endif %}
 					{% endif %}
+					<!-- author reply section end -->
 					</div>
 				</div>
 			{% endfor %}
 		</div>
 	</div>
 	{% endif %}
+	<!-- comment section end -->
 	<div class="top-drop">
 		<p class="left-anime comment-head" style="padding-top: 2rem;">Leave a comment</p>
 		<form id="form" class="article-comments-form" action="" method="POST">
