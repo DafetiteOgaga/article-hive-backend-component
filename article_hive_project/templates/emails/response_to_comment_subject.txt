@@ -1,0 +1,1 @@
+{{ reply.comment.article.author.first_name|capfirst }} responded to your comment {{ reply.comment.user.first_name|capfirst }}
