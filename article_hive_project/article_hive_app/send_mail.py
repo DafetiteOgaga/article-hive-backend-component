@@ -135,9 +135,6 @@ def author_reply_notification_email(request: object, reply: object, article_url:
 		'heading': f'Response to your comment on {reply.comment.article.title}'
 	})
 
-	print(f'user (reply): {reply.comment.user.first_name}')
-	print(f'replier (reply): {reply.comment.article.author.first_name}')
-
 	email_data = {
 		'sender': {'name': 'Article-Hive', 'email': 'ogagadafetite@gmail.com'},
 		'to': [{'email': reply.comment.user.email, 'name': reply.comment.user.first_name}],
