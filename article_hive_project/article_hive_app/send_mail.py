@@ -7,11 +7,12 @@ sys.path.append(os.path.expanduser("~"))
 from mhykhehy import api_key
 url = 'https://api.brevo.com/v3/smtp/email'
 
+dev_prod = 'Production Mode' if not settings.DEBUG else 'Development Mode'
 try:
-    print('production')
+    print(dev_prod)
     logo_path = os.path.join(settings.STATIC_ROOT, 'logo - shade of brown', 'the-article-hive-high-resolution-logo-transparent.png') # production
 except:
-    print('development')
+    print(dev_prod)
     logo_path = os.path.join(settings.STATIC_URL.lstrip('/'), 'article_hive_project', 'logo - shade of brown', 'the-article-hive-high-resolution-logo-transparent.png') # development
 with open(logo_path, "rb") as image_file:
 		encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
