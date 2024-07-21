@@ -27,9 +27,10 @@ User = get_user_model()
 from .forms import RegistrationForm, ProfileUpdateForm
 from .forms import CustomPasswordChangeForm, CustomPasswordResetForm
 from .forms import CustomSetPasswordForm, Author_replyForm
-from .forms import ArticleForm, CommentForm, ContactForm
+from .forms import ArticleForm, CommentForm, ContactForm, AboutForm
 
 from .models import Article, Comment, Contact, Author_reply, SearchHistory
+from .models import About
 
 from .mock_data import *
 
@@ -69,6 +70,33 @@ def hive(request):
         'pgname': 'Hive'
     }
     return render(request, 'hive.html', context)
+
+def about_page(request):
+    about = About.objects.all().last()
+    context = {
+        'about': about.about,
+        'pgname': 'About'
+    }
+    return render(request, 'about.html', context)
+
+@login_required
+def about_form_page(request):
+    superuser_access = is_superuser(request)
+    if not superuser_access:
+        return redirect_to_login(next=request.path)
+
+    if request.method == 'POST':
+        form = AboutForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('about')
+    about = About.objects.all().last()
+    form = AboutForm()
+    context = {
+        'form': form,
+        'about': about.about,
+    }
+    return render(request, 'about_form.html', context)
 
 def article(request, pk):
     article = Article.objects.prefetch_related('comments').filter(pk=pk).first()
@@ -185,14 +213,6 @@ def author_response(request, pk):
     response_form = Author_replyForm()
     context = {'response_form': response_form, 'pgname': 'Author Response'}
     return render(request, 'author_comment_response_form.html', context)
-
-
-def about_page(request):
-    context = {
-        'about': about,
-        'pgname': 'About'
-    }
-    return render(request, 'about.html', context)
 
 def contact_page(request):
     if request.method == 'POST':
