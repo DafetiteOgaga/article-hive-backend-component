@@ -1297,3 +1297,7 @@ form p a:active {
 .anime-text-color:hover {
 	color: rgb(172, 77, 15);
 }
+
+.preformatted, .preformatted p {
+	white-space: pre-line;
+}
