@@ -29,11 +29,6 @@
           {% elif result|class_name == 'Author_reply' %}
             <h4><a href="{% url 'article' result.id %}">{{ result.comment.article.author.first_name }} replied:</h4>
             <p>{{ result.reply|truncatewords:10 }}</a></p>
-      {% comment %}
-          {% elif result|class_name == 'Contact' %}
-            <h4><a href="{% url 'feedback_contact_detail_view' result.id %}">Contact: {{ result.name }}</h4>
-            <p>{{ result.contact|truncatewords:10 }}</a></p>
-      {% endcomment %}
           {% endif %}
         </li>
       </div>

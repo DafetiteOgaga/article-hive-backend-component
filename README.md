@@ -10,10 +10,19 @@ Welcome to **Article Hive**, a dynamic platform where users can read articles an
 
 ## Features
 
+#### Email Notifications
+- **Membership Registration**
+- **First Post**
+- **Comment on Article**
+- **Reply to Comments**
+- **Password Change Successful**
+- **Password Reset**
+- **Password Reset Successful**
+
 #### For Readers
 - **Explore Articles**: Access a diverse collection of articles on various topics.
 - **Author Profiles**: Learn more about the authors behind the articles.
-  
+
 #### For Authors
 - **Create and Publish**: Write and publish articles with a user-friendly editor.
 - **Manage Profile**: Build and update your author profile.
@@ -32,8 +41,8 @@ Welcome to **Article Hive**, a dynamic platform where users can read articles an
 - **MySQL**: Used for production database management.
 - **SQLite**: Used for local development and testing.
 
-#### Email Service
-- **Brevo (SMTP)**: Used for sending emails, such as account verification and password reset links.
+#### Email Server
+- **Brevo (Http)**: Used for sending emails, such as account verification and password reset links.
 
 ## Installation
 
