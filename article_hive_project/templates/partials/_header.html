@@ -8,12 +8,10 @@
 		<div style="display: flex;">
 			<nav class="left-anime nav">
 				<ul class="nav-anchor">
-					<!-- <li class="right-anime"><a href="./index-static.html">Home</a></li> -->
 					<li class="right-anime"><a href="{% url 'home' %}">Home</a></li>
 					<li class="right-anime"><a href="{% url 'hive' %}">Hive</a></li>
 					<li class="right-anime"><a href="{% url 'contact' %}">Contact Us</a></li>
 					{% if user.is_authenticated %}
-					<!-- <li class="right-anime" style="color: brown;"><a>{{user.email}}</a></li> -->
 					<li class="right-anime"><a href="{% url 'profile' user.id %}">Profile</a></li>
 					<li class="right-anime"><a href="{% url 'logout' %}">Logout</a></li>
 					{% else %}
