@@ -2,12 +2,17 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 from django.contrib.auth.forms import SetPasswordForm
-from .models import User, Contact, Comment, Author_reply
+from .models import User, Contact, Comment, Author_reply, About
 
 class ContactForm(forms.ModelForm):
     class Meta:
         model = Contact
         fields = [ 'name', 'contact', ]
+
+class AboutForm(forms.ModelForm):
+    class Meta:
+        model = About
+        fields = [ 'about', ]
 
 class RegistrationForm(UserCreationForm):
 # class RegistrationForm(forms.ModelForm):
