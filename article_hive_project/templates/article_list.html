@@ -9,10 +9,10 @@
 			<div class="responsive">
 				{% for article in articles %}
 				<a class="box-link" href="{% url 'article' pk=article.pk %}">
-					<article class="article-box index-page top-drop article-new">
+					<article class="article-box index-page top-drop article-new preformatted">
 						<h1 class="hor-align">{{ article.title|default:empty }}</h1>
 						<p>
-							{{ article.content|truncatechars:250|default:empty }}
+							{{ article.content|truncatechars:100|default:empty }}
 						</p>
 						<div class="author-profilePic-date position-h1-new">
 							<img src="{{ article.author.profile_picture.url }}" alt="author image" /><span class="separator">•</span>

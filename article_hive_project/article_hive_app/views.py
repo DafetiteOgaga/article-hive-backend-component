@@ -158,13 +158,19 @@ def author_response(request, pk):
         # print('comment pk:', pk)
         comment = Comment.objects.get(pk=pk)
         pk = comment.article.pk
+
+        # new_reply = Author_reply.objects.get(reply=form.cleaned_data['reply'])
+        # print(f'new reply: {new_reply}')
+
         # pk = the_article.pk
         if form.is_valid():
             reply = form.save(commit=False)
             reply.comment = comment
             reply.save()
             if comment.user != None:
-                new_reply = Author_reply.objects.get(reply=form.cleaned_data['reply'])
+                # new_reply = Author_reply.objects.get(reply=form.cleaned_data['reply'])
+                new_reply = comment.author_reply
+                # print(f'new reply comment model: {new_reply}')
                 article_path = reverse('article', args=[new_reply.comment.article.id])
                 article_url = f"{request.scheme}://{request.get_host()}{article_path}"
                 response = author_reply_notification_email(request=request, reply=new_reply, article_url=article_url)

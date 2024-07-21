@@ -10,10 +10,17 @@
 				{% for feedback in feedbacks %}
 				<a class="box-link" href="{% url 'feedback_comment_detail_view' pk=feedback.id %}">
 					<article class="article-box index-page top-drop article-new">
-						<h1 class="hor-align">{{ feedback.user.first_name|default:Anonymous }} {{ feedback.name|default:Anonymous }} said:</h1>
-						<h1 class="hor-align">{{ feedback.comment|default:Anonymous }}</h1>
-						<p>
-							To: {{ feedback.article.content|truncatechars:250|default:Anonymous }}
+						<h1 class="hor-align">
+							{% if feedback.user.first_name %}
+								{{ feedback.user.first_name|default:Anonymous }}
+							{% else %}
+								{{ feedback.name|default:Anonymous }}
+							{% endif %}
+							said:
+						</h1>
+						<h1 class="hor-align preformatted">{{ feedback.comment|default:Anonymous }}</h1>
+						<p class="preformatted">
+							To: {{ feedback.article.content|truncatechars:100|default:Anonymous }}
 						</p>
 						<div class="author-profilePic-date position-h1-new">
 							<h1>On {{ feedback.date_commented|date:"jS b, Y" }}</h1>

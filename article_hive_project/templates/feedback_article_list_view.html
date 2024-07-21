@@ -13,8 +13,8 @@
 				<a class="box-link" href="{% url 'feedback_article_detail_view' feedback.id %}">
 					<article class="article-box index-page top-drop article-new">
 						<h1 class="hor-align">{{ feedback.title|default:empty }}</h1>
-						<p>
-							{{ feedback.content|truncatechars:250|default:empty }}
+						<p class="preformatted">
+							{{ feedback.content|truncatechars:100|default:empty }}
 						</p>
 						<div class="author-profilePic-date position-h1-new">
 							<img src="{{ feedback.author.profile_picture.url }}" alt="author image" /><span class="separator">•</span>

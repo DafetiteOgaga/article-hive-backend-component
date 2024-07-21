@@ -4,11 +4,11 @@
 {% with "" as empty %}
 <section class="article">
 	<h1 class="right-anime" style="margin-bottom: 0;">Feedback:</h1>
-	<h1 class="right-anime" style="margin-bottom: 0;">{{ feedback.title }}</h1>
+	<h1 class="right-anime" style="margin-bottom: 0; color: rgb(206, 149, 112);"><a href="{% url 'article' feedback.pk %}">{{ feedback.title }}</a></h1>
 	<div class="flex-block top-drop">
 	</div>
 	<img class="down-drop article-pic" src="{% static 'logo - shade of brown/the-article-hive-favicon-white.png' %}" alt="article photo" />
-	<p class="left-anime">
+	<p class="left-anime preformatted">
 		{{ feedback.content|default:empty }}
 	</p>
 	<div class="flex-block top-drop">
@@ -33,7 +33,7 @@
 					{% else %}
 						<p class="left-anime comment-author">{{ article_comment.name|capfirst }} Wrote: </p>
 					{% endif %}
-					<div class="right-anime comment-text"><p>{{ article_comment.comment }}</p></div>
+					<div class="right-anime comment-text preformatted"><p>{{ article_comment.comment }}</p></div>
 					<div class="right-anime comment-date"><p>On {{ article_comment.date_commented }}</p></div>
 					{% if article_comment.author_reply %}
 						<div class="comment">
@@ -50,7 +50,7 @@
 								<p class="left-anime comment-author">{{ article_comment.name|capfirst }} Responded: </p>
 							{% endif %}
 							<!-- <div class="comment-author">Sasha</div> -->
-							<div class="right-anime comment-text"><p>{{ article_comment.author_reply.reply }}</p></div>
+							<div class="right-anime comment-text preformatted"><p>{{ article_comment.author_reply.reply }}</p></div>
 							<div class="right-anime comment-date"><p>On {{ article_comment.author_reply.date_replied }}</p></div>
 						</div>
 					{% endif %}
