@@ -6,7 +6,7 @@ sys.path.append(os.path.expanduser("~"))
 from mhykhehy import api_key
 url = 'https://api.brevo.com/v3/smtp/email'
 
-with open("static/article_hive_project/logo - shade of brown/the-article-hive-high-resolution-logo-transparent.png", "rb") as image_file:
+with open("article_hive_project/logo - shade of brown/the-article-hive-high-resolution-logo-transparent.png", "rb") as image_file:
 		encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
 
 def req(request):
