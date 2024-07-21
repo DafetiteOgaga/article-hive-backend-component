@@ -7,6 +7,7 @@ urlpatterns = [
 	path('', views.home, name='home'),
 	path('hive/', views.hive, name='hive'),
 	path('about/', views.about_page, name='about'),
+	path('about-form/', views.about_form_page, name='about_form'),
 	path('contact/', views.contact_page, name='contact'),
 	path('profile/<int:pk>/', views.profile_page, name='profile'),
 	path('profile-update/<int:pk>/', views.profile_update, name='profile_update'),

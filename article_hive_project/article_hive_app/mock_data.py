@@ -222,7 +222,7 @@ articles = {
 }
 
 # about page
-about = {
+about1 = {
     'title': 'About Us',
     'content': [
         "Welcome to Article Hive, your go-to platform for accessing a diverse\
