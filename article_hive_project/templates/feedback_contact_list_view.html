@@ -11,8 +11,8 @@
 				<a class="box-link" href="{% url 'feedback_contact_detail_view' pk=feedback.id %}">
 					<article class="article-box index-page top-drop article-new">
 						<h1 class="hor-align">{{ feedback.name|default:Anonymous }}</h1>
-						<p>
-							{{ feedback.contact|truncatechars:250|default:Anonymous }}
+						<p class="preformatted">
+							{{ feedback.contact|truncatechars:100|default:Anonymous }}
 						</p>
 						<div class="author-profilePic-date position-h1-new">
 							<h1>{{ feedback.created_at|date:"jS b, Y" }}</h1>
