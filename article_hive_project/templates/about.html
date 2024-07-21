@@ -2,12 +2,18 @@
 {% load static %}
 {% block section %}
 <section class="about">
-	<h1 class="right-anime">{{ about.title }}</h1>
+	<h1 class="right-anime">About Us</h1>
 	<p class="left-anime preformatted">
-		{% for paragraph in about.content %}
-			{{ paragraph }}
-			<br>
-		{% endfor %}
+			{{ about }}
 	</p>
+	{% if  user.is_superuser %}
+	<div class="button-container">
+		<div class="click-anime">
+			<a href="{% url 'about_form' %}">
+				<button style="background-color: rgb(122, 122, 211);">Edit About</button>
+			</a>
+		</div>
+	</div>
+	{% endif %}
 </section>
 {% endblock section %}
