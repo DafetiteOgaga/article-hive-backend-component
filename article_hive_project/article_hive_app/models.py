@@ -102,3 +102,7 @@ class SearchHistory(models.Model):
 
     def __str__(self):
         return f"{self.user.username}: {self.query}"
+
+class About(models.Model):
+    about = models.TextField(max_length=10000)
+    timestamp = models.DateTimeField(auto_now_add=True)
