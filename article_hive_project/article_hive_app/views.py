@@ -102,7 +102,8 @@ def article(request, pk):
                 comment_author = post_data["name"]
             article_path = reverse('article', args=[pk])
             article_url = f"{request.scheme}://{request.get_host()}{article_path}"
-            new_comment = Comment.objects.get(comment=post_data['comment'])
+            new_comment = article.comments.filter(comment=post_data['comment']).last()
+            print('the comments:', new_comment)
             response = comment_notification_email(request=request, comment_author=comment_author, comment=new_comment, article_url=article_url)
             if response.status_code == 201:
                 print(f'Email sent successfully to {comment.article.author.email}')
