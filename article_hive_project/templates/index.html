@@ -16,8 +16,8 @@
 								<h1>{{ item.author.first_name|default:empty|capfirst }}</h1><span class="separator">•</span>
 								<h1>{{ item.date_published|default:empty|date:"jS b, Y" }}</h1>
 							</div>
-							<p>
-								{{ item.content|truncatechars:250|default:empty }}
+							<p class="preformatted">
+								{{ item.content|truncatechars:100|default:empty }}
 							</p>
 						</article>
 					</a>
