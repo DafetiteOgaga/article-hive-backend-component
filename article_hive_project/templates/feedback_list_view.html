@@ -15,11 +15,20 @@
 				</a>
 				{% endfor %}
 			</div>
-			<div class="button-container">
-				<div class="click-anime">
-					<a href="/admin">
-						<button>Admin Panel</button>
-					</a>
+			<div class="about-form">
+				<div class="button-container">
+					<div class="click-anime">
+						<a href="/admin">
+							<button>Admin Panel</button>
+						</a>
+					</div>
+				</div>
+				<div class="button-container">
+					<div class="click-anime">
+						<a href="{% url 'about_form' %}">
+							<button>About Form</button>
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>
