@@ -1301,3 +1301,9 @@ form p a:active {
 .preformatted, .preformatted p {
 	white-space: pre-line;
 }
+
+.about-form {
+	display: flex;
+	justify-content: center;
+	gap: 1rem;
+}
