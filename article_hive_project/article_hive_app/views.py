@@ -134,7 +134,7 @@ def article(request, pk):
             print('the comments:', new_comment)
             response = comment_notification_email(request=request, comment_author=comment_author, comment=new_comment, article_url=article_url)
             if response.status_code == 201:
-                print(f'Email sent successfully to {comment.article.author.email}')
+                print(f'Email sent successfully to {comment.article.author.email} # for comment')
             else:
                 print(f'Failed to send email: {response.status_code}')
                 print(response.text)
@@ -203,7 +203,7 @@ def author_response(request, pk):
                 article_url = f"{request.scheme}://{request.get_host()}{article_path}"
                 response = author_reply_notification_email(request=request, reply=new_reply, article_url=article_url)
                 if response.status_code == 201:
-                    print(f'Email sent successfully to {new_reply.comment.user.email}')
+                    print(f'Email sent successfully to {new_reply.comment.user.email} # for author reply')
                 else:
                     print(f'Failed to send email: {response.status_code}')
                     print(response.text)
@@ -308,7 +308,7 @@ def register_page(request):
                 article_url = f"{request.scheme}://{request.get_host()}"
                 response = welcome_email(request=request, user=user, article_url=article_url)
                 if response.status_code == 201:
-                    print(f'Email sent successfully to {user.email}')
+                    print(f'Email sent successfully to {user.email} # for registration')
                 else:
                     print(f'Failed to send email: {response.status_code}')
                     print(response.text)
@@ -337,7 +337,7 @@ def article_form(request):
                 article_url = f"{request.scheme}://{request.get_host()}{article_path}"
                 response = congratulations_first_post(request=request, user=user, article_url=article_url)
                 if response.status_code == 201:
-                    print(f'Email sent successfully to {user.email}')
+                    print(f'Email sent successfully to {user.email} # for first post')
                 else:
                     print(f'Failed to send email: {response.status_code}')
                     print(response.text)
@@ -381,7 +381,7 @@ class CustomPasswordChangeView(auth_views.PasswordChangeView):
         user = self.request.user
         email_response = password_change_done_email(request=self.request, user=user) #, article_url=article_url)
         if email_response.status_code == 201:
-            print(f'Email sent successfully to {user.email}')
+            print(f'Email sent successfully to {user.email} # for password change done')
         else:
             print(f'Failed to send email: {email_response.status_code}')
             print(email_response.text)
@@ -410,7 +410,7 @@ def custom_password_reset(request):
                 reset_link = f"{protocol}://{domain}{reset_url}"
                 response = send_password_reset_email(request=request, user=user, reset_link=reset_link)
                 if response.status_code == 201:
-                    print(f'Email sent successfully to {user.email}')
+                    print(f'Email sent successfully to {user.email} # for password reset sent')
                 else:
                     print(f'Failed to send email: {response.status_code}')
                     print(response.text)
@@ -445,7 +445,7 @@ class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
         try:
             email_response = password_reset_complete_email(request=self.request, user=user) #, article_url=article_url)
             if email_response.status_code == 201:
-                print(f'Email sent successfully to {user.email}')
+                print(f'Email sent successfully to {user.email} # for password reset complete')
             else:
                 print(f'Failed to send email: {email_response.status_code}')
                 print(email_response.text)
