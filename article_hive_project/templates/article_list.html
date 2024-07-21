@@ -26,25 +26,6 @@
 		</div>
 		{% include 'partials/_latest.html' %}
 	</div>
-	<!-- <div class="pagination right-anime text-sizes">
-		<span class="step-links">
-			{% if articles.has_previous %}
-				<a href="?page=1"><h1>&laquo; first</h1></a>
-				<a href="?page={{ articles.previous_page_number }}"><h1>previous</h1></a>
-			{% endif %}
-
-			<span class="current">
-				<h1 style="text-decoration: underline;">
-					{{ articles.number }} of {{ articles.paginator.num_pages }}
-				</h1>
-			</span>
-
-			{% if articles.has_next %}
-				<a href="?page={{ articles.next_page_number }}"><h1>next</h1></a>
-				<a href="?page={{ articles.paginator.num_pages }}"><h1>last &raquo;</h1></a>
-			{% endif %}
-		</span>
-	</div> -->
 	{% with articles as feedbacks %}
 		{% include 'partials/_pagination.html' %}
 	{% endwith %}
