@@ -12,11 +12,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
-# import configparser
-import os
-
-# config = configparser.ConfigParser()
-# config.read('../emailBackend_config.cnf')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -94,16 +89,6 @@ if os.environ.get('MY_LOCAL_MACHINE'):
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-    # EMAIL_BACKEND = 'article_hive_app.brevo_EmailBackend.BrevoEmailBackend'
-    # BREVO_API_KEY = os.getenv('EMAILBACKEND_API_PASSWORD')
-
-    # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    # EMAIL_HOST = os.environ.get('EMAILBACKEND_HOST')
-    # EMAIL_PORT = os.environ.get('EMAILBACKEND_PORT')
-    # EMAIL_HOST_USER = os.environ.get('EMAILBACKEND_USER')
-    # EMAIL_HOST_PASSWORD = os.environ.get('EMAILBACKEND_PASSWORD')
-    # EMAIL_USE_TLS = os.environ.get('EMAILBACKEND_TLS')
-    # DEFAULT_FROM_EMAIL = os.environ.get('EMAILBACKEND_DEFAULT_FROM')
 
 else:
     DEBUG = False # production
@@ -180,22 +165,9 @@ AUTH_USER_MODEL = 'article_hive_app.User'
 # login redirect for anonymous users
 LOGIN_URL = '/login/'
 
-# # urls for password reset
-# LOGIN_REDIRECT_URL = 'home'
-# LOGOUT_REDIRECT_URL = 'home'
-
 # Media files custom added
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # for production
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-##########
-# STATIC_URL = '/static/'
-# STATIC_ROOT = BASE_DIR / 'staticfiles'  # For collectstatic
-# STATICFILES_DIRS = [BASE_DIR / 'static']
-
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = BASE_DIR / 'media'
-##########
