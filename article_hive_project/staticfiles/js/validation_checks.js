@@ -1,5 +1,6 @@
 const newPassword1 = document.getElementById('id_new_password1');
 const newPassword2 = document.getElementById('id_new_password2');
+
 newPassword1.addEventListener('input', checkPasswordMatch);
 newPassword2.addEventListener('input', checkPasswordMatch);
 
