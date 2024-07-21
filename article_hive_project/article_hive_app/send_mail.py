@@ -92,6 +92,7 @@ def welcome_email(request: object, user: object, article_url: str):
 def comment_notification_email(request: object, comment_author: str, comment: object, article_url: str):
 	subject = render_to_string('emails/comment_subject.txt', {'user': comment.article.author}).strip()
 	email_body = render_to_string('emails/comment_email.html', {
+		'user': comment.article.author.first_name,
 		'comment_author': comment_author,
 		'comment': comment,
 		'article_url': article_url,
@@ -127,11 +128,15 @@ def comment_notification_email(request: object, comment_author: str, comment: ob
 def author_reply_notification_email(request: object, reply: object, article_url: str):
 	subject = render_to_string('emails/response_to_comment_subject.txt', {'reply': reply}).strip()
 	email_body = render_to_string('emails/response_to_comment_email.html', {
+		'user': reply.comment.user.first_name,
 		'reply': reply,
 		'article_url': article_url,
 		'article_support_url': req(request=request),
 		'heading': f'Response to your comment on {reply.comment.article.title}'
 	})
+
+	print(f'user (reply): {reply.comment.user.first_name}')
+	print(f'replier (reply): {reply.comment.article.author.first_name}')
 
 	email_data = {
 		'sender': {'name': 'Article-Hive', 'email': 'ogagadafetite@gmail.com'},

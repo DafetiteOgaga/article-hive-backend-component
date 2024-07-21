@@ -78,6 +78,8 @@ class Comment(models.Model):
 	name = models.CharField(max_length=100, null=True, blank=True)
 	article = models.ForeignKey('Article', on_delete=models.CASCADE, related_name='comments')
 	date_commented = models.DateTimeField(auto_now=True) # last modified stamp
+	def __str__(self) -> str:
+		return self.comment
 
 class Author_reply(models.Model):
     reply = models.TextField(max_length=500)
