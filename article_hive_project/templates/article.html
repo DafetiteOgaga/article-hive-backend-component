@@ -16,7 +16,7 @@
 	<div class="flex-block top-drop">
 	</div>
 	<img class="down-drop article-pic" src="{% static 'logo - shade of brown/the-article-hive-favicon-white.png' %}" alt="article photo" />
-	<p class="left-anime">
+	<p class="left-anime preformatted">
 		{{ article.content|default:empty }}
 	</p>
 	<div class="flex-block top-drop">
@@ -42,7 +42,7 @@
 					{% else %}
 						<p class="left-anime comment-author">{{ article_comment.name|capfirst }} Wrote: </p>
 					{% endif %}
-					<div class="right-anime comment-text"><p>{{ article_comment.comment }}</p></div>
+					<div class="right-anime comment-text preformatted"><p>{{ article_comment.comment }}</p></div>
 					<div class="right-anime comment-date"><p>On {{ article_comment.date_commented }}</p></div>
 					<!-- author reply section -->
 					{% if article_comment.author_reply %}
@@ -72,7 +72,7 @@
 							{% endcomment %}
 							<!-- commented out end -->
 							<!-- <div class="comment-author">Sasha</div> -->
-							<div class="right-anime comment-text"><p>{{ article_comment.author_reply.reply }}</p></div>
+							<div class="right-anime comment-text preformatted"><p>{{ article_comment.author_reply.reply }}</p></div>
 							<div class="right-anime comment-date"><p>On {{ article_comment.author_reply.date_replied }}</p></div>
 						</div>
 					{% else %}
