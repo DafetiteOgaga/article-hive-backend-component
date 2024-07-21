@@ -33,29 +33,22 @@ class User(AbstractUser):
 
 	def save(self, *args, **kwargs):
 		print('entering save method ###### 1')
-		print(f'self.profile_picture: {self.profile_picture}')
 		print(f'isinstance(self.profile_picture, InMemoryUploadedFile: {isinstance(self.profile_picture, InMemoryUploadedFile)}')
-		print('entering save method ###### 2')
 		if (self.profile_picture or isinstance(self.profile_picture, InMemoryUploadedFile)) and self.first_name:
 			img = Image.open(self.profile_picture)
-			print('opened file ######')
 			if img.mode != 'RGB':
 				img = img.convert('RGB')
-				print('converted file ######')
 			min_dim = min(img.width, img.height)
 			left = (img.width - min_dim) / 2
 			top = (img.height - min_dim) / 2
 			right = (img.width + min_dim) / 2
 			bottom = (img.height + min_dim) / 2
 			img = img.crop((left, top, right, bottom))
-			print('cropped file ######')
 			target_size = (200, 200)
 			img = img.resize(target_size, Image.LANCZOS)
-			print('resize file ######')
 			output = io.BytesIO()
 			img.save(output, format='JPEG', quality=500)
 			output.seek(0)
-			print('processed image ######')
 			self.profile_picture = InMemoryUploadedFile(
 				output, 'ImageField', 
 				f"{unique_profile_pic(self, self.profile_picture.name)}",
@@ -65,14 +58,6 @@ class User(AbstractUser):
 			)
 
 		super().save(*args, **kwargs)
-
-	# def save(self, *args, **kwargs):
-	# 	if self.profile_picture:
-	# 		print('getting and resizing profile picture ####************#####')
-	# 		img = Image.open(self.profile_picture)
-	# 		img = img.resize((300, 300), Image.Resampling.LANCZOS)
-	# 		img.save(self.profile_picture.path)
-	# 	super().save(*args, **kwargs)
 
 class Article(models.Model):
 	title = models.CharField(max_length=200)
