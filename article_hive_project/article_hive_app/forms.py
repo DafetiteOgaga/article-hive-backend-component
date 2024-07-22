@@ -48,13 +48,13 @@ class ArticleForm(forms.ModelForm):
         fields = ['title', 'content']
 
 class CustomPasswordChangeForm(PasswordChangeForm):
-    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Old password'}))
-    new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'New password', 'id': 'id_new_password1'}))
-    new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Confirm new password', 'id': 'id_new_password2'}))
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Old password', 'id': 'id_old_password', 'type': "password", 'class': "input-field"}))
+    new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'New password', 'id': 'id_new_password1', 'type': "password", 'class': "input-field"}))
+    new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Confirm new password', 'id': 'id_new_password2', 'type': "password", 'class': "input-field"}))
 
 class CustomPasswordResetForm(PasswordResetForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={'placeholder': 'Email'}))
 
 class CustomSetPasswordForm(SetPasswordForm):
-    new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'New password', 'id': 'id_new_password1'}))
-    new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Confirm new password', 'id': 'id_new_password2'}))
+    new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'New password', 'id': 'id_new_password1', 'type': "password", 'class': "input-field"}))
+    new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Confirm new password', 'id': 'id_new_password2', 'type': "password", 'class': "input-field"}))
