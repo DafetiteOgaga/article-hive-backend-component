@@ -24,13 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ks%dws4&%hgxe21a(9g+8dmp)9l(tq7k&w&s4cuz2=dy4joql^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-# ALLOWED_HOSTS = []
-
 ALLOWED_HOSTS = [
     'dafetite.pythonanywhere.com',
     'localhost',
-    '127.0.0.1'
+    '127.0.0.1',
 ]
 
 # Application definition
@@ -102,6 +99,10 @@ else:
         }
     }
 
+# ############### for tests ##############
+# DEBUG = True # for test
+# SERVE_STATIC_FILES = True  # for test
+# ALLOWED_HOSTS = ['*'] # for test
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
@@ -110,6 +111,7 @@ else:
 #         },
 #     }
 # }
+# ########################################
 
 
 # Password validation
@@ -171,3 +173,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # for production
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# STATICFILES_FINDERS = [
+#     'django.contrib.staticfiles.finders.FileSystemFinder',
+#     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+# ]

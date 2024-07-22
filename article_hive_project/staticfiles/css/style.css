@@ -1307,3 +1307,15 @@ form p a:active {
 	justify-content: center;
 	gap: 1rem;
 }
+
+.eye-icon {
+    position: absolute;
+    right: 10px;
+    top: 70%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 0.6rem;
+	@media (min-width: 1024px) {
+		font-size: 0.8rem;
+	}
+}
