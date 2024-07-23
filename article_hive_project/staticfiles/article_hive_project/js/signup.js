@@ -1,33 +1,35 @@
-try {
-    document.addEventListener('DOMContentLoaded', function() {
-        const textElement = document.querySelector('.signup');
-        const text1 = "Sign-up NOW to start making Posts!";
-        const text2 = "Get email notifications for posts, comments, replies and more!";
-        let current = true;
-        const getText = () => {
-            return current ? text1 : text2;
-        }
-        let index = 0;
-        const typingSpeed = 100; //speed
+document.addEventListener('DOMContentLoaded', function() {
+    const textElement = document.querySelector('.signup');
+    const texts = [
+        "Sign-up NOW to start making Posts!",
+        "Get email notifications for posts, comments, replies and more!",
+        "This Application is developed with Django, HTML, CSS and JavaScript."
+    ];
+    let current = 0;
+    let index = 0;
+    const typingSpeed = 100; // speed of typing
+    const pauseDuration = 2000; // pause duration before restarting
 
-        function typeText() {
-            const text = getText()
-            if (index < text.length) {
-                textElement.textContent += text.charAt(index);
-                index++;
-                setTimeout(typeText, typingSpeed);
-            } else {
-                setTimeout(resetAndTypeText, 2000);  // Pauses the cursor before restarting
-            }
+    function typeText() {
+        if (index < texts[current].length) {
+            textElement.textContent += texts[current].charAt(index);
+            index++;
+            setTimeout(typeText, typingSpeed);
+        } else {
+            setTimeout(resetAndTypeText, pauseDuration);
         }
+    }
 
-        function resetAndTypeText() {
-            textElement.textContent = '';
-            index = 0;
-            current = !current
-            typeText();
-        }
-
+    function resetAndTypeText() {
+        textElement.textContent = '';
+        index = 0;
+        current = (current + 1) % texts.length; // cycle through texts
         typeText();
-    });
-} catch (e) {}
+    }
+
+    try {
+        typeText();
+    } catch (e) {
+        console.error("Error in typing animation: ", e);
+    }
+});

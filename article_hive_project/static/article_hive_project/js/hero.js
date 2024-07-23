@@ -11,14 +11,16 @@ try {
 		let currentIndex = 0;
 		const heroElement = document.getElementsByClassName('hero')[0];
 
-		function changeBackgroundImage() {
-			heroElement.style.background = `url(${images[currentIndex]}) no-repeat center center`;
-			heroElement.style.backgroundSize = 'cover';
-			currentIndex = (currentIndex + 1) % images.length;
+		if (heroElement) {
+			function changeBackgroundImage() {
+				heroElement.style.background = `url(${images[currentIndex]}) no-repeat center center`;
+				heroElement.style.backgroundSize = 'cover';
+				currentIndex = (currentIndex + 1) % images.length;
+			}
+
+			setInterval(changeBackgroundImage, 4500);
+
+			changeBackgroundImage();
 		}
-
-		setInterval(changeBackgroundImage, 4500);
-
-		changeBackgroundImage();
 	});
 } catch (e) {}
