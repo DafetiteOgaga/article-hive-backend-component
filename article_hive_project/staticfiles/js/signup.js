@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const texts = [
         "Sign-up NOW to start making Posts!",
         "Get email notifications for posts, comments, replies and more!",
-        "This Application is developed with Django, HTML, CSS and JavaScript."
+        "This Application was developed with Django, HTML, CSS and JS."
     ];
     let current = 0;
     let index = 0;
