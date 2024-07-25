@@ -24,11 +24,11 @@
 			{% endif %}
 		</div>
 		<h1 style="margin-bottom: 0;" class="left-anime">About Me</h1>
-		<p style="margin-top: 0;" class="down-drop preformatted">
+		<p style="margin-top: 0;" id="down-drop" class="preformatted">
 			{{ member.aboutme|default:empty }}
 		</p>
 	</div>
-	<div class="top-drop nav-anchor">
+	<div id="top-drop" class="nav-anchor">
 		{% if user.is_authenticated and is_owner %}
 			<p><strong><a href="{% url 'article_list' member.id %}">Open Your Hive</a></strong></p>
 		{% else %}
