@@ -9,7 +9,7 @@
 			<div class="responsive">
 				{% for feedback in feedbacks %}
 				<a class="box-link" href="{% url 'advanced_search' %}?q={{ feedback.query }}&page=1">
-					<article class="article-box index-page top-drop article-new">
+					<article id="top-drop" class="article-box index-page article-new">
 						<h1 class="hor-align">{{ feedback.user.first_name|default:Anonymous }} searched for:</h1>
 						<h1 class="hor-align">"{{ feedback.query|default:Anonymous }}"</h1>
 						<div class="author-profilePic-date position-h1-new">
