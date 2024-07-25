@@ -9,9 +9,9 @@
 			<div class="responsive">
 				{% for article in articles %}
 				<a class="box-link" href="{% url 'article' pk=article.pk %}">
-					<article class="article-box index-page top-drop article-new">
+					<article id="top-drop" class="article-box index-page article-new">
 						<h1 class="hor-align">{{ article.title|default:empty }}</h1>
-						<p class="preformatted">
+						<p class="">
 							{{ article.content|truncatechars:100|default:empty }}
 						</p>
 						<div class="author-profilePic-date position-h1-new">
