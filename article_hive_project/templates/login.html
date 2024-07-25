@@ -2,15 +2,15 @@
 {% load static %}
 {% block section %}
 <section class="login">
-	<div class="content top-drop">
+	<div id="top-drop" class="content">
 		<h1 class="right-anime">{{ login.title }}</h1>
 		<form id="form" class="form-login" action="" method="POST">
 			{% csrf_token %}
-			<div class="down-drop">
+			<div id="down-drop" class="">
 				<span class="required">*</span>
 				<input id="username" name="username" type="email" placeholder="Email" required>
 			</div>
-			<div class="down-drop">
+			<div id="down-drop" class="">
 				<span class="required">*</span>
 				<input id="password" name="password" type="password" placeholder="Password" required>
 				<span class="eye-icon" onclick="togglePasswordVisibility('password')">

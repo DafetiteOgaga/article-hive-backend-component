@@ -9,7 +9,7 @@
 			<div class="responsive">
 				{% for feedback in feedbacks %}
 				<a class="box-link" href="{% url 'feedback_comment_detail_view' pk=feedback.id %}">
-					<article class="article-box index-page top-drop article-new">
+					<article id="top-drop" class="article-box index-page article-new">
 						<h1 class="hor-align">
 							{% if feedback.user.first_name %}
 								{{ feedback.user.first_name|default:Anonymous }}

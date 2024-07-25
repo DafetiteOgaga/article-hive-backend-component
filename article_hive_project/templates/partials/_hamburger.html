@@ -1,0 +1,35 @@
+    <div id="main-content">
+        <!-- Your main content goes here -->
+    </div>
+    <div class="hamburger-menu">
+        <input type="checkbox" id="menu-toggle">
+        <label for="menu-toggle" class="menu-icon">
+            <span class="nav-icon"></span>
+        </label>
+        <div class="menu">
+            <ul class="hamburger-ulist nav-anchor">
+                <li class="right-anime"><a href="{% url 'home' %}">Home</a></li>
+                <li class="left-anime"><a href="{% url 'hive' %}">Hive</a></li>
+                <li class="right-anime"><a href="{% url 'contact' %}">Contact Us</a></li>
+                {% if user.is_authenticated %}
+                <li class="left-anime"><a href="{% url 'profile' user.id %}">Profile</a></li>
+                <li class="right-anime"><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                <li class="left-anime"><a href="{% url 'register' %}">Register</a></li>
+                <li class="right-anime"><a href="{% url 'login' %}">Login</a></li>
+                {% endif %}
+                {% if user.is_superuser %}
+                <li class="left-anime"><a href="{% url 'feedback_list_view' %}">Feedback</a></li>
+                <li class="right-anime"><a href="/admin">Admin Page</a></li>
+                {% endif %}
+            </ul>
+            <div  class="search-header click-anime">
+				<!-- <form style="gap: 0.2rem;" class="center-form-search" action="{% url 'advanced_search' %}" method="get"> -->
+                <form class="hamburger-search center-form-search" action="{% url 'advanced_search' %}" method="get">
+					<input class="left-anime" name="q" type="text" id="search-input" placeholder="Search..." value="{{ query }}">
+					<button class="right-anime" type="submit">Search</button>
+				</form>
+			</div>
+        </div>
+    </div>
+

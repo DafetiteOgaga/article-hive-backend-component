@@ -5,13 +5,13 @@
 <section class="article">
 	<h1 class="right-anime" style="margin-bottom: 0;">Feedback:</h1>
 	<h1 class="right-anime" style="margin-bottom: 0; color: rgb(206, 149, 112);"><a href="{% url 'article' feedback.pk %}">{{ feedback.title }}</a></h1>
-	<div class="flex-block top-drop">
+	<div id="top-drop" class="flex-block">
 	</div>
-	<img class="down-drop article-pic" src="{% static 'logo - shade of brown/the-article-hive-favicon-white.png' %}" alt="article photo" />
+	<img id="down-drop" class="article-pic" src="{% static 'logo - shade of brown/the-article-hive-favicon-white.png' %}" alt="article photo" />
 	<p class="left-anime preformatted">
 		{{ feedback.content|default:empty }}
 	</p>
-	<div class="flex-block top-drop">
+	<div id="top-drop" class="flex-block">
 		<p class="nav-anchor" >Written by <a href="{% url 'feedback_user_detail_view' pk=feedback.author.pk %}">{{ feedback.author.first_name|default:empty|capfirst }} {{ feedback.author.last_name|default:empty|capfirst }}</a></h2> on {{ feedback.date_published|default:empty }}</p>
 		<p>Views: {{ feedback.views|default:empty }} | Rating: {{ feedback.rating|default:empty }}</p>
 	</div>
