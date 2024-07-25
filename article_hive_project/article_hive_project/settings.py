@@ -79,11 +79,22 @@ WSGI_APPLICATION = 'article_hive_project.wsgi.application'
 
 # print('MY_LOCAL_MACHINE:', os.environ.get('MY_LOCAL_MACHINE'))
 if os.environ.get('MY_LOCAL_MACHINE'):
+    # print(f"development mode: {os.environ.get('MY_LOCAL_MACHINE')}")
+    # print(f"MY_LOCAL_REDIS_LOCATION: {os.environ.get('MY_LOCAL_REDIS_LOCATION')}")
     DEBUG = True # for development
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": os.environ.get('MY_LOCAL_REDIS_LOCATION'),
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            }
         }
     }
 
@@ -93,9 +104,18 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'dafetite$article-hive_db',
-            'USER': 'dafetite',
-            'PASSWORD': 'debbydafe',
+            'USER': os.environ.get('MY_DB_USERNAME'),
+            'PASSWORD': os.environ.get('MY_DB_PASSWORD'),
             'HOST': 'dafetite.mysql.pythonanywhere-services.com',
+        }
+    }
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": os.environ.get('MY_REDIS_LOCATION'),
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            }
         }
     }
 
