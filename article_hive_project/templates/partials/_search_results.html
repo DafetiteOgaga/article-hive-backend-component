@@ -4,8 +4,13 @@
 {% block section %}
 {% with "" as empty %}
 
-<div class="search-font-color click-anime">
-  <ul style="margin: 0;"><h2>Search Results for "{{ query }}"</h2></ul>
+<div id="click-anime" class="search-font-color">
+  <!-- fix search font size -->
+  <form style="gap: 0.2rem;" class="center-form-search" action="{% url 'advanced_search' %}" method="get">
+    <input id="right-anime" class="search-result-page" name="q" type="text" id="search-input" placeholder="Search..." value="{{ query }}">
+    <button id="left-anime" type="submit">Search</button>
+  </form>
+  <h2 style="text-align: center; padding-top: 0.5rem;">Search Results for "{{ query }}"</h2>
   {% if results %}
   <ul>
   <div class="search-result-container">
