@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block section %}
+{% with "" as empty %}
+<section class="section-background-color">
+	<h1 class="section-headings left-anime"><a class="nav-anchor a" href="{% url 'profile' pk=member.id %}">{{ member.first_name|capfirst }}'s Hive</a></h1>
+	<div class="new-and-rated">
+		<div style="padding-bottom: 3rem;">
+			<div class="responsive">
+				{% for article in articles %}
+				<a class="box-link" href="{% url 'article' pk=article.pk %}">
+					<article id="top-drop" class="article-box index-page article-new preformatted">
+						<h1 class="hor-align">{{ article.title|default:empty }}</h1>
+						<p>
+							{{ article.content|truncatechars:100|default:empty }}
+						</p>
+						<div class="author-profilePic-date position-h1-new">
+							<img src="{{ article.author.profile_picture.url }}" alt="author image" /><span class="separator">•</span>
+							<h1>{{ article.author.first_name|default:empty|capfirst }}</h1><span class="separator">•</span>
+							<h1>{{ article.date_published|default:empty|date:"jS b, Y" }}</h1>
+						</div>
+					</article>
+				</a>
+				{% endfor %}
+			</div>
+		</div>
+		{% include 'partials/_latest.html' %}
+	</div>
+	{% with articles as feedbacks %}
+		{% include 'partials/_pagination.html' %}
+	{% endwith %}
+</section>
+{% endwith %}
+{% endblock section %}
