@@ -23,11 +23,13 @@ from django.conf.urls.static import static
 from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
 from django.contrib.admin.views.decorators import staff_member_required
+from .project_views.admin_views import redis_stats
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('article_hive_app.urls')),     # For article_hive_app configuration.
     path('cache-stats/', never_cache(staff_member_required(TemplateView.as_view(template_name='global_cache_stats.html'))), name='cache_stats'),
+    path('redis-stats/', redis_stats, name='redis_stats'),
 ]
 
 if settings.DEBUG:
