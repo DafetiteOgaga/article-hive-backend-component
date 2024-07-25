@@ -10,7 +10,7 @@
 				{% for feedback in feedbacks %}
 				<!-- <h1>feedback id: {{ feedback.id }}</h1>
 				<h1>feedback title: {{ feedback.title }}</h1> -->
-				<a class="box-link" href="{% url 'feedback_article_detail_view' feedback.id %}">
+				<a class="box-link" href="{% url 'feedback_member_detail_view' feedback.id %}">
 					<article id="top-drop" class="article-box index-page article-new">
 						<h1 class="hor-align">{{ feedback.title|default:empty }}</h1>
 						<p class="preformatted">

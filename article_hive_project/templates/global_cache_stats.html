@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cache %}
+{% block section %}
+{% with "" as empty %}
+<section class="profile">
+    <h1>Cache Statistics</h1>
+    <p>Total calls to cache: {{ cache.calls }}</p>
+    <p>Cache hits: {{ cache.hits }}</p>
+    <p>Cache misses: {{ cache.misses }}</p>
+    <p>Hit rate: {{ cache.hits_rate|floatformat:2 }}%</p>
+    <p>Miss rate: {{ cache.misses_rate|floatformat:2 }}%</p>
+</section>
+{% endwith %}
+{% endblock section %}
