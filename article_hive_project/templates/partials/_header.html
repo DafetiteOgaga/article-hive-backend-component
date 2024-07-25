@@ -1,48 +1,56 @@
 {% load static %}
 {% with "" as empty %}
 <header>
-	<a class="bounce-header" href="{% url 'home' %}">
-		<img class="right-anime" src="{% static 'logo - shade of brown/the-article-hive-high-resolution-logo-transparent.png' %}" alt="header logo" />
-	</a>
-	<!-- <div class="nav-and-user"> -->
-		<div style="display: flex;">
-			<nav class="left-anime nav">
-				<ul class="nav-anchor">
-					<li class="right-anime"><a href="{% url 'home' %}">Home</a></li>
-					<li class="right-anime"><a href="{% url 'hive' %}">Hive</a></li>
-					<li class="right-anime"><a href="{% url 'contact' %}">Contact Us</a></li>
-					{% if user.is_authenticated %}
-					<li class="right-anime"><a href="{% url 'profile' user.id %}">Profile</a></li>
-					<li class="right-anime"><a href="{% url 'logout' %}">Logout</a></li>
-					{% else %}
-					<li class="right-anime"><a href="{% url 'login' %}">Register/Login</a></li>
-					{% endif %}
-					{% if user.is_superuser %}
-						<li class="right-anime"><a href="{% url 'feedback_list_view' %}">Feedback</a></li>
-					{% endif %}
-				</ul>
-			</nav>
+	<div class="header-main-container">
+		<div id="down-drop" class="">
+			{% include 'partials/_hamburger.html' %}
 		</div>
-	<!-- </div> -->
+		<div class="other-headers">
+			<a class="bounce-header" href="{% url 'home' %}">
+				<img class="right-anime" src="{% static 'logo - shade of brown/the-article-hive-high-resolution-logo-transparent.png' %}" alt="header logo" />
+			</a>
+
+			<!-- <div style="display: flex;">
+				<nav class="left-anime nav">
+					<ul class="nav-anchor">
+						<li class="right-anime"><a href="{% url 'home' %}">Home</a></li>
+						<li class="right-anime"><a href="{% url 'hive' %}">Hive</a></li>
+						<li class="right-anime"><a href="{% url 'contact' %}">Contact Us</a></li>
+						{% if user.is_authenticated %}
+						<li class="right-anime"><a href="{% url 'profile' user.id %}">Profile</a></li>
+						<li class="right-anime"><a href="{% url 'logout' %}">Logout</a></li>
+						{% else %}
+						<li class="right-anime"><a href="{% url 'login' %}">Register/Login</a></li>
+						{% endif %}
+						{% if user.is_superuser %}
+							<li class="right-anime"><a href="{% url 'feedback_list_view' %}">Feedback</a></li>
+						{% endif %}
+					</ul>
+				</nav>
+			</div> -->
+		</div>
+	</div>
+
 </header>
 <div style="padding-bottom: 0.5rem;" class="greeting nav left-align-mini-header">
 	<div class="">
 		<div class="inner-min-header">
-			<div  class="search-header click-anime">
+			<!-- <div  class="search-header click-anime">
 				<form style="gap: 0.2rem;" class="center-form-search" action="{% url 'advanced_search' %}" method="get">
 					<input class="right-anime" name="q" type="text" id="search-input" placeholder="Search..." value="{{ query }}">
 					<button class="left-anime" type="submit">Search</button>
 				</form>
-				<!-- <a class="bounce-head" style="text-decoration: none;" href="{% url 'article_form' %}"><h1 class="click-anime">Article</h1></a> -->
-			</div>
+			</div> -->
 			<div class="welcome-header">
 				{% if user.is_authenticated %}
-					<a class="bounce-head" style="text-decoration: none;" href="{% url 'profile' user.id %}"><h1 class="click-anime">Welcome {{ user.first_name|default:empty|capfirst }}</h1></a>
+				<div class="inner-welcome-btn">
 					<a class="bounce-head" style="text-decoration: none;" href="{% url 'article_form' %}"><h1 class="click-anime">Post an Article</h1></a>
+					<a class="bounce-head" style="text-decoration: none;" href="{% url 'profile' user.id %}"><h1 class="click-anime">Welcome {{ user.first_name|default:empty|capfirst }}</h1></a>
+				</div>
 				{% else %}
-					<div class="animated-banner">
-						<a style="text-decoration: none;" href="{% url 'register' %}"><hi class="signup anime-text-color"></hi></a>
-					</div>
+				<div class="animated-banner">
+					<a style="text-decoration: none;" href="{% url 'register' %}"><hi class="signup anime-text-color"></hi></a>
+				</div>
 				{% endif %}
 			</div>
 		</div>
