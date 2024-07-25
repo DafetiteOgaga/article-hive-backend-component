@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-import os
+import os, sys
+# Your GitHub personal access token
+sys.path.append(os.path.expanduser("~"))
+from my_credentials import credentials
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -104,15 +107,15 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'dafetite$article-hive_db',
-            'USER': os.environ.get('MY_DB_USERNAME'),
-            'PASSWORD': os.environ.get('MY_DB_PASSWORD'),
+            'USER': credentials['MY_DB_USERNAME'],
+            'PASSWORD': credentials['MY_DB_PASSWORD'],
             'HOST': 'dafetite.mysql.pythonanywhere-services.com',
         }
     }
     CACHES = {
         "default": {
             "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": os.environ.get('MY_REDIS_LOCATION'),
+            "LOCATION": credentials['MY_REDIS_LOCATION'],
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
             }
