@@ -52,9 +52,9 @@ def home(request):
 def hive(request):
     articles = Article.objects.all()
     ratings = articles[::-1]
-    articles = articles.order_by("?")[:8]
+    articles = articles.order_by("?")[:12]
 
-    paginator = Paginator(articles, 8)
+    paginator = Paginator(articles, 12)
     page_number = request.GET.get('page')
     try:
         articles_paginated = paginator.page(page_number)
