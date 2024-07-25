@@ -251,7 +251,7 @@ def member_hive(request, pk):
         # member = get_object_or_404(User, pk=pk)
         user_articles = member.articles.all()
         
-        articles = Article.objects.all()
+        articles = Article.objects.all().order_by('id')
         ratings = articles[::-1]
 
         cached_data = {

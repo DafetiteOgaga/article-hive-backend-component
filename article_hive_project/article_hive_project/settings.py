@@ -15,6 +15,9 @@ import os, sys
 # Your GitHub personal access token
 sys.path.append(os.path.expanduser("~"))
 from my_credentials import credentials
+# print(f'credentials: {credentials}')
+
+CACHE_TTL = 60 * 60 * 24 # a day
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -83,7 +86,9 @@ WSGI_APPLICATION = 'article_hive_project.wsgi.application'
 # print('MY_LOCAL_MACHINE:', os.environ.get('MY_LOCAL_MACHINE'))
 if os.environ.get('MY_LOCAL_MACHINE'):
     # print(f"development mode: {os.environ.get('MY_LOCAL_MACHINE')}")
-    # print(f"MY_LOCAL_REDIS_LOCATION: {os.environ.get('MY_LOCAL_REDIS_LOCATION')}")
+    # print(f"MY_LOCAL_REDIS_LOCATION (from env): {os.environ.get('MY_LOCAL_REDIS_LOCATION')}")
+    # print(f"MY_LOCAL_REDIS_LOCATION (from file): {credentials['MY_LOCAL_REDIS_LOCATION']}"),
+    # print(f"MY_REDIS_LOCATION (from file): {credentials['MY_REDIS_LOCATION']}"),
     DEBUG = True # for development
     DATABASES = {
         'default': {
@@ -94,12 +99,22 @@ if os.environ.get('MY_LOCAL_MACHINE'):
     CACHES = {
         "default": {
             "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": os.environ.get('MY_LOCAL_REDIS_LOCATION'),
+            "LOCATION": credentials['MY_LOCAL_REDIS_LOCATION'],
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
             }
         }
     }
+    # CACHES = {
+    #     "default": {
+    #         "BACKEND": "django_redis.cache.RedisCache",
+    #         "LOCATION": credentials['MY_REDIS_LOCATION'],
+    #         "OPTIONS": {
+    #             "CLIENT_CLASS": credentials['CLIENT_CLASS'],
+    #             "PASSWORD": credentials['PASSWORD'],
+    #         }
+    #     }
+    # }
 
 else:
     DEBUG = False # production
@@ -121,6 +136,16 @@ else:
             }
         }
     }
+    # CACHES = {
+    #     "default": {
+    #         "BACKEND": "django_redis.cache.RedisCache",
+    #         "LOCATION": credentials['MY_REDIS_LOCATION'],
+    #         "OPTIONS": {
+    #             "CLIENT_CLASS": credentials['CLIENT_CLASS'],
+    #             "PASSWORD": credentials['PASSWORD'],
+    #         }
+    #     }
+    # }
 
 # ############### for tests ##############
 # DEBUG = True # for test

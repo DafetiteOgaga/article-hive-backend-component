@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block section %}
+<section class="profile">
+    <h1>Redis Statistics</h1>
+    <p>Total Keys: {{ total_keys }}</p>
+    <p>Used Memory: {{ used_memory }}</p>
+    <p>Connected Clients: {{ connected_clients }}</p>
+    <p>Last Save Time: {{ last_save_time }}</p>
+
+    <h2 style="color: whitesmoke;">Key List:</h2>
+    {% for key, ttl in ttl_dict.items %}
+    <h2 style="color: whitesmoke;">
+        {{ key }}:
+        {% if ttl == -1 %}
+            No expiration
+        {% elif ttl == -2 %}
+            Key does not exist
+        {% else %}
+            {{ ttl }} seconds
+        {% endif %}</h2>
+    {% empty %}
+    <h2 style="color: whitesmoke;">No cached keys found.</h2>
+    {% endfor %}
+</section>
+{% endblock section %}
