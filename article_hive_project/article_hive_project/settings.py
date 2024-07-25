@@ -127,25 +127,25 @@ else:
             'HOST': 'dafetite.mysql.pythonanywhere-services.com',
         }
     }
-    CACHES = {
-        "default": {
-            "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": credentials['MY_LOCAL_REDIS_LOCATION'],
-            "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            }
-        }
-    }
     # CACHES = {
     #     "default": {
     #         "BACKEND": "django_redis.cache.RedisCache",
-    #         "LOCATION": credentials['MY_REDIS_LOCATION'],
+    #         "LOCATION": credentials['MY_LOCAL_REDIS_LOCATION'],
     #         "OPTIONS": {
-    #             "CLIENT_CLASS": credentials['CLIENT_CLASS'],
-    #             "PASSWORD": credentials['PASSWORD'],
+    #             "CLIENT_CLASS": "django_redis.client.DefaultClient",
     #         }
     #     }
     # }
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": credentials['MY_REDIS_LOCATION'],
+            "OPTIONS": {
+                "CLIENT_CLASS": credentials['CLIENT_CLASS'],
+                "PASSWORD": credentials['PASSWORD'],
+            }
+        }
+    }
 
 # ############### for tests ##############
 # DEBUG = True # for test
