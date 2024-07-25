@@ -24,6 +24,14 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth import authenticate, login, logout, get_user_model
 User = get_user_model()
 
+from django.views.decorators.cache import cache_page
+#######################################################
+from django.core.cache import cache
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+#######################################################
+
 from .forms import RegistrationForm, ProfileUpdateForm
 from .forms import CustomPasswordChangeForm, CustomPasswordResetForm
 from .forms import CustomSetPasswordForm, Author_replyForm
@@ -38,9 +46,27 @@ from .send_mail import *
 
 # Create your views here.
 def home(request):
-    articles = Article.objects.all()
-    ratings = articles[::-1]
-    articles = articles.order_by("?")[:8]
+    cache_key = 'hive_articles'
+    cached_data = cache.get(cache_key)
+    
+    ratings = None
+    if cached_data is None:
+        print('No cached data #####')
+        all_articles = Article.objects.all()
+        ratings = all_articles[::-1]
+        articles = all_articles.order_by("?")[:8]
+
+        cached_data = {
+            'all_articles': all_articles,
+            'ratings': ratings,
+        }
+        cache.set(cache_key, cached_data, timeout=CACHE_TTL)
+    else:
+        print('Cache data: home view #####')
+        all_articles = cached_data['all_articles']
+        ratings = cached_data['ratings']
+        articles = all_articles.order_by("?")[:8]
+
     context = {
         'articles': articles,
         'ratings': ratings,
@@ -50,11 +76,27 @@ def home(request):
     return render(request, 'index.html', context)
 
 def hive(request):
-    articles = Article.objects.all()
-    ratings = articles[::-1]
-    articles = articles.order_by("?")[:12]
+    cache_key = 'hive_articles'
+    cached_data = cache.get(cache_key)
 
-    paginator = Paginator(articles, 12)
+    if cached_data is None:
+        print('No cached data #####')
+        all_articles = Article.objects.all()
+        ratings = all_articles[::-1]
+        articles = all_articles.order_by("?")[:10]
+
+        cached_data = {
+            'all_articles': all_articles,
+            'ratings': ratings,
+        }
+        cache.set(cache_key, cached_data, timeout=CACHE_TTL)
+    else:
+        print('Cache data: hive view #####')
+        all_articles = cached_data['all_articles']
+        ratings = cached_data['ratings']
+        articles = all_articles.order_by("?")[:10]
+
+    paginator = Paginator(articles, 10)
     page_number = request.GET.get('page')
     try:
         articles_paginated = paginator.page(page_number)
@@ -71,8 +113,22 @@ def hive(request):
     }
     return render(request, 'hive.html', context)
 
+# @cache_page(60 * 60) # 60mins
 def about_page(request):
-    about = About.objects.all().last()
+    cache_key = 'about_page'
+    cached_data = cache.get(cache_key)
+
+    if cached_data is None:
+        print('No cached data #####')
+        about = About.objects.all().last()
+        cached_data = {
+            'about': about,
+        }
+        cache.set(cache_key, cached_data, timeout=CACHE_TTL)
+    else:
+        print('Cache data: about page view #####')
+        about = cached_data['about']
+
     context = {
         'about': about.about,
         'pgname': 'About'
@@ -80,6 +136,7 @@ def about_page(request):
     return render(request, 'about.html', context)
 
 @login_required
+# @cache_page(60 * 15) # 15mins
 def about_form_page(request):
     superuser_access = is_superuser(request)
     if not superuser_access:
@@ -89,6 +146,10 @@ def about_form_page(request):
         form = AboutForm(request.POST)
         if form.is_valid():
             form.save()
+
+            # remove old data from cache
+            cache.delete('about_page')
+
             return redirect('about')
     about = About.objects.all().last()
     form = AboutForm()
@@ -99,9 +160,28 @@ def about_form_page(request):
     return render(request, 'about_form.html', context)
 
 def article(request, pk):
-    article = Article.objects.prefetch_related('comments').filter(pk=pk).first()
-    author = article.author
-    article_comments = article.comments.all()
+    # gets data from cache
+    cache_key = f'article_{pk}'
+    cached_data = cache.get(cache_key)
+    
+    if cached_data is None:
+        print('No cached data #####')
+        article = Article.objects.prefetch_related('comments').filter(pk=pk).first()
+        author = article.author
+        article_comments = article.comments.all()
+
+        # Cache the data
+        cached_data = {
+            'article': article,
+            'author': author,
+            'article_comments': article_comments,
+        }
+        cache.set(cache_key, cached_data, timeout=CACHE_TTL)
+    else:
+        print('Cache data: article view #####')
+        article = cached_data['article']
+        author = cached_data['author']
+        article_comments = cached_data['article_comments']
 
     user = request.user
     is_owner = author == user
@@ -124,6 +204,16 @@ def article(request, pk):
                 comment.user = request.user
             comment.save()
             # print(f"comment saved")
+            
+            # remove old data from cache
+            cache.delete(f'article_{pk}')
+            cache.delete('comments')
+            
+            # Update cache with new comment
+            article_comments.append(comment)
+            cached_data['article_comments'] = article_comments
+            cache.set(cache_key, cached_data, timeout=CACHE_TTL)
+
             if comment.user != None:
                 comment_author = comment.user.first_name
             else:
@@ -151,13 +241,30 @@ def article(request, pk):
     }
     return render(request, 'article.html', context)
 
-def article_list(request, pk):
-    member = User.objects.prefetch_related('articles').filter(pk=pk).first()
-    # member = get_object_or_404(User, pk=pk)
-    user_articles = member.articles.all()
-    
-    articles = Article.objects.all()
-    ratings = articles[::-1]
+def member_hive(request, pk):
+    cache_key = f'member_hive_{pk}'
+    cached_data = cache.get(cache_key)
+
+    if cached_data is None:
+        print('No cached data #####')
+        member = User.objects.prefetch_related('articles').filter(pk=pk).first()
+        # member = get_object_or_404(User, pk=pk)
+        user_articles = member.articles.all()
+        
+        articles = Article.objects.all()
+        ratings = articles[::-1]
+
+        cached_data = {
+            'member': member,
+            'user_articles': user_articles,
+            'ratings': ratings,
+        }
+        cache.set(cache_key, cached_data, timeout=CACHE_TTL)
+    else:
+        print('Cache data: member hive view #####')
+        member = cached_data['member']
+        user_articles = cached_data['user_articles']
+        ratings = cached_data['ratings']
 
     paginator = Paginator(user_articles, 8)
     page_number = request.GET.get('page')
@@ -177,9 +284,10 @@ def article_list(request, pk):
         'is_owner': is_owner,
         'pgname': f"{member.first_name}'s Articles"
     }
-    return render(request, 'article_list.html', context)
+    return render(request, 'member_hive.html', context)
 
 @login_required
+# @cache_page(60 * 30) # 30mins
 def author_response(request, pk):
     if request.method == 'POST':
         form = Author_replyForm(request.POST)
@@ -195,6 +303,11 @@ def author_response(request, pk):
             reply = form.save(commit=False)
             reply.comment = comment
             reply.save()
+
+            # remove old data from cache
+            cache.delete(f'article_{pk}')
+            cache.delete('author_reply')
+
             if comment.user != None:
                 # new_reply = Author_reply.objects.get(reply=form.cleaned_data['reply'])
                 new_reply = comment.author_reply
@@ -219,14 +332,34 @@ def contact_page(request):
         form = ContactForm(request.POST)
         if form.is_valid():
             form.save()
+            
+            # remove old data from cache
+            cache.delete(f'contact')
+            
             return JsonResponse({'message': 'success'})
         return JsonResponse({'message': 'error'})
     context = {'contact': contact, 'pgname': 'Contact'}
     return render(request, 'contact.html', context)
 
 def profile_page(request, pk):
-    member = User.objects.prefetch_related('articles').filter(pk=pk).first()
-    number_of_articles = member.articles.all().count()
+    cache_key = f'profile_page_{pk}'
+    cached_data = cache.get(cache_key)
+
+    if cached_data is None:
+        print('No cached data #####')
+        member = User.objects.prefetch_related('articles').filter(pk=pk).first()
+        # number_of_articles = member.articles.all().count()
+
+        cached_data = {
+            'member': member,
+            # 'number_of_articles': number_of_articles,
+        }
+        cache.set(cache_key, cached_data, timeout=CACHE_TTL)
+    else:
+        print('Cache data: profile page view #####')
+        member = cached_data['member']
+        # number_of_articles = cached_data['number_of_articles']
+
     is_owner = member == request.user
     context = {
         'member': member,
@@ -258,6 +391,11 @@ def profile_update(request, pk):
                 if isinstance(new_picture, InMemoryUploadedFile):
                     user.profile_picture = new_picture
             user.save()
+
+            # remove old data from cache
+            cache.delete(f'profile_page_{pk}')
+            cache.delete(f'users_list_{pk}')
+
             return redirect('profile', pk=pk)
         return JsonResponse({'message': 'form invalid', 'errors': form.errors})
     form = ProfileUpdateForm(instance=user)
@@ -306,6 +444,10 @@ def register_page(request):
                 user = authenticate(username=username, password=password)
                 login(request, user)
                 article_url = f"{request.scheme}://{request.get_host()}"
+                
+                # remove old data from cache
+                cache.delete('users_list')
+            
                 response = welcome_email(request=request, user=user, article_url=article_url)
                 if response.status_code == 201:
                     print(f'Email sent successfully to {user.email} # for registration')
@@ -331,6 +473,11 @@ def article_form(request):
             article = form.save(commit=False)
             article.author = request.user
             article.save()
+
+            # remove old data from cache
+            cache.delete(f'hive_articles')
+            cache.delete(f'member_hive_{pk}')
+
             user = User.objects.prefetch_related('articles').filter(pk=pk).first()
             if user.articles.all().count() == 1:
                 article_path = reverse('article_form')
@@ -341,7 +488,7 @@ def article_form(request):
                 else:
                     print(f'Failed to send email: {response.status_code}')
                     print(response.text)
-            return redirect('article_list', pk=pk)
+            return redirect('member_hive', pk=pk)
     form = ArticleForm()
     context = {
         'form': form,
@@ -363,6 +510,10 @@ def update_article_form(request, pk):
             article.content = form.cleaned_data['content']
             article.author = request.user
             article.save()
+
+            # remove old data from cache
+            cache.delete(f'article_{pk}')
+
             return redirect('article', pk=pk)
     context = {
         'article': article,
@@ -466,8 +617,22 @@ def feedback_contact_list_view(request):
     if not superuser_access:
         return redirect_to_login(next=request.path)
 
-    feedbacks = Contact.objects.all().order_by('-id')
-    print(f"feedbacks:", feedbacks)
+    cache_key = 'contact'
+    cached_data = cache.get(cache_key)
+
+    if cached_data is None:
+        print('No cached data #####')
+        feedbacks = Contact.objects.all().order_by('-id')
+        cached_data = {
+            'contact': contact,
+        }
+        cache.set(cache_key, cached_data, timeout=CACHE_TTL)
+    else:
+        print('Cache data: feedback contact list view #####')
+        contact = cached_data['contact']
+
+    # feedbacks = Contact.objects.all().order_by('-id')
+    # print(f"feedbacks:", feedbacks)
     paginator = Paginator(feedbacks, 8)
     page_number = request.GET.get('page')
     print(f"page_number:", page_number)
@@ -487,19 +652,43 @@ def feedback_contact_detail_view(request, pk):
     superuser_access = is_superuser(request)
     if not superuser_access:
         return redirect_to_login(next=request.path)
-    feedback = get_object_or_404(Contact, pk=pk)
+    
+    cache_key = f'contact_{pk}'
+    cached_data = cache.get(cache_key)
+
+    if cached_data is None:
+        print('No cached data #####')
+        feedback = Contact.objects.get(pk=pk)
+        cached_data = {
+            'feedback': feedback,
+        }
+        cache.set(cache_key, cached_data, timeout=CACHE_TTL)
+    else:
+        print('Cache data: feedback contact detail view #####')
+        feedback = cached_data['feedback']
+
+    # feedback = get_object_or_404(Contact, pk=pk)
     context = {
         'feedback': feedback,
         'pgname': 'Feedback Details'
     }
     return render(request, 'feedback_contact_detail_view.html', context)
 
-def feedback_article_list_view(request):
+def feedback_member_hive_view(request):
     superuser_access = is_superuser(request)
     if not superuser_access:
         return redirect_to_login(next=request.path)
 
-    feedbacks = Article.objects.all().order_by('-id')
+    cache_key = 'hive_articles'
+    cached_data = cache.get(cache_key)
+    
+    if cached_data is None:
+        print('No cached data #####')
+        feedbacks = Article.objects.all().order_by('-id')
+    else:
+        print('Cache data: feedback member hive list view #####')
+        feedbacks = cached_data['all_articles']
+
     paginator = Paginator(feedbacks, 8)
     page_number = request.GET.get('page')
     try:
@@ -513,39 +702,67 @@ def feedback_article_list_view(request):
         'ratings': feedbacks,
         'pgname': 'Feedback'
     }
-    return render(request, 'feedback_article_list_view.html', context)
+    return render(request, 'feedback_member_hive_view.html', context)
 
-def feedback_article_detail_view(request, pk):
+def feedback_member_detail_view(request, pk):
     superuser_access = is_superuser(request)
     if not superuser_access:
         return redirect_to_login(next=request.path)
 
-    feedback = Article.objects.prefetch_related('comments').filter(pk=pk).first()
-    author = feedback.author
-    article_comments = feedback.comments.all()
+    cache_key = f'article_{pk}'
+    cached_data = cache.get(cache_key)
+    
+    if cached_data is None:
+        print('No cached data #####')
+        feedback = Article.objects.prefetch_related('comments').filter(pk=pk).first()
+    else:
+        print('Cache data: feedback member hive detail view #####')
+        feedback = cached_data[f'article']
+        author = cached_data['author']
+        article_comments = cached_data['article_comments']
 
-    user = request.user
-    is_owner = author == user
-    is_member = False
-    for comment in article_comments:
-        if comment.user != None and comment.user.is_active:
-            is_member = True
-            print(f"Commentor {comment.user.first_name} is an active member.")
-    is_owner = author == user
+
+    # feedback = Article.objects.prefetch_related('comments').filter(pk=pk).first()
+    # author = feedback.author
+    # article_comments = feedback.comments.all()
+
+    # user = request.user
+    # is_owner = author == user
+    # is_member = False
+    # for comment in article_comments:
+    #     if comment.user != None and comment.user.is_active:
+    #         is_member = True
+            # print(f"Commentor {comment.user.first_name} is an active member.")
+    # is_owner = author == user
     # print('is_owner:', is_owner)
     context = {
         'feedback': feedback,
         'article_comments': article_comments,
         'pgname': 'Feedback Details'
     }
-    return render(request, 'feedback_article_detail_view.html', context)
+    return render(request, 'feedback_member_detail_view.html', context)
 
 def feedback_author_reply_list_view(request):
     superuser_access = is_superuser(request)
     if not superuser_access:
         return redirect_to_login(next=request.path)
 
-    feedbacks = Author_reply.objects.all().order_by('-id')
+    cache_key = 'author_reply'
+    cached_data = cache.get(cache_key)
+    
+    if cached_data is None:
+        print('No cached data #####')
+        feedbacks = Author_reply.objects.all().order_by('-id')
+        
+        cached_data = {
+            'feedbacks': feedbacks
+        }
+        cache.set(cache_key, cached_data, timeout=CACHE_TTL)
+    else:
+        print('Cache data: feedback author reply list view #####')
+        feedbacks = cached_data['feedbacks']
+
+    # feedbacks = Author_reply.objects.all().order_by('-id')
     paginator = Paginator(feedbacks, 8)
     page_number = request.GET.get('page')
     try:
@@ -564,21 +781,49 @@ def feedback_author_reply_detail_view(request, pk):
     superuser_access = is_superuser(request)
     if not superuser_access:
         return redirect_to_login(next=request.path)
-    feedback = get_object_or_404(Author_reply, pk=pk)
+    
+    cache_key = f'author_reply_{pk}'
+    cached_data = cache.get(cache_key)
+
+    if cached_data is None:
+        print('No cached data #####')
+        feedback = get_object_or_404(Author_reply, pk=pk)
+        cached_data = {
+            'feedback': feedback,
+        }
+        cache.set(cache_key, cached_data, timeout=CACHE_TTL)
+    else:
+        print('Cache data: feedback author reply detail view #####')
+        feedback = cached_data['feedback']
+        
+    # feedback = get_object_or_404(Author_reply, pk=pk)
     context = {
         'feedback': feedback,
         'pgname': 'Feedback Details'
     }
     return render(request, 'feedback_author_reply_detail_view.html', context)
 
-
-
 def feedback_comment_list_view(request):
     superuser_access = is_superuser(request)
     if not superuser_access:
         return redirect_to_login(next=request.path)
 
-    feedbacks = Comment.objects.all().order_by('-id')
+    cache_key = 'comments'
+    cached_data = cache.get(cache_key)
+    if cached_data is None:
+        print('No cached data #####')
+        feedbacks = Comment.objects.all().order_by('-id')
+        
+        cached_data = {
+            'feedbacks': feedbacks
+        }
+        cache.set(cache_key, cached_data, timeout=CACHE_TTL)
+    else:
+        print('Cache data: feedback comments list view #####')
+        feedbacks = cached_data['feedbacks']
+
+
+    # feedbacks = Comment.objects.all().order_by('-id')
     paginator = Paginator(feedbacks, 8)
     page_number = request.GET.get('page')
     try:
@@ -597,7 +842,22 @@ def feedback_comment_detail_view(request, pk):
     superuser_access = is_superuser(request)
     if not superuser_access:
         return redirect_to_login(next=request.path)
-    feedback = get_object_or_404(Comment, pk=pk)
+    
+    cache_key = f'comment_{pk}'
+    cached_data = cache.get(cache_key)
+
+    if cached_data is None:
+        print('No cached data #####')
+        feedback = get_object_or_404(Comment, pk=pk)
+        cached_data = {
+            'feedback': feedback,
+        }
+        cache.set(cache_key, cached_data, timeout=CACHE_TTL)
+    else:
+        print('Cache data: feedback comments detail view #####')
+        feedback = cached_data['feedback']
+        
+    # feedback = get_object_or_404(Comment, pk=pk)
     context = {
         'feedback': feedback,
         'pgname': 'Feedback Details'
@@ -609,7 +869,23 @@ def feedback_user_list_view(request):
     if not superuser_access:
         return redirect_to_login(next=request.path)
 
-    feedbacks = User.objects.all().order_by('-id')
+    cache_key = 'users_list'
+    cached_data = cache.get(cache_key)
+    
+    if cached_data is None:
+        print('No cached data #####')
+        feedbacks = User.objects.all().order_by('-id')
+        
+        cached_data = {
+            'feedbacks': feedbacks
+        }
+        cache.set(cache_key, cached_data, timeout=CACHE_TTL)
+    else:
+        print('Cache data: feedback user list view #####')
+        feedbacks = cached_data['feedbacks']
+
+
+    # feedbacks = User.objects.all().order_by('-id')
     paginator = Paginator(feedbacks, 8)
     page_number = request.GET.get('page')
     try:
@@ -628,7 +904,22 @@ def feedback_user_detail_view(request, pk):
     superuser_access = is_superuser(request)
     if not superuser_access:
         return redirect_to_login(next=request.path)
-    feedback = get_object_or_404(User, pk=pk)
+    
+    cache_key = f'users_list_{pk}'
+    cached_data = cache.get(cache_key)
+
+    if cached_data is None:
+        print('No cached data #####')
+        feedback = get_object_or_404(User, pk=pk)
+        cached_data = {
+            'feedback': feedback,
+        }
+        cache.set(cache_key, cached_data, timeout=CACHE_TTL)
+    else:
+        print('Cache data: feedback user detail view #####')
+        feedback = cached_data['feedback']
+        
+    # feedback = get_object_or_404(User, pk=pk)
     _is_active = feedback.is_active
     _is_staff = feedback.is_staff
     _is_superuser = feedback.is_superuser
@@ -648,7 +939,21 @@ def feedback_search_history_list_view(request):
     if not superuser_access:
         return redirect_to_login(next=request.path)
 
-    feedbacks = SearchHistory.objects.all().order_by('-id')
+    cache_key = 'search_history'
+    cached_data = cache.get(cache_key)
+
+    if cached_data is None:
+        print('No cached data #####')
+        feedbacks = SearchHistory.objects.all().order_by('-id')
+        cached_data = {
+            'feedbacks': feedbacks,
+        }
+        cache.set(cache_key, cached_data, timeout=CACHE_TTL)
+    else:
+        print('Cache data: feedback search history view #####')
+        feedbacks = cached_data['feedbacks']
+
+    # feedbacks = SearchHistory.objects.all().order_by('-id')
     paginator = Paginator(feedbacks, 8)
     page_number = request.GET.get('page')
     try:
@@ -722,6 +1027,8 @@ def advanced_search(request):
         
         if request.user.is_authenticated:
             SearchHistory.objects.create(user=request.user, query=query)
+            # remove old data from cache
+            cache.delete(f'search_history')
     else:
         all_results = []
     
