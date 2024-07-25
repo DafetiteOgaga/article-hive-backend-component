@@ -9,11 +9,11 @@
 			<h1><a style="color: rgb(206, 149, 112);" href="{% url 'article' pk=feedback.article.pk %}">{{ feedback.user.first_name|default:empty|capfirst }} {{ feedback.user.middle_name|default:empty|capfirst }} {{ feedback.user.last_name|default:empty|capfirst }}</a> said:</h1>
 		</div>
 		<!-- <h1 style="margin-bottom: 0;" class="left-anime">About Me</h1> -->
-		<p style="margin-top: 0;" class="down-drop preformatted">
+		<p style="margin-top: 0;" id="down-drop" class="preformatted">
 			{{ feedback.comment|default:empty }}
 		</p>
 	</div>
-	<div class="top-drop nav-anchor preformatted">
+	<div id="top-drop" class="nav-anchor preformatted">
 		<p>To:
 			{{ feedback.article.content|default:empty }}
 
