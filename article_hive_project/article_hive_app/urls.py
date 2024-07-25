@@ -1,7 +1,6 @@
 from django.urls import path
 from . import views
 # from django.contrib.auth import views as auth_views
-
 urlpatterns = [
 	# Create your urlpatterns here.
 	path('', views.home, name='home'),
@@ -14,7 +13,6 @@ urlpatterns = [
 	path('login/', views.login_page, name='login'),
 	path('logout/', views.logout_page, name='logout'),
 	path('register/', views.register_page, name='register'),
-
 	# path('article/new/<int:pk>/', views.article_form, name='article_form'),
 	path('article/<int:pk>/', views.article, name='article'),
 	path('author-response/<int:pk>/', views.author_response, name='author_response'),
@@ -44,15 +42,11 @@ urlpatterns = [
 	path('feedback/search-history/', views.feedback_search_history_list_view, name='feedback_search_history_list_view'),
 	# path('feedback/search-history-detail/<str:pk>/', views.feedback_search_history_detail_view, name='feedback_search_history_detail_view'),
 	path('feedback/', views.feedback_list_view, name='feedback_list_view'),
-
 	path('oopsy/', views.oopsy_view, name='oopsy'),
-
 	path('search/', views.advanced_search, name='advanced_search'),
     path('autocomplete/', views.autocomplete, name='autocomplete'),
-
 	path('test-email/', views.test_email_view, name='test_email'),
 	# path('test-404/', lambda request: None),
-
 	path('test_authentication/', views.test_authentication, name='test_authentication'),
 	path('ports/', views.checkRequest, name='checkRequest'),
 ]
