@@ -20,7 +20,7 @@ urlpatterns = [
 	path('author-response/<int:pk>/', views.author_response, name='author_response'),
 	path('article/new/', views.article_form, name='article_form'),
 	path('update-article-form/<int:pk>/', views.update_article_form, name='update_article_form'),
-	path('member-articles/<int:pk>/', views.article_list, name='article_list'),
+	path('member-articles/<int:pk>/', views.member_hive, name='member_hive'),
 
 	path('password_change/', views.CustomPasswordChangeView.as_view(), name='password_change'),
     path('password_change/done/', views.CustomPasswordChangeDoneView.as_view(), name='password_change_done'),
@@ -31,8 +31,8 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', views.CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', views.CustomPasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
-	path('feedback/article/', views.feedback_article_list_view, name='feedback_article_list_view'),
-	path('feedback/article-detail/<int:pk>/', views.feedback_article_detail_view, name='feedback_article_detail_view'),
+	path('feedback/article/', views.feedback_member_hive_view, name='feedback_member_hive_view'),
+	path('feedback/article-detail/<int:pk>/', views.feedback_member_detail_view, name='feedback_member_detail_view'),
 	path('feedback/author-reply/', views.feedback_author_reply_list_view, name='feedback_author_reply_list_view'),
 	path('feedback/author-reply-detail/<int:pk>/', views.feedback_author_reply_detail_view, name='feedback_author_reply_detail_view'),
 	path('feedback/comment/', views.feedback_comment_list_view, name='feedback_comment_list_view'),
