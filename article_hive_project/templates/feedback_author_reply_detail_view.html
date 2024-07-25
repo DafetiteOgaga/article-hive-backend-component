@@ -9,11 +9,11 @@
 			<h1><a style="color: rgb(206, 149, 112);" href="{% url 'article' pk=feedback.comment.article.pk %}">{{ feedback.comment.article.author.first_name|default:empty|capfirst }} {{ feedback.comment.article.author.middle_name|default:empty|capfirst }} {{ feedback.comment.article.author.last_name|default:empty|capfirst }}</a> replied:</h1>
 		</div>
 		<!-- <h1 style="margin-bottom: 0;" class="left-anime">About Me</h1> -->
-		<p style="margin-top: 0;" class="down-drop preformatted">
+		<p style="margin-top: 0;" id="down-drop" class="preformatted">
 			{{ feedback.reply|default:empty }}
 		</p>
 	</div>
-	<div class="top-drop nav-anchor preformatted">
+	<div id="top-drop" class="nav-anchor preformatted">
 		<p>To: {{ feedback.comment.comment|default:empty }} 
 			by:	<span style=" color: grey;">{% if feedback.comment.user %}<a href="{% url 'profile' pk=feedback.comment.user.id %}">{{ feedback.comment.user.first_name|capfirst }}</a>{% else %}{{ feedback.comment.name|capfirst }}{% endif %}</span>
 		</p>
