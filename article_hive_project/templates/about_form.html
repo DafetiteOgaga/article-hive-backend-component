@@ -2,11 +2,11 @@
 {% load static %}
 {% block section %}
 <section class="contact">
-	<div class="content top-drop">
+	<div id="top-drop" class="content">
 		<h1 class="right-anime">About Form</h1>
 		<form id="form" class="form-contact" action="" method="POST">
 			{% csrf_token %}
-			<div class="down-drop">
+			<div id="down-drop" class="">
 				<span class="required">*</span>
 				<textarea id="about" name="about" placeholder="About content goes here ..." rows="10" required>{{ about }}</textarea>
 			</div>
