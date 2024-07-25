@@ -13,13 +13,13 @@
 	</div>
 	{% endif %}
 	<h1 class="right-anime" style="margin-bottom: 0;">{{ article.title }}</h1>
-	<div class="flex-block top-drop">
+	<div id="top-drop" class="flex-block">
 	</div>
-	<img class="down-drop article-pic" src="{% static 'logo - shade of brown/the-article-hive-favicon-white.png' %}" alt="article photo" />
+	<img id="down-drop" class="article-pic" src="{% static 'logo - shade of brown/the-article-hive-favicon-white.png' %}" alt="article photo" />
 	<p class="left-anime preformatted">
 		{{ article.content|default:empty }}
 	</p>
-	<div class="flex-block top-drop">
+	<div id="top-drop" class="flex-block">
 		<p class="nav-anchor" >Written by <a href="{% url 'profile' pk=article.author.pk %}">{{ article.author.first_name|default:empty|capfirst }} {{ article.author.last_name|default:empty|capfirst }}</a></h2> on {{ article.date_published|default:empty }}</p>
 		<p>Views: {{ article.views|default:empty }} | Rating: {{ article.rating|default:empty }}</p>
 	</div>
@@ -94,19 +94,19 @@
 	</div>
 	{% endif %}
 	<!-- comment section end -->
-	<div class="top-drop">
+	<div id="top-drop" class="">
 		<p class="left-anime comment-head" style="padding-top: 2rem;">Leave a comment</p>
 		<form id="form" class="article-comments-form" action="" method="POST">
 			{% csrf_token %}
 
 			{% if not user.is_authenticated %}
-			<div class="down-drop">
+			<div id="down-drop" class="">
 				<span class="not-required">*</span>
 				<input id="name" name="name" type="text" placeholder="Enter your name">
 			</div>
 			{% endif %}
 
-			<div class="down-drop">
+			<div id="down-drop" class="">
 				<span class="required" style="color: white;">*</span>
 				<textarea id="comment" name="comment" placeholder="Comment here" rows="4" required></textarea>
 			</div>
