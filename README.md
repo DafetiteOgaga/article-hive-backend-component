@@ -8,7 +8,7 @@ Welcome to **Article Hive**, a dynamic platform where users can read articles an
 
 ## Features
 
-#### Email Notifications
+#### Get Email Notifications for:
 - **Membership Registration**
 - **First Post**
 - **Comment on Article**
