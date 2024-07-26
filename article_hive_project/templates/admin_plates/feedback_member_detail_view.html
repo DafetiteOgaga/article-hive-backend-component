@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block section %}
+{% with "" as empty %}
+<section class="article">
+	<h1 class="right-anime" style="margin-bottom: 0;">Feedback:</h1>
+	<h1 class="right-anime" style="margin-bottom: 0; color: rgb(206, 149, 112);"><a href="{% url 'article' feedback.pk %}">{{ feedback.title }}</a></h1>
+	<div id="top-drop" class="flex-block">
+	</div>
+	<img id="down-drop" class="article-pic" src="{% static 'logo - shade of brown/the-article-hive-favicon-white.png' %}" alt="article photo" />
+	<p class="left-anime preformatted">
+		{{ feedback.content|default:empty }}
+	</p>
+	<div id="top-drop" class="flex-block">
+		<p class="nav-anchor" >Written by <a href="{% url 'feedback_user_detail_view' pk=feedback.author.pk %}">{{ feedback.author.first_name|default:empty|capfirst }} {{ feedback.author.last_name|default:empty|capfirst }}</a></h2> on {{ feedback.date_published|default:empty }}</p>
+		<p>Views: {{ feedback.views|default:empty }} | Rating: {{ feedback.rating|default:empty }}</p>
+	</div>
+	{% if article_comments.exists %}
+	<div class="comment-disp">
+		<div class="comments-section">
+			<h2 class="right-anime comment-head">Comments</h2>
+			{% for article_comment in article_comments %}
+				<div class="comment">
+					{% if article_comment.user %}
+						<p class="left-anime nav-anchor comment-author" >
+							<a href="{% url 'feedback_user_detail_view' article_comment.user.id %}">{{ article_comment.user.first_name|default:article_comment.name|capfirst }}
+								{% if article_comment.user == article_comment.article.author %}
+									(Author)
+								{% endif %}
+							</a>
+							Wrote:
+						</p>
+					{% else %}
+						<p class="left-anime comment-author">{{ article_comment.name|capfirst }} Wrote: </p>
+					{% endif %}
+					<div class="right-anime comment-text preformatted"><p>{{ article_comment.comment }}</p></div>
+					<div class="right-anime comment-date"><p>On {{ article_comment.date_commented }}</p></div>
+					{% if article_comment.author_reply %}
+						<div class="comment">
+							{% if article_comment.user %}
+								<p class="left-anime nav-anchor comment-author" >
+								<a href="{% url 'feedback_user_detail_view' article_comment.user.id %}">{{ article_comment.user.first_name|default:article_comment.name|capfirst }}
+									{% if article_comment.user == article_comment.article.author %}
+										(Author)
+									{% endif %}
+								</a>
+								Responded:
+							</p>
+							{% else %}
+								<p class="left-anime comment-author">{{ article_comment.name|capfirst }} Responded: </p>
+							{% endif %}
+							<!-- <div class="comment-author">Sasha</div> -->
+							<div class="right-anime comment-text preformatted"><p>{{ article_comment.author_reply.reply }}</p></div>
+							<div class="right-anime comment-date"><p>On {{ article_comment.author_reply.date_replied }}</p></div>
+						</div>
+					{% endif %}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+	{% endif %}
+</section>
+{% endwith %}
+{% endblock section %}

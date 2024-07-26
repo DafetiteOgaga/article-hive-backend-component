@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block section %}
+{% with "" as empty %}
+<section class="profile">
+	<div>
+		<div class="profile-img-container right-anime small-container">
+			<!-- <img src="{{ member.profile_picture.url|default:empty }}" alt="profile photo" /> -->
+			<h1>{{ feedback.user.first_name|default:empty|capfirst }} {{ feedback.user.middle_name|default:empty|capfirst }} {{ feedback.user.last_name|default:empty|capfirst }} searched for:</h1>
+		</div>
+		<!-- <h1 style="margin-bottom: 0;" class="left-anime">About Me</h1> -->
+		<p style="margin-top: 0;" id="down-drop" class="">
+			"{{ feedback.query|default:empty }}"
+		</p>
+	</div>
+	<div id="top-drop" class="nav-anchor">
+		<p>On: {{ feedback.timestamp }}</p>
+	</div>
+</section>
+{% endwith %}
+{% endblock section %}

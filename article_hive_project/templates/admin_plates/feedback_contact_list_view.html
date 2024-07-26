@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block section %}
+{% with "" as Anonymous %}
+<section class="section-background-color">
+	<h1 class="section-headings left-anime">Public Feedback</h1>
+	<div>
+		<div style="padding-bottom: 3rem;">
+			<div class="responsive">
+				{% for feedback in feedbacks %}
+				<a class="box-link" href="{% url 'feedback_contact_detail_view' pk=feedback.id %}">
+					<article id="top-drop" class="article-box index-page article-new">
+						<h1 class="hor-align">{{ feedback.name|default:Anonymous }}</h1>
+						<p class="preformatted">
+							{{ feedback.contact|truncatechars:100|default:Anonymous }}
+						</p>
+						<div class="author-profilePic-date position-h1-new">
+							<h1>{{ feedback.created_at|date:"jS b, Y" }}</h1>
+						</div>
+					</article>
+				</a>
+				{% endfor %}
+			</div>
+			<div class="button-container">
+				<div class="click-anime">
+					<a href="/admin">
+						<button>Admin Panel</button>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% include 'partials/_pagination.html' %}
+	
+</section>
+{% endwith %}
+{% endblock section %}
