@@ -96,15 +96,15 @@ if os.environ.get('MY_LOCAL_MACHINE'):
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-    CACHES = {
-        "default": {
-            "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": credentials['MY_LOCAL_REDIS_LOCATION'],
-            "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            }
-        }
-    }
+    # CACHES = {
+    #     "default": {
+    #         "BACKEND": "django_redis.cache.RedisCache",
+    #         "LOCATION": credentials['MY_LOCAL_REDIS_LOCATION'],
+    #         "OPTIONS": {
+    #             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+    #         }
+    #     }
+    # }
     # CACHES = {
     #     "default": {
     #         "BACKEND": "django_redis.cache.RedisCache",
@@ -136,16 +136,16 @@ else:
     #         }
     #     }
     # }
-    CACHES = {
-        "default": {
-            "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": credentials['MY_REDIS_LOCATION'],
-            "OPTIONS": {
-                "CLIENT_CLASS": credentials['CLIENT_CLASS'],
-                "PASSWORD": credentials['PASSWORD'],
-            }
-        }
-    }
+    # CACHES = {
+    #     "default": {
+    #         "BACKEND": "django_redis.cache.RedisCache",
+    #         "LOCATION": credentials['MY_REDIS_LOCATION'],
+    #         "OPTIONS": {
+    #             "CLIENT_CLASS": credentials['CLIENT_CLASS'],
+    #             "PASSWORD": credentials['PASSWORD'],
+    #         }
+    #     }
+    # }
 
 # ############### for tests ##############
 # DEBUG = True # for test
