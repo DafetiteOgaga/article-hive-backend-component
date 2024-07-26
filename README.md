@@ -2,7 +2,7 @@
 
 Welcome to **Article Hive**, a dynamic platform where users can read articles and explore author profiles, while authors can create and manage their own content. Built with a robust architecture leveraging modern web technologies, Article Hive aims to provide a seamless experience for both readers and writers.
 
-**Click here: [Article Hive](https://dafetite.pythonanywhere.com) to visit the WebApp**
+**Click [Article Hive](https://dafetite.pythonanywhere.com) to visit the Web Application live**
 
 **Click [here](https://dafetite.pythonanywhere.com) to read about Article Hive**
 
