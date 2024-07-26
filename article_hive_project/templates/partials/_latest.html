@@ -7,7 +7,7 @@
 				<article class="article-box top-rated index-page left-anime article-rated">
 					<h1 class="hor-align">{{ rating.title }}</h1>
 					<p class="">
-						{{ rating.content|truncatechars:80|default:empty }}
+						{{ rating.content|truncatechars:70|default:empty }}
 					</p>
 					<div class="author-profilePic-date position-h1-new">
 						<h1>{{ rating.author.first_name|default:empty|capfirst }}</h1><span class="separator separator-rated">•</span>
