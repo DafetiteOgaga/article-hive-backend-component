@@ -1403,7 +1403,7 @@ form p a:active {
 .nav-icon::after {
     content: '';
     display: block;
-    background-color:  rgba(170, 96, 47, 0.726);
+    background-color:  rgba(196, 119, 68, 0.726);
     height: 3px;
     width: 100%;
     position: absolute;
