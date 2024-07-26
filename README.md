@@ -33,6 +33,7 @@ Welcome to **Article Hive**, a dynamic platform where users can read articles an
 - **Django**: A high-level Python web framework that encourages rapid development and clean, pragmatic design.
 - **HTML**: For structuring the web pages.
 - **CSS**: For styling the web pages.
+- **Bash**: Automates updating and reconfiguring the server with code changes.
 - **JavaScript**: For adding interactions and document object manipulations.
 - **SQL**: Used to create authorized user profile, create database and assign neccessary permissions.
 - **Request Library**: For automating the email notifications.
