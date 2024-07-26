@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block section %}
+{% with "" as empty %}
+<section class="profile">
+	<div>
+		<div class="profile-img-container right-anime small-container">
+			<!-- <img src="{{ member.profile_picture.url|default:empty }}" alt="profile photo" /> -->
+			<h1><a style="color: rgb(206, 149, 112);" href="{% url 'article' pk=feedback.comment.article.pk %}">{{ feedback.comment.article.author.first_name|default:empty|capfirst }} {{ feedback.comment.article.author.middle_name|default:empty|capfirst }} {{ feedback.comment.article.author.last_name|default:empty|capfirst }}</a> replied:</h1>
+		</div>
+		<!-- <h1 style="margin-bottom: 0;" class="left-anime">About Me</h1> -->
+		<p style="margin-top: 0;" id="down-drop" class="preformatted">
+			{{ feedback.reply|default:empty }}
+		</p>
+	</div>
+	<div id="top-drop" class="nav-anchor preformatted">
+		<p>To: {{ feedback.comment.comment|default:empty }} 
+			by:	<span style=" color: grey;">{% if feedback.comment.user %}<a href="{% url 'profile' pk=feedback.comment.user.id %}">{{ feedback.comment.user.first_name|capfirst }}</a>{% else %}{{ feedback.comment.name|capfirst }}{% endif %}</span>
+		</p>
+		<p>On: {{ feedback.comment.article.content|default:empty }}</p>
+		<p>On: {{ feedback.date_replied|default:empty|date:"jS b, Y" }}</p>
+	</div>
+</section>
+{% endwith %}
+{% endblock section %}

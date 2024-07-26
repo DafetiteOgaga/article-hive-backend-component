@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block section %}
+<section class="about">
+	<h1 class="right-anime">{{ feedback.name }}</h1>
+	<p class="left-anime preformatted">
+		{{ feedback.contact }}
+	</p>
+</section>
+{% endblock section %}

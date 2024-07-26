@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block section %}
+{% with "" as empty %}
+<section class="profile">
+	<div>
+		<div class="profile-img-container right-anime small-container">
+			<img src="{{ feedback.profile_picture.url|default:empty }}" alt="profile photo" />
+			<h1><a style="color: rgb(206, 149, 112);" href="{% url 'profile' pk=feedback.pk %}">{{ feedback.first_name|default:empty|capfirst }} {{ feedback.middle_name|default:empty|capfirst }} {{ feedback.last_name|default:empty|capfirst }}</a></h1>
+			{% comment %}
+			<div class="click-anime">
+				<div class="profile-buttons">
+					<a href="{% url 'profile_update' feedback.id %}">
+						<button>Update Profile</button>
+					</a>
+					<a href="{% url 'article_form' %}">
+						<button>Post an Article</button>
+					</a>
+					<a href="{% url 'password_change' %}">
+						<button>Change Password</button>
+					</a>
+				</div>
+            </div>
+			{% endcomment %}
+		</div>
+		<h1 style="margin-bottom: 0;" class="left-anime">About Me</h1>
+		<p style="margin-top: 0;" id="down-drop" class="preformatted">
+			{{ feedback.aboutme|default:empty }}
+		</p>
+	</div>
+	<div id="top-drop" class="nav-anchor">
+		{% comment %}
+			<p><strong><a href="{% url 'article_list' feedback.id %}">Open Your Hive</a></strong></p>
+			<p><strong><a href="{% url 'article_list' feedback.id %}">Open {{ feedback.first_name|capfirst }}'s Hive</a></strong></p>
+		{% endcomment %}
+		<p>Username: {{ feedback|default:empty }}</p>
+		<p>Number of Articles: {{ feedback.articles.all.count|default:empty }}</p>
+		<p>Phone {{ feedback.phone|default:empty }}</p>
+		<p>Email: {{ feedback.email|default:empty }}</p>
+		<p>Id: {{ feedback.id|default:empty }}</p>
+		<p>Active: {{ is_active }}</p>
+		<p>Staff: {{ is_staff }}</p>
+		<p>Superuser: {{ is_superuser }}</p>
+		<p>Website: {{ feedback.website|default:empty }}</p>
+		<p style="overflow-wrap: break-word;">Profile Picture: {{ profile_picture }}</p>
+		<p>Rating: {{ profile.rating|default:empty }}</p>
+		<p>Followers: {{ profile.followers|default:empty }}</p>
+		<p>Member since: {{ feedback.date_joined|default:empty|date:"jS b, Y" }}</p>
+		<p>Last seen: {{ feedback.last_login|default:empty|date:"jS b, Y" }}</p>
+	</div>
+</section>
+{% endwith %}
+{% endblock section %}

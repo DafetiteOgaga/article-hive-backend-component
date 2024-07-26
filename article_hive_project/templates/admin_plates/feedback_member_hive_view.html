@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block section %}
+{% with "" as empty %}
+<section class="section-background-color">
+	<h1 class="section-headings left-anime">Article</h1>
+	<div class="new-and-rated">
+		<div style="padding-bottom: 3rem;">
+			<div class="responsive">
+				{% for feedback in feedbacks %}
+				<!-- <h1>feedback id: {{ feedback.id }}</h1>
+				<h1>feedback title: {{ feedback.title }}</h1> -->
+				<a class="box-link" href="{% url 'feedback_member_detail_view' feedback.id %}">
+					<article id="top-drop" class="article-box index-page article-new">
+						<h1 class="hor-align">{{ feedback.title|default:empty }}</h1>
+						<p class="preformatted">
+							{{ feedback.content|truncatechars:100|default:empty }}
+						</p>
+						<div class="author-profilePic-date position-h1-new">
+							<img src="{{ feedback.author.profile_picture.url }}" alt="author image" /><span class="separator">•</span>
+							<h1>{{ feedback.author.first_name|default:empty|capfirst }}</h1><span class="separator">•</span>
+							<h1>{{ feedback.date_published|default:empty|date:"jS b, Y" }}</h1>
+						</div>
+					</article>
+				</a>
+				{% endfor %}
+			</div>
+		</div>
+		{% include 'partials/_latest.html' %}
+	</div>
+	<div class="button-container">
+		<div class="click-anime">
+			<a href="/admin">
+				<button>Admin Panel</button>
+			</a>
+		</div>
+	</div>
+	{% include 'partials/_pagination.html' %}
+
+</section>
+{% endwith %}
+{% endblock section %}

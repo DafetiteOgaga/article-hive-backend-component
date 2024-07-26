@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block section %}
+{% with "" as Anonymous %}
+<section class="section-background-color">
+	<h1 class="section-headings left-anime">Feedback</h1>
+	<div>
+		<div style="padding-bottom: 3rem;">
+			<div class="responsive">
+				{% for feedback in feedbacks %}
+				<a class="box-link" href="{% url 'advanced_search' %}?q={{ feedback.query }}&page=1">
+					<article id="top-drop" class="article-box index-page article-new">
+						<h1 class="hor-align">{{ feedback.user.first_name|default:Anonymous }} searched for:</h1>
+						<h1 class="hor-align">"{{ feedback.query|default:Anonymous }}"</h1>
+						<div class="author-profilePic-date position-h1-new">
+							<h1>On {{ feedback.timestamp }}</h1>
+						</div>
+					</article>
+				</a>
+				{% endfor %}
+			</div>
+			<div class="button-container">
+				<div class="click-anime">
+					<a href="/admin">
+						<button>Admin Panel</button>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% include 'partials/_pagination.html' %}
+	
+</section>
+{% endwith %}
+{% endblock section %}
