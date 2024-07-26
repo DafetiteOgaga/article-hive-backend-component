@@ -30,16 +30,20 @@ Welcome to **Article Hive**, a dynamic platform where users can read articles an
 
 ## Architecture
 
-#### Languages and Frameworks
+#### Languages and Frameworks/Libraries
 - **Python**: The core language used for backend development.
 - **Django**: A high-level Python web framework that encourages rapid development and clean, pragmatic design.
 - **HTML**: For structuring the web pages.
 - **CSS**: For styling the web pages.
-- **JavaScript**: For adding interactive elements to the web pages.
+- **JavaScript**: For adding interactions and document object manipulations.
+- **SQL**: Used to create authorized user profile, create database and assign neccessary permissions.
+- **Request Library**: For automating the email notifications.
+- **Pillow**: Used to resize and reshape profile photos before being saved to database.
 
 #### Databases
 - **MySQL**: Used for production database management.
 - **SQLite**: Used for local development and testing.
+- **Redis**: For caching views querysets, objects, template statics, etc.
 
 #### Email Server
 - **Brevo (Http)**: Used for sending emails, such as account verification and password reset links.
