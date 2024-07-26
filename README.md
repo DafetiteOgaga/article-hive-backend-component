@@ -72,7 +72,7 @@ Welcome to **Article Hive**, a dynamic platform where users can read articles an
     ```
     On Windows, use `env\Scripts\activate` to activate env.
     <br>
-    On Linux, use `source env/bin/activate` to activate env
+    On Linux/MacOS, use `source env/bin/activate` to activate env
     ```bash
     pip install -r requirements.txt
     ```
