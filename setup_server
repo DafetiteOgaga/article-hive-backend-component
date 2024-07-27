@@ -1,14 +1,16 @@
 #!/bin/bash
 
 # pulling from github main
+echo ""
 echo "Pulling from github-main"
 git pull
 echo "##### Pulling from github-main done."
+echo ""
 sleep 2
 
 # activating virtual environment
 activate_venv="$(find $HOME -name "activate")"
-echo "activate: $activate_venv"
+echo "activating virtual environment at: $activate_venv"
 source "$activate_venv"
 echo "##### activated virtual environment ..."
 echo ""
@@ -30,7 +32,6 @@ sleep 2
 # collect static files for production
 python manage.py collectstatic --noinput
 sleep 2
-echo ""
 echo "##### static files collected ..."
 echo ""
 sleep 2
